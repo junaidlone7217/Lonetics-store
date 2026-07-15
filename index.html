@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lonetics - Premium Electronics & Essentials</title>
+    <!-- Include the official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         try {
@@ -226,71 +227,12 @@
             padding-right: 4px;
         }
         
-        /* Cart Item Setup */
-        .cart-item {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 12px; background-color: #0f172a;
-            padding: 10px; border-radius: 8px;
-            border: 1px solid #334155;
-        }
-        .cart-item-thumb {
-            width: 45px; height: 45px; object-fit: cover; border-radius: 4px;
-        }
-        .cart-item-details {
-            flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
-            gap: 2px;
-        }
-        .cart-item-price { color: #06b6d4; font-weight: bold; }
-        
-        .quantity-controller {
-            display: flex;
-            align-items: center;
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .qty-btn {
-            background: none; border: none; color: #f8fafc;
-            width: 24px; height: 28px; font-weight: bold; cursor: pointer;
-            font-size: 0.85rem;
-        }
-        .qty-btn:hover { background-color: #475569; }
-        .qty-val {
-            font-size: 0.8rem; font-weight: bold; padding: 0 6px; min-width: 20px; text-align: center;
-        }
-
-        /* Address Checkout View Setup */
-        .checkout-form-container {
-            display: none; flex-direction: column; gap: 12px;
-            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
-        }
-        .form-row-split { display: flex; gap: 8px; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
-        .input-group input, .input-group textarea {
-            background-color: #0f172a; border: 1px solid #334155;
-            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
-        }
-        .input-group input:focus, .input-group textarea:focus { border-color: #06b6d4; outline: none; }
-
-        .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
-        .pay-option {
-            background-color: #0f172a; border: 1px solid #334155;
-            border-radius: 6px; padding: 10px; text-align: center;
-            font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #94a3b8;
-        }
-        .pay-option.selected {
-            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.1); color: #06b6d4;
-        }
-
         .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
-        .checkout-btn, .place-order-btn {
+        .checkout-btn {
             background-color: #06b6d4; color: #0f172a; border: none;
             width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
         }
-        .place-order-btn { background-color: #10b981; color: #fff; display: none; }
 
         /* Smooth Transform Overlay Modals */
         .modal-overlay {
@@ -312,7 +254,15 @@
         }
         .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; text-align: center; }
         
-        /* OTP Form UI Setup */
+        .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+        .input-group input {
+            background-color: #0f172a; border: 1px solid #334155;
+            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
+        }
+        .input-group input:focus { border-color: #06b6d4; outline: none; }
+
+        /* OTP Styling */
         .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
         .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
         .otp-field {
@@ -331,7 +281,7 @@
             font-weight: bold; cursor: pointer; color: #0f172a;
         }
 
-        /* Top Bar Elastic Slid Toast Alert UI Banner Component */
+        /* Top Bar Elastic Toast Alert UI */
         .toast-notification {
             position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 340px; background-color: #1e293b; border: 1px solid #334155;
@@ -351,7 +301,7 @@
         <div class="toast-icon" id="toastIcon">⚠️</div>
         <div class="toast-body">
             <h4 id="toastTitle">System Event</h4>
-            <p id="toastMessage">Operational parameters updated.</p>
+            <p id="toastMessage">Operational updates.</p>
         </div>
     </div>
 
@@ -373,67 +323,11 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3 id="sidebarTitle">Your Cart</h3>
-            <button class="close-cart" id="closeCart">&times;</button>
-        </div>
-        
-        <div class="cart-items-list" id="cartItemsList"></div>
-        
-        <div class="checkout-form-container" id="checkoutForm">
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" id="custName" placeholder="Enter full name details">
-            </div>
-            <div class="form-row-split">
-                <div class="input-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="custPhone" placeholder="10-digit line">
-                </div>
-                <div class="input-group">
-                    <label>Pincode Area Code</label>
-                    <input type="number" id="custPin" placeholder="6-digit code">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Detailed Delivery Address</label>
-                <textarea id="custAddress" rows="2" placeholder="House/Flat metrics..."></textarea>
-            </div>
-            <div class="form-row-split">
-                <div class="input-group">
-                    <label>City</label>
-                    <input type="text" id="custCity" placeholder="City location">
-                </div>
-                <div class="input-group">
-                    <label>State</label>
-                    <input type="text" id="custState" placeholder="State region">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Payment Mode Strategy</label>
-                <div class="payment-grid">
-                    <div class="pay-option selected" onclick="selectPayment(this, 'COD')">COD</div>
-                    <div class="pay-option" onclick="selectPayment(this, 'UPI')">UPI</div>
-                    <div class="pay-option" onclick="selectPayment(this, 'CARD')">Card</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="cart-total-section">
-            <div class="total-row">
-                <span>Total Invoice:</span>
-                <span id="cartTotal">$0.00</span>
-            </div>
-            <button class="checkout-btn" id="proceedBtn">Proceed to Checkout</button>
-            <button class="place-order-btn" id="placeOrderBtn">Confirm & Dispatch Order</button>
-        </div>
-    </div>
-
     <div class="modal-overlay" id="authModal">
         <div class="auth-box">
             <button class="modal-close" id="closeAuth">&times;</button>
             
+            <!-- Standard Login / Signup Forms -->
             <div id="credentialsForm">
                 <h3 id="authModalTitle">Sign In</h3>
                 <div id="signUpFields" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 12px;">
@@ -447,20 +341,48 @@
                         <label>Email Address</label>
                         <input type="email" id="authIdentity" placeholder="Enter your email...">
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" id="passwordGroup">
                         <label>Password</label>
                         <input type="password" id="authPassword" placeholder="Minimum 6 characters">
                     </div>
                 </div>
+                
+                <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: 8px;">
+                    <span onclick="switchWorkflow('forgot')" style="color: #06b6d4; font-size: 0.75rem; cursor: pointer; font-weight: 600;">Forgot Password?</span>
+                </div>
+
                 <button class="auth-submit-btn" id="authSubmitBtn">Continue</button>
                 <p class="auth-toggle-text" id="authToggleText">
                     New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>
                 </p>
             </div>
 
+            <!-- Forgot Password Base Workflow Form -->
+            <div id="forgotForm" style="display: none;">
+                <h3>Reset Password</h3>
+                <p class="auth-toggle-text" style="margin: 0 0 15px 0; text-align: left; line-height: 1.4;">Enter your email below to verify your account identification profile.</p>
+                <div class="input-group">
+                    <label>Account Email</label>
+                    <input type="email" id="forgotIdentity" placeholder="name@domain.com">
+                </div>
+                <button class="auth-submit-btn" id="forgotSubmitBtn">Send Verification Code</button>
+                <p class="auth-toggle-text">Back to <span onclick="switchWorkflow('auth')">Sign In</span></p>
+            </div>
+
+            <!-- Choose New Password After OTP Success -->
+            <div id="resetPasswordFields" style="display: none;">
+                <h3>Set New Password</h3>
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label>New Password</label>
+                    <input type="password" id="newPasswordInput" placeholder="Minimum 6 characters">
+                </div>
+                <button class="auth-submit-btn" id="saveNewPasswordBtn">Update Password</button>
+            </div>
+
+            <!-- OTP Validation Form Matrix View -->
             <div class="otp-container" id="otpView">
-                <h3>Enter 4-Digit OTP</h3>
-                <p class="auth-toggle-text" style="margin: 0 0 10px 0; line-height: 1.4;">We sent a verification code to your email.</p>
+                <h3>Verify Email Identity</h3>
+                <p class="auth-toggle-text" style="margin: 0; line-height: 1.4;">We sent a 4-digit verification code to your email.</p>
                 <div class="otp-inputs">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
@@ -468,7 +390,7 @@
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
                 </div>
                 <button class="auth-submit-btn" id="verifyOtpBtn">Verify Code</button>
-                <p class="timer-text" id="otpTimerText" style="margin-top: 10px;">Resend OTP in <span id="secondsLeft">30</span>s</p>
+                <p class="timer-text" id="otpTimerText">Resend OTP in <span id="secondsLeft">30</span>s</p>
             </div>
         </div>
     </div>
@@ -481,22 +403,10 @@
             { id: "p4", name: "Premium Smart Watch OLED", price: 199.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" }
         ];
 
-        const productGrid = document.getElementById('productGrid');
-        const cartSidebar = document.getElementById('cartSidebar');
-        const cartToggle = document.getElementById('cartToggle');
-        const closeCart = document.getElementById('closeCart');
-        const cartItemsList = document.getElementById('cartItemsList');
-        const checkoutForm = document.getElementById('checkoutForm');
-        const cartTotal = document.getElementById('cartTotal');
-        const proceedBtn = document.getElementById('proceedBtn');
-        const placeOrderBtn = document.getElementById('placeOrderBtn');
-        const sidebarTitle = document.getElementById('sidebarTitle');
-        const catalogSearch = document.getElementById('catalogSearch');
+        // Native Mock Client Database Storage Arrays (Simulating real DB operations)
+        let registeredUsers = {}; 
 
-        const appToast = document.getElementById('appToast');
-        const toastIcon = document.getElementById('toastIcon');
-        const toastTitle = document.getElementById('toastTitle');
-        const toastMessage = document.getElementById('toastMessage');
+        const productGrid = document.getElementById('productGrid');
         const authModal = document.getElementById('authModal');
         const openAuthModal = document.getElementById('openAuthModal');
         const closeAuth = document.getElementById('closeAuth');
@@ -505,17 +415,25 @@
         const authModalTitle = document.getElementById('authModalTitle');
         const authToggleText = document.getElementById('authToggleText');
         const authSubmitBtn = document.getElementById('authSubmitBtn');
+        const forgotForm = document.getElementById('forgotForm');
+        const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
+        const resetPasswordFields = document.getElementById('resetPasswordFields');
+        const saveNewPasswordBtn = document.getElementById('saveNewPasswordBtn');
         const otpView = document.getElementById('otpView');
         const verifyOtpBtn = document.getElementById('verifyOtpBtn');
         const otpTimerText = document.getElementById('otpTimerText');
+        const appToast = document.getElementById('appToast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const forgotPasswordLinkContainer = document.getElementById('forgotPasswordLinkContainer');
 
-        let cartMap = {};
         let isSignUpMode = false;
-        let selectedPayMode = 'COD';
         let isLoggedIn = false;
         let timerInterval = null;
         let generatedOtp = "";
         let userEmailAddress = "";
+        let activeWorkflow = "signup"; // signup, login, forgot
 
         const SERVICE_ID = "service_oofkjro";
         const TEMPLATE_ID = "template_sorgfz4";
@@ -532,15 +450,19 @@
                     </div>
                     <div>
                         <div class="product-price">$${product.price.toFixed(2)}</div>
-                        <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add to Cart</button>
+                        <button class="buy-btn" onclick="executeCartInsertion()">Add to Cart</button>
                     </div>
                 `;
                 productGrid.appendChild(card);
             });
         }
 
+        function executeCartInsertion() {
+            emitSlidToastAlert('success', 'Cart Action', 'Item added to buying cache sequence.');
+        }
+
         function filterCatalogSearch() {
-            const criteria = catalogSearch.value.toLowerCase().trim();
+            const criteria = document.getElementById('catalogSearch').value.toLowerCase().trim();
             const filtered = PRODUCT_CATALOG.filter(item => item.name.toLowerCase().includes(criteria));
             buildMainCatalogUI(filtered);
         }
@@ -555,64 +477,107 @@
         }
 
         openAuthModal.addEventListener('click', () => {
-            credentialsForm.style.display = 'block';
-            otpView.style.display = 'none';
+            switchWorkflow('auth');
+            toggleAuthView(false);
             authModal.classList.add('active');
         });
         closeAuth.addEventListener('click', () => authModal.classList.remove('active'));
+
+        function switchWorkflow(target) {
+            credentialsForm.style.display = target === 'auth' ? 'block' : 'none';
+            forgotForm.style.display = target === 'forgot' ? 'block' : 'none';
+            otpView.style.display = target === 'otp' ? 'flex' : 'none';
+            resetPasswordFields.style.display = target === 'reset' ? 'block' : 'none';
+        }
 
         function toggleAuthView(toSignUp) {
             isSignUpMode = toSignUp;
             if (toSignUp) {
                 authModalTitle.textContent = "Create Account (Sign Up)";
                 signUpFields.style.display = 'flex';
+                forgotPasswordLinkContainer.style.display = 'none';
                 authToggleText.innerHTML = 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>';
             } else {
                 authModalTitle.textContent = "Sign In";
                 signUpFields.style.display = 'none';
+                forgotPasswordLinkContainer.style.display = 'block';
                 authToggleText.innerHTML = 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
             }
         }
 
+        // Handle Login and Sign Up Submissions
         authSubmitBtn.addEventListener('click', () => {
-            const email = document.getElementById('authIdentity').value.trim();
+            const email = document.getElementById('authIdentity').value.trim().toLowerCase();
             const pass = document.getElementById('authPassword').value.trim();
             
             if(!email || !pass || !email.includes('@')) { 
-                emitSlidToastAlert('error', 'Invalid Input', 'Provide a valid email and password.'); 
+                emitSlidToastAlert('error', 'Input Error', 'Please enter valid parameters.'); 
                 return; 
             }
             
             userEmailAddress = email;
 
             if (isSignUpMode) {
-                generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-                emitSlidToastAlert('success', 'Sending OTP...', 'Please check your spam folder.');
-
-                const templateParams = {
-                    email: userEmailAddress,
-                    to_email: userEmailAddress,
-                    otp_code: generatedOtp
-                };
-
-                if (typeof emailjs !== 'undefined') {
-                    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-                        .then(() => {
-                            credentialsForm.style.display = 'none';
-                            otpView.style.display = 'flex';
-                            beginCountdownClock();
-                            emitSlidToastAlert('success', 'OTP Dispatched!', `Check your spam folder.`);
-                        }, (error) => {
-                            emitSlidToastAlert('error', 'Mail Delivery Failed', 'Verify API configuration details.');
-                        });
-                }
+                // Sign Up Logic
+                activeWorkflow = "signup";
+                sendOtpEmail();
             } else {
-                isLoggedIn = true;
-                openAuthModal.textContent = "Account Active ✔";
-                authModal.classList.remove('active');
-                emitSlidToastAlert('success', 'Logged In', 'Welcome back!');
+                // Real Login Verification Logic
+                activeWorkflow = "login";
+                if (registeredUsers[email]) {
+                    if (registeredUsers[email].password === pass) {
+                        isLoggedIn = true;
+                        openAuthModal.textContent = "Account Active ✔";
+                        authModal.classList.remove('active');
+                        emitSlidToastAlert('success', 'Logged In Successfully', `Welcome back, ${registeredUsers[email].name || 'User'}!`);
+                    } else {
+                        emitSlidToastAlert('error', 'Authentication Failed', 'Incorrect password. Please try again.');
+                    }
+                } else {
+                    emitSlidToastAlert('error', 'Account Not Found', 'No account exists with this email address.');
+                }
             }
         });
+
+        // Forgot Password Handle Send OTP Verification
+        forgotSubmitBtn.addEventListener('click', () => {
+            const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
+            if(!email || !email.includes('@')) {
+                emitSlidToastAlert('error', 'Input Error', 'Please enter a valid email address.');
+                return;
+            }
+            
+            if(!registeredUsers[email]) {
+                emitSlidToastAlert('error', 'Not Found', 'No user registered under this account identity.');
+                return;
+            }
+
+            userEmailAddress = email;
+            activeWorkflow = "forgot";
+            sendOtpEmail();
+        });
+
+        function sendOtpEmail() {
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            emitSlidToastAlert('success', 'Sending Code...', 'Routing OTP transmission array.');
+
+            const templateParams = {
+                email: userEmailAddress,
+                to_email: userEmailAddress,
+                otp_code: generatedOtp
+            };
+
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                    .then(() => {
+                        switchWorkflow('otp');
+                        beginCountdownClock();
+                        emitSlidToastAlert('success', 'OTP Sent!', 'Check your spam folder.');
+                    }, (err) => {
+                        emitSlidToastAlert('error', 'Mail Pipeline Error', 'Delivery failure detected.');
+                    });
+            }
+        }
 
         function moveNext(current) {
             if (current.value.length >= 1 && current.nextElementSibling) {
@@ -638,47 +603,59 @@
         }
 
         function resendRealOtp() {
-            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            const templateParams = { email: userEmailAddress, to_email: userEmailAddress, otp_code: generatedOtp };
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams).then(() => {
-                beginCountdownClock();
-                emitSlidToastAlert('success', 'New OTP Sent!', 'Check your inbox.');
-            });
+            otpTimerText.innerHTML = `Resend OTP in <span id="secondsLeft">30</span>s`;
+            sendOtpEmail();
         }
 
+        // Global verification engine handling both workflows
         verifyOtpBtn.addEventListener('click', () => {
             let enteredCode = "";
             document.querySelectorAll('.otp-field').forEach(input => enteredCode += input.value.trim());
             
             if(enteredCode.length < 4) { 
-                emitSlidToastAlert('error', 'Incomplete Code', 'Please fill out all 4 slots.'); 
+                emitSlidToastAlert('error', 'Incomplete', 'Please fill all 4 slots.'); 
                 return; 
             }
             
             if (enteredCode === generatedOtp) {
-                isLoggedIn = true;
-                openAuthModal.textContent = "Account Active ✔";
-                authModal.classList.remove('active');
-                emitSlidToastAlert('success', 'Identity Verified!', 'Welcome to Lonetics!');
+                if (activeWorkflow === "signup") {
+                    // Finalize Sign Up Database Entry
+                    const name = document.getElementById('regName').value.trim();
+                    const pass = document.getElementById('authPassword').value.trim();
+                    registeredUsers[userEmailAddress] = { name: name || 'User', password: pass };
+
+                    isLoggedIn = true;
+                    openAuthModal.textContent = "Account Active ✔";
+                    authModal.classList.remove('active');
+                    emitSlidToastAlert('success', 'Verified Successfully', 'Your account is active!');
+                } else if (activeWorkflow === "forgot") {
+                    // Forward User to New Password Configuration View
+                    switchWorkflow('reset');
+                    emitSlidToastAlert('success', 'Verification Confirmed', 'Please set your new password.');
+                }
             } else {
-                emitSlidToastAlert('error', 'Invalid Code', 'The OTP code is incorrect. Try again.');
+                emitSlidToastAlert('error', 'Invalid Token', 'The verification token is incorrect.');
                 document.querySelectorAll('.otp-field').forEach(input => input.value = "");
             }
         });
 
-        function executeCartInsertion(prodId) {
-            if (cartMap[prodId]) { cartMap[prodId].quantity += 1; } 
-            else { const targetObj = PRODUCT_CATALOG.find(p => p.id === prodId); cartMap[prodId] = { ...targetObj, quantity: 1 }; }
-            refreshCartDrawerUI();
-        }
+        // Update Password Database Execution Block
+        saveNewPasswordBtn.addEventListener('click', () => {
+            const newPass = document.getElementById('newPasswordInput').value.trim();
+            if(newPass.length < 6) {
+                emitSlidToastAlert('error', 'Weak Password', 'Minimum 6 character allocation required.');
+                return;
+            }
 
-        function refreshCartDrawerUI() {
-            let counterMetrics = 0;
-            let subtotal = 0;
-            Object.keys(cartMap).forEach(k => { subtotal += (cartMap[k].price * cartMap[k].quantity); counterMetrics += cartMap[k].quantity; });
-            cartToggle.textContent = `Cart (${counterMetrics})`;
-            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
-        }
+            if(registeredUsers[userEmailAddress]) {
+                registeredUsers[userEmailAddress].password = newPass;
+                emitSlidToastAlert('success', 'Password Updated', 'Your new credential rules are active. Please Sign In.');
+                switchWorkflow('auth');
+                toggleAuthView(false);
+                document.getElementById('authPassword').value = "";
+                document.getElementById('newPasswordInput').value = "";
+            }
+        });
 
         buildMainCatalogUI(PRODUCT_CATALOG);
     </script>
