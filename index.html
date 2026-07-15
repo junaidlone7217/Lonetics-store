@@ -113,11 +113,7 @@
             cursor: pointer;
             transition: transform 0.1s ease;
         }
-        .cart-icon:active {
-            transform: scale(0.95);
-        }
 
-        /* Profile Avatar Circular Header Trigger */
         .profile-avatar-trigger {
             width: 35px;
             height: 35px;
@@ -157,11 +153,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-            border-color: #475569;
         }
         .product-img {
             width: 100%;
@@ -175,7 +166,6 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 4px;
-            line-height: 1.3;
             min-height: 36px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -193,42 +183,32 @@
             flex-direction: column;
             gap: 6px;
         }
-        .buy-btn {
-            background-color: transparent;
-            border: 1px solid #06b6d4;
-            color: #06b6d4;
-            padding: 6px 0;
+        .buy-btn, .buynow-btn {
+            padding: 7px 0;
             width: 100%;
             border-radius: 6px;
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            text-align: center;
         }
-        .buy-btn:hover {
-            background-color: #06b6d4;
-            color: #0f172a;
+        .buy-btn {
+            background-color: transparent;
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
         }
         .buynow-btn {
             background-color: #06b6d4;
             color: #0f172a;
             border: none;
-            padding: 6px 0;
-            width: 100%;
-            border-radius: 6px;
             font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-        .buynow-btn:hover {
-            background-color: #0891b2;
         }
 
         /* Slide-out Sidebar Panel Drawer UI */
         .cart-sidebar {
             position: fixed;
-            top: 0; right: -360px;
-            width: 360px; height: 100vh;
+            top: 0; right: -380px;
+            width: 380px; height: 100vh;
             background-color: #1e293b;
             border-left: 1px solid #334155;
             box-shadow: -5px 0 25px rgba(0,0,0,0.6);
@@ -256,7 +236,6 @@
         
         .cart-items-list {
             flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
-            padding-right: 4px;
         }
 
         .cart-item {
@@ -265,34 +244,19 @@
             padding: 10px; border-radius: 8px;
             border: 1px solid #334155;
         }
-        .cart-item-thumb {
-            width: 45px; height: 45px; object-fit: cover; border-radius: 4px;
-        }
-        .cart-item-details {
-            flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
-            gap: 2px;
-        }
+        .cart-item-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
+        .cart-item-details { flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem; gap: 2px; }
         .cart-item-price { color: #06b6d4; font-weight: bold; }
         
-        .quantity-controller {
-            display: flex;
-            align-items: center;
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 6px;
-        }
-        .qty-btn {
-            background: none; border: none; color: #f8fafc;
-            width: 24px; height: 28px; font-weight: bold; cursor: pointer;
-        }
-        .qty-val {
-            font-size: 0.8rem; font-weight: bold; padding: 0 4px;
-        }
+        .quantity-controller { display: flex; align-items: center; background-color: #1e293b; border: 1px solid #334155; border-radius: 6px; }
+        .qty-btn { background: none; border: none; color: #f8fafc; width: 24px; height: 26px; cursor: pointer; font-weight: bold; }
+        .qty-val { font-size: 0.8rem; font-weight: bold; padding: 0 4px; }
         
-        /* Interactive Country/State Form Components */
+        /* Checkout Views Matrix */
         .checkout-form-container {
             display: none; flex-direction: column; gap: 12px;
-            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
+            overflow-y: auto; flex-grow: 1; margin-bottom: 10px;
+            padding-bottom: 10px;
         }
         .form-row-split { display: flex; gap: 8px; }
         .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
@@ -301,15 +265,33 @@
             background-color: #0f172a; border: 1px solid #334155;
             color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
         }
-        .input-group input:focus, .input-group select:focus { border-color: #06b6d4; outline: none; }
+
+        /* Currency Wise Payment Engine Interface */
+        .payment-gateway-lane {
+            display: none; flex-direction: column; gap: 14px;
+            overflow-y: auto; flex-grow: 1;
+        }
+        .gateway-card-select {
+            background-color: #0f172a; border: 1px solid #334155;
+            border-radius: 8px; padding: 14px; display: flex;
+            align-items: center; justify-content: space-between;
+            cursor: pointer; transition: border-color 0.2s;
+        }
+        .gateway-card-select.selected {
+            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.05);
+        }
+        .gateway-details h4 { font-size: 0.9rem; font-weight: bold; }
+        .gateway-details p { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
 
         .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
-        .checkout-btn, .place-order-btn {
-            background-color: #06b6d4; color: #0f172a; border: none;
-            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
+        
+        /* Navigation Button Blocks */
+        .flow-btn {
+            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; text-align: center;
         }
-        .place-order-btn { background-color: #10b981; color: #fff; display: none; }
+        .primary-flow-btn { background-color: #06b6d4; color: #0f172a; }
+        .success-flow-btn { background-color: #10b981; color: white; display: none; }
 
         /* Smooth Transform Overlay Modals */
         .modal-overlay {
@@ -322,90 +304,26 @@
         .auth-box {
             background-color: #1e293b; border: 1px solid #334155;
             padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
-            transform: scale(0.92); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .modal-overlay.active .auth-box { transform: scale(1); }
-        .modal-close {
-            position: absolute; top: 10px; right: 15px;
-            background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;
-        }
+        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
         .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; text-align: center; }
 
-        /* Profile Dashboard Layout View */
-        .profile-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        .avatar-upload-box {
-            position: relative;
-            width: 90px;
-            height: 90px;
-        }
-        .profile-preview-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #06b6d4;
-            background-color: #0f172a;
-        }
-        .file-input-label {
-            position: absolute;
-            bottom: 0; right: 0;
-            background-color: #06b6d4;
-            color: #0f172a;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 0.8rem; font-weight: bold; cursor: pointer;
-        }
-        .history-list {
-            width: 100%;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 10px;
-            max-height: 110px;
-            overflow-y: auto;
-            text-align: left;
-        }
-        .history-item {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            padding: 4px 0;
-            border-bottom: 1px solid #1e293b;
-        }
-        .history-item:last-child { border: none; }
+        /* Dashboard Components */
+        .profile-container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .avatar-upload-box { position: relative; width: 90px; height: 90px; }
+        .profile-preview-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #06b6d4; background-color: #0f172a; }
+        .file-input-label { position: absolute; bottom: 0; right: 0; background-color: #06b6d4; color: #0f172a; width: 26px; height: 26px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .history-list { width: 100%; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; max-height: 110px; overflow-y: auto; }
+        .history-item { font-size: 0.75rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid #1e293b; }
         
-        /* OTP Form View Layout */
         .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
         .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
-        .otp-field {
-            width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155;
-            border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #fff;
-        }
-        .otp-field:focus { border-color: #06b6d4; outline: none; }
-        .timer-text { font-size: 0.8rem; color: #64748b; }
-        .timer-text span { color: #06b6d4; font-weight: bold; cursor: pointer; }
-
+        .otp-field { width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #fff; }
         .auth-toggle-text { font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center; }
         .auth-toggle-text span { color: #06b6d4; cursor: pointer; font-weight: bold; }
-        .auth-submit-btn {
-            width: 100%; margin-top: 15px; padding: 10px;
-            background-color: #06b6d4; border: none; border-radius: 6px;
-            font-weight: bold; cursor: pointer; color: #0f172a;
-        }
-
-        /* Top Bar Elastic Toast Alert UI */
-        .toast-notification {
-            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 340px; background-color: #1e293b; border: 1px solid #334155;
-            padding: 16px; border-radius: 12px; z-index: 1000; box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-            display: flex; align-items: flex-start; gap: 12px;
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .auth-submit-btn { width: 100%; margin-top: 15px; padding: 10px; background-color: #06b6d4; border: none; border-radius: 6px; font-weight: bold; color: #0f172a; cursor: pointer; }
+        
+        .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 340px; background-color: #1e293b; border: 1px solid #334155; padding: 16px; border-radius: 12px; z-index: 1000; box-shadow: 0 12px 30px rgba(0,0,0,0.6); display: flex; align-items: flex-start; gap: 12px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast-notification.active { top: 20px; }
         .toast-icon { font-size: 1.4rem; }
         .toast-body h4 { font-size: 0.9rem; font-weight: bold; margin-bottom: 2px; }
@@ -441,7 +359,7 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Combined Cart & Checkout Sidebar Drawer -->
+    <!-- Combined Cart, Address & Payment Sidebar Drawer -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h3 id="sidebarTitle">Your Cart</h3>
@@ -450,7 +368,7 @@
         
         <div class="cart-items-list" id="cartItemsList"></div>
         
-        <!-- Advanced Country-Specific Delivery Matrix -->
+        <!-- Step 2: Address Input Flow Panel -->
         <div class="checkout-form-container" id="checkoutForm">
             <div class="input-group">
                 <label>Full Name</label>
@@ -463,7 +381,7 @@
             <div class="form-row-split">
                 <div class="input-group">
                     <label>Country Destination</label>
-                    <select id="custCountry" onchange="populateCountryStates()">
+                    <select id="custCountry" onchange="populateCountryStates(); evaluateCountryCurrencyConfig();">
                         <option value="">Select Country</option>
                         <option value="IN">India</option>
                         <option value="US">United States</option>
@@ -483,8 +401,14 @@
             </div>
             <div class="input-group">
                 <label>Street Address Details</label>
-                <textarea id="custAddress" rows="2" placeholder="House/Flat block coordinates, building metrics..."></textarea>
+                <textarea id="custAddress" rows="2" placeholder="Near landmark, building metrics..."></textarea>
             </div>
+        </div>
+
+        <!-- Step 3: Currency Dependent Dynamic Payment Channel Screen -->
+        <div class="payment-gateway-lane" id="paymentForm">
+            <p style="font-size: 0.8rem; color:#94a3b8; margin-bottom: 5px;">Select Region Gateway Method:</p>
+            <div id="currencyGatewayOptions"></div>
         </div>
 
         <div class="cart-total-section">
@@ -492,8 +416,9 @@
                 <span>Total Invoice:</span>
                 <span id="cartTotal">$0.00</span>
             </div>
-            <button class="checkout-btn" id="proceedBtn">Proceed to Checkout</button>
-            <button class="place-order-btn" id="placeOrderBtn">Confirm Order</button>
+            <!-- Dynamic Navigation Buttons Layer Layout -->
+            <button class="flow-btn primary-flow-btn" id="proceedBtn">Proceed to Checkout</button>
+            <button class="flow-btn success-flow-btn" id="placeOrderBtn">Confirm & Authorize Order</button>
         </div>
     </div>
 
@@ -501,7 +426,6 @@
     <div class="modal-overlay" id="authModal">
         <div class="auth-box">
             <button class="modal-close" id="closeAuth" style="display:none;">&times;</button>
-            
             <div id="credentialsForm">
                 <h3 id="authModalTitle">Sign In</h3>
                 <div id="signUpFields" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 12px;">
@@ -520,33 +444,21 @@
                         <input type="password" id="authPassword" placeholder="Minimum 6 characters">
                     </div>
                 </div>
-                
-                <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: 8px;">
-                    <span onclick="switchWorkflow('forgot')" style="color: #06b6d4; font-size: 0.75rem; cursor: pointer; font-weight: 600;">Forgot Password?</span>
-                </div>
-
+                <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: 8px;"><span onclick="switchWorkflow('forgot')" style="color: #06b6d4; font-size: 0.75rem; cursor: pointer; font-weight: 600;">Forgot Password?</span></div>
                 <button class="auth-submit-btn" id="authSubmitBtn">Continue</button>
-                <p class="auth-toggle-text" id="authToggleText">
-                    New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>
-                </p>
+                <p class="auth-toggle-text" id="authToggleText">New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span></p>
             </div>
 
             <div id="forgotForm" style="display: none;">
                 <h3>Reset Password</h3>
-                <div class="input-group" style="margin-bottom: 12px;">
-                    <label>Account Email</label>
-                    <input type="email" id="forgotIdentity" placeholder="name@domain.com">
-                </div>
+                <div class="input-group" style="margin-bottom: 12px;"><label>Account Email</label><input type="email" id="forgotIdentity" placeholder="name@domain.com"></div>
                 <button class="auth-submit-btn" id="forgotSubmitBtn">Send Verification Code</button>
                 <p class="auth-toggle-text">Back to <span onclick="switchWorkflow('auth')">Sign In</span></p>
             </div>
 
             <div id="resetPasswordFields" style="display: none;">
                 <h3>Set New Password</h3>
-                <div class="input-group" style="margin-bottom: 12px;">
-                    <label>New Password</label>
-                    <input type="password" id="newPasswordInput" placeholder="Minimum 6 characters">
-                </div>
+                <div class="input-group" style="margin-bottom: 12px;"><label>New Password</label><input type="password" id="newPasswordInput" placeholder="Minimum 6 characters"></div>
                 <button class="auth-submit-btn" id="saveNewPasswordBtn">Update Password</button>
             </div>
 
@@ -564,7 +476,7 @@
         </div>
     </div>
 
-    <!-- User Profile Dashboard Modal -->
+    <!-- Profile Dashboard Modal -->
     <div class="modal-overlay" id="profileModal">
         <div class="auth-box" style="max-width:380px;">
             <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')">&times;</button>
@@ -581,11 +493,9 @@
                 </div>
                 <div style="width:100%;">
                     <p style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:#06b6d4;">Recent Search Queries:</p>
-                    <div class="history-list" id="historyListContainer">
-                        <div class="history-item">No records yet.</div>
-                    </div>
+                    <div class="history-list" id="historyListContainer"><div class="history-item">No records yet.</div></div>
                 </div>
-                <button class="auth-submit-btn" style="background-color:#ef4444; color:#fff;" onclick="executeLogout()">Sign Out of Account</button>
+                <button class="auth-submit-btn" style="background-color:#ef4444; color:#fff;" onclick="executeLogout()">Sign Out</button>
             </div>
         </div>
     </div>
@@ -604,6 +514,12 @@
             AE: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"]
         };
 
+        const CURRENCY_PAYMENT_MAP = {
+            IN: { label: "INR (₹)", rate: 83.5, gateways: [{ id: "in_upi", name: "UPI Apps Lane", desc: "Pay via GPay, PhonePe, or BHIM" }, { id: "in_cod", name: "Cash on Delivery", desc: "Pay cash upon arrival" }] },
+            US: { label: "USD ($)", rate: 1.0, gateways: [{ id: "us_stripe", name: "Stripe Secured Credit Card", desc: "Visa, Mastercard, Amex" }, { id: "us_paypal", name: "PayPal Express Hub", desc: "Instant wallet payment balance" }] },
+            AE: { label: "AED", rate: 3.67, gateways: [{ id: "ae_apple", name: "Apple Pay Token", desc: "Secure multi-factor iOS launch" }, { id: "ae_card", name: "Mashreq Bank Gateway", desc: "Local credit/debit card allocation" }] }
+        };
+
         let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {}; 
         let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
         let currentSessionUser = localStorage.getItem('currentSessionUser') || null;
@@ -614,6 +530,7 @@
         const closeCart = document.getElementById('closeCart');
         const cartItemsList = document.getElementById('cartItemsList');
         const checkoutForm = document.getElementById('checkoutForm');
+        const paymentForm = document.getElementById('paymentForm');
         const cartTotal = document.getElementById('cartTotal');
         const proceedBtn = document.getElementById('proceedBtn');
         const placeOrderBtn = document.getElementById('placeOrderBtn');
@@ -645,6 +562,8 @@
         let generatedOtp = "";
         let userEmailAddress = "";
         let activeWorkflow = "signup"; 
+        let currentCheckoutStep = "cart"; // cart, address, payment
+        let selectedGatewayId = "";
 
         const SERVICE_ID = "service_oofkjro";
         const TEMPLATE_ID = "template_sorgfz4";
@@ -655,10 +574,8 @@
                 const card = document.createElement('div');
                 card.classList.add('product-card');
                 card.innerHTML = `
-                    <div>
-                        <img class="product-img" src="${product.image}">
-                        <div class="product-title">${product.name}</div>
-                    </div>
+                    <img class="product-img" src="${product.image}">
+                    <div class="product-title">${product.name}</div>
                     <div>
                         <div class="product-price">$${product.price.toFixed(2)}</div>
                         <div class="action-btn-group">
@@ -682,29 +599,58 @@
             }
         }
 
-        // 3-Second Automated Pop-Up Rules Engine Trigger
+        function evaluateCountryCurrencyConfig() {
+            const countryCode = document.getElementById('custCountry').value;
+            const optionsContainer = document.getElementById('currencyGatewayOptions');
+            optionsContainer.innerHTML = "";
+            selectedGatewayId = "";
+
+            if(CURRENCY_PAYMENT_MAP[countryCode]) {
+                const config = CURRENCY_PAYMENT_MAP[countryCode];
+                config.gateways.forEach((gate, idx) => {
+                    const isSelected = idx === 0 ? 'selected' : '';
+                    if(idx === 0) selectedGatewayId = gate.id;
+
+                    optionsContainer.innerHTML += `
+                        <div class="gateway-card-select ${isSelected}" id="${gate.id}" onclick="selectPaymentGateway('${gate.id}')">
+                            <div class="gateway-details">
+                                <h4>${gate.name}</h4>
+                                <p>${gate.desc}</p>
+                            </div>
+                            <span style="font-size:0.8rem; color:#06b6d4;">✔</span>
+                        </div>
+                    `;
+                });
+            }
+            refreshCartDrawerUI();
+        }
+
+        function selectPaymentGateway(id) {
+            document.querySelectorAll('.gateway-card-select').forEach(card => card.classList.remove('selected'));
+            const selected = document.getElementById(id);
+            if(selected) selected.classList.add('selected');
+            selectedGatewayId = id;
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             buildMainCatalogUI(PRODUCT_CATALOG);
             renderSystemSessionState();
             
-            if(!currentSessionUser) {
-                setTimeout(() => {
-                    if(!currentSessionUser) {
-                        switchWorkflow('auth');
-                        toggleAuthView(false);
-                        authModal.classList.add('active');
-                        emitSlidToastAlert('error', 'Sign In Required', 'Please connect profile configurations to explore storefront.');
-                    }
-                }, 3000);
-            }
+            setTimeout(() => {
+                if(!currentSessionUser) {
+                    switchWorkflow('auth');
+                    toggleAuthView(false);
+                    authModal.classList.add('active');
+                    emitSlidToastAlert('error', 'Sign In Required', 'Please connect profile configurations.');
+                }
+            }, 3000);
         });
 
         function renderSystemSessionState() {
             if(currentSessionUser && registeredUsers[currentSessionUser]) {
                 openAuthModal.style.display = 'none';
                 profileTrigger.style.display = 'block';
-                const storedAvatar = localStorage.getItem(`avatar_${currentSessionUser}`);
-                profileTrigger.src = storedAvatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                profileTrigger.src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
                 document.getElementById('closeAuth').style.display = 'block';
             } else {
                 openAuthModal.style.display = 'block';
@@ -719,9 +665,7 @@
                 reader.onload = function(e) {
                     document.getElementById('profileDashboardImg').src = e.target.result;
                     profileTrigger.src = e.target.result;
-                    if(currentSessionUser) {
-                        localStorage.setItem(`avatar_${currentSessionUser}`, e.target.result);
-                    }
+                    if(currentSessionUser) localStorage.setItem(`avatar_${currentSessionUser}`, e.target.result);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -731,16 +675,11 @@
             if(!currentSessionUser) return;
             document.getElementById('profileNameString').textContent = registeredUsers[currentSessionUser].name;
             document.getElementById('profileEmailString').textContent = currentSessionUser;
-            
-            const storedAvatar = localStorage.getItem(`avatar_${currentSessionUser}`);
-            document.getElementById('profileDashboardImg').src = storedAvatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+            document.getElementById('profileDashboardImg').src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
             
             const listNode = document.getElementById('historyListContainer');
             listNode.innerHTML = searchHistory.length === 0 ? '<div class="history-item">No queries recorded.</div>' : '';
-            searchHistory.forEach(item => {
-                listNode.innerHTML += `<div class="history-item">🔍 ${item}</div>`;
-            });
-            
+            searchHistory.forEach(item => { listNode.innerHTML += `<div class="history-item">🔍 ${item}</div>`; });
             document.getElementById('profileModal').classList.add('active');
         }
 
@@ -757,18 +696,13 @@
         function executeLogout() {
             localStorage.removeItem('currentSessionUser');
             currentSessionUser = null;
-            document.getElementById('profileModal').classList.remove('active');
-            renderSystemSessionState();
             window.location.reload();
         }
 
         function executeBuyNowLane(prodId) {
             executeCartInsertion(prodId);
-            cartItemsList.style.display = 'none';
-            checkoutForm.style.display = 'flex';
-            proceedBtn.style.display = 'none';
-            placeOrderBtn.style.display = 'block';
-            sidebarTitle.textContent = "Delivery Setup";
+            if(!currentSessionUser) { authModal.classList.add('active'); return; }
+            transitionSidebarFlowView("address");
             cartSidebar.classList.add('open');
         }
 
@@ -787,52 +721,107 @@
             setTimeout(() => appToast.classList.remove('active'), 3500);
         }
 
+        // Navigation Management Interface Step Switching Function
+        function transitionSidebarFlowView(step) {
+            currentCheckoutStep = step;
+            if(step === 'cart') {
+                sidebarTitle.textContent = "Your Cart";
+                cartItemsList.style.display = "block";
+                checkoutForm.style.display = "none";
+                paymentForm.style.display = "none";
+                proceedBtn.style.display = "block";
+                proceedBtn.textContent = "Proceed to Checkout";
+                placeOrderBtn.style.display = "none";
+            } else if(step === 'address') {
+                sidebarTitle.textContent = "Delivery Address Setup";
+                cartItemsList.style.display = "none";
+                checkoutForm.style.display = "flex";
+                paymentForm.style.display = "none";
+                proceedBtn.style.display = "block";
+                proceedBtn.textContent = "Continue to Payment";
+                placeOrderBtn.style.display = "none";
+            } else if(step === 'payment') {
+                sidebarTitle.textContent = "Select Payment Option";
+                cartItemsList.style.display = "none";
+                checkoutForm.style.display = "none";
+                paymentForm.style.display = "flex";
+                proceedBtn.style.display = "none";
+                placeOrderBtn.style.display = "block";
+            }
+        }
+
+        proceedBtn.addEventListener('click', () => {
+            if(currentCheckoutStep === 'cart') {
+                if (Object.keys(cartMap).length === 0) { emitSlidToastAlert('error', 'Empty Cart', 'Please choose products first.'); return; }
+                if(!currentSessionUser) { cartSidebar.classList.remove('open'); authModal.classList.add('active'); return; }
+                transitionSidebarFlowView('address');
+            } else if(currentCheckoutStep === 'address') {
+                // Validation of fields
+                const name = document.getElementById('custName').value.trim();
+                const phone = document.getElementById('custPhone').value.trim();
+                const country = document.getElementById('custCountry').value;
+                const state = document.getElementById('custState').value;
+                const pin = document.getElementById('custPin').value.trim();
+                const address = document.getElementById('custAddress').value.trim();
+
+                if(!name || !phone || !country || !state || !pin || !address) {
+                    emitSlidToastAlert('error', 'Missing Fields', 'Please complete all address fields layout details.');
+                    return;
+                }
+                transitionSidebarFlowView('payment');
+            }
+        });
+
+        placeOrderBtn.addEventListener('click', () => {
+            if(!selectedGatewayId) { emitSlidToastAlert('error', 'Selection Required', 'Please tap a billing gateway lane.'); return; }
+            
+            emitSlidToastAlert('success', 'Order Placed!', 'Your transaction process execution routing is complete.');
+            cartMap = {}; 
+            document.getElementById('custName').value = "";
+            document.getElementById('custPhone').value = "";
+            document.getElementById('custCountry').value = "";
+            document.getElementById('custState').innerHTML = '<option value="">Select State</option>';
+            document.getElementById('custPin').value = "";
+            document.getElementById('custAddress').value = "";
+            refreshCartDrawerUI(); 
+            transitionSidebarFlowView('cart');
+            cartSidebar.classList.remove('open');
+        });
+
         authSubmitBtn.addEventListener('click', () => {
             const email = document.getElementById('authIdentity').value.trim().toLowerCase();
             const pass = document.getElementById('authPassword').value.trim();
-            
-            if(!email || !pass || !email.includes('@')) { 
-                emitSlidToastAlert('error', 'Input Error', 'Please complete login criteria parameters.'); 
-                return; 
-            }
-            
+            if(!email || !pass) return;
             userEmailAddress = email;
 
             if (isSignUpMode) {
-                activeWorkflow = "signup";
-                sendOtpEmail();
+                activeWorkflow = "signup"; sendOtpEmail();
             } else {
-                if (registeredUsers[email]) {
-                    if (registeredUsers[email].password === pass) {
-                        currentSessionUser = email;
-                        localStorage.setItem('currentSessionUser', currentSessionUser);
-                        renderSystemSessionState();
-                        authModal.classList.remove('active');
-                        emitSlidToastAlert('success', 'Logged In', 'Session connected.');
-                    } else {
-                        emitSlidToastAlert('error', 'Auth Failure', 'Incorrect verification configuration password rule.');
-                    }
+                if (registeredUsers[email] && registeredUsers[email].password === pass) {
+                    currentSessionUser = email; localStorage.setItem('currentSessionUser', currentSessionUser);
+                    renderSystemSessionState(); authModal.classList.remove('active');
+                    emitSlidToastAlert('success', 'Session Synced', 'Welcome back!');
                 } else {
-                    emitSlidToastAlert('error', 'Not Found', 'No account matrix records matching this address.');
+                    emitSlidToastAlert('error', 'Auth Failure', 'Bad parameters configuration.');
                 }
             }
         });
 
-        // Event bindings
         document.getElementById('closeAuth').addEventListener('click', () => authModal.classList.remove('active'));
         openAuthModal.addEventListener('click', () => { switchWorkflow('auth'); toggleAuthView(false); authModal.classList.add('active'); });
-        
+        cartToggle.addEventListener('click', () => { transitionSidebarFlowView('cart'); cartSidebar.classList.add('open'); });
+        closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
         forgotSubmitBtn.addEventListener('click', () => {
             const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
-            if(!registeredUsers[email]) { emitSlidToastAlert('error', 'Not Found', 'Account not recorded.'); return; }
-            userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail();
+            if(registeredUsers[email]) { userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail(); }
         });
 
         function sendOtpEmail() {
             generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
             const templateParams = { email: userEmailAddress, to_email: userEmailAddress, otp_code: generatedOtp };
             emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams).then(() => {
-                switchWorkflow('otp'); beginCountdownClock(); emitSlidToastAlert('success', 'OTP Dispatched', 'Check spam folder maps.');
+                switchWorkflow('otp'); beginCountdownClock(); emitSlidToastAlert('success', 'OTP Sent', 'Check spam box.');
             });
         }
 
@@ -856,16 +845,9 @@
                     const pass = document.getElementById('authPassword').value.trim();
                     registeredUsers[userEmailAddress] = { name: name || 'User', password: pass };
                     localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-                    currentSessionUser = userEmailAddress;
-                    localStorage.setItem('currentSessionUser', currentSessionUser);
-                    renderSystemSessionState();
-                    authModal.classList.remove('active');
-                    emitSlidToastAlert('success', 'Account Formed', 'Registration metrics fully established.');
-                } else {
-                    switchWorkflow('reset');
-                }
-            } else {
-                emitSlidToastAlert('error', 'Token Bad', 'Wrong token verification sequence.');
+                    currentSessionUser = userEmailAddress; localStorage.setItem('currentSessionUser', currentSessionUser);
+                    renderSystemSessionState(); authModal.classList.remove('active');
+                } else { switchWorkflow('reset'); }
             }
         });
 
@@ -874,7 +856,6 @@
             if(newPass.length < 6) return;
             registeredUsers[userEmailAddress].password = newPass;
             localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            emitSlidToastAlert('success', 'Updated', 'Credentials modified successfully.');
             switchWorkflow('auth'); toggleAuthView(false);
         });
 
@@ -897,7 +878,6 @@
             if (cartMap[prodId]) { cartMap[prodId].quantity += 1; } 
             else { const targetObj = PRODUCT_CATALOG.find(p => p.id === prodId); cartMap[prodId] = { ...targetObj, quantity: 1 }; }
             refreshCartDrawerUI();
-            emitSlidToastAlert('success', 'Added', 'Cart catalog tracking values updated.');
         }
 
         function adjustQuantity(prodId, delta) {
@@ -908,35 +888,27 @@
         }
 
         function refreshCartDrawerUI() {
-            cartItemsList.innerHTML = '';
-            let counterMetrics = 0, subtotal = 0;
-            Object.keys(cartMap).forEach(k => {
-                const ref = cartMap[k]; subtotal += (ref.price * ref.quantity); counterMetrics += ref.quantity;
-                cartItemsList.innerHTML += `<div class="cart-item"><img class="cart-item-thumb" src="${ref.image}"><div class="cart-item-details"><span>${ref.name}</span><span class="cart-item-price">$${ref.price}</span></div><div class="quantity-controller"><button class="qty-btn" onclick="adjustQuantity('${k}', -1)">-</button><span class="qty-val">${ref.quantity}</span><button class="qty-btn" onclick="adjustQuantity('${k}', 1)">+</button></div></div>`;
-            });
+            if(currentCheckoutStep === 'cart') {
+                cartItemsList.innerHTML = '';
+                Object.keys(cartMap).forEach(k => {
+                    const ref = cartMap[k];
+                    cartItemsList.innerHTML += `<div class="cart-item"><img class="cart-item-thumb" src="${ref.image}"><div class="cart-item-details"><span>${ref.name}</span><span class="cart-item-price">$${ref.price}</span></div><div class="quantity-controller"><button class="qty-btn" onclick="adjustQuantity('${k}', -1)">-</button><span class="qty-val">${ref.quantity}</span><button class="qty-btn" onclick="adjustQuantity('${k}', 1)">+</button></div></div>`;
+                });
+            }
+
+            let counterMetrics = 0, baseUsdTotal = 0;
+            Object.keys(cartMap).forEach(k => { baseUsdTotal += (cartMap[k].price * cartMap[k].quantity); counterMetrics += cartMap[k].quantity; });
             cartToggle.textContent = `Cart (${counterMetrics})`;
-            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+
+            const countryCode = document.getElementById('custCountry').value;
+            if(countryCode && CURRENCY_PAYMENT_MAP[countryCode]) {
+                const config = CURRENCY_PAYMENT_MAP[countryCode];
+                const convertedPrice = baseUsdTotal * config.rate;
+                cartTotal.textContent = `${config.label} ${convertedPrice.toFixed(2)}`;
+            } else {
+                cartTotal.textContent = `$${baseUsdTotal.toFixed(2)}`;
+            }
         }
-
-        cartToggle.addEventListener('click', () => {
-            cartItemsList.style.display = 'block'; checkoutForm.style.display = 'none';
-            proceedBtn.style.display = 'block'; placeOrderBtn.style.display = 'none';
-            sidebarTitle.textContent = "Your Cart"; cartSidebar.classList.add('open');
-        });
-        closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
-
-        proceedBtn.addEventListener('click', () => {
-            if(!currentSessionUser) { cartSidebar.classList.remove('open'); authModal.classList.add('active'); return; }
-            cartItemsList.style.display = 'none'; checkoutForm.style.display = 'flex';
-            proceedBtn.style.display = 'none'; placeOrderBtn.style.display = 'block';
-            sidebarTitle.textContent = "Delivery Matrix Setup";
-        });
-
-        placeOrderBtn.addEventListener('click', () => {
-            if(!document.getElementById('custName').value || !document.getElementById('custState').value) return;
-            emitSlidToastAlert('success', 'Order Dispatched', 'Your transaction process execution is complete.');
-            cartMap = {}; refreshCartDrawerUI(); cartSidebar.classList.remove('open');
-        });
 
         function moveNext(current) { if (current.value.length >= 1 && current.nextElementSibling) current.nextElementSibling.focus(); }
     </script>
