@@ -523,7 +523,8 @@
         let generatedOtp = "";
         let userEmailAddress = "";
 
-        const SERVICE_ID = "service_oefkjro";
+        // Corrected Service ID with twin 'o' parameters
+        const SERVICE_ID = "service_oofkjro";
         const TEMPLATE_ID = "template_sorgfz4";
 
         function buildMainCatalogUI(items) {
@@ -604,7 +605,7 @@
                     otp_code: generatedOtp
                 };
 
-                // Added wrapper check in case EmailJS is blocked on network
+                // Security wrapper check for CDN load failures
                 if (typeof emailjs !== 'undefined') {
                     emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
                         .then(() => {
