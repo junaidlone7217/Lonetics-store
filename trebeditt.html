@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lonetics - Premium Electronics & Essentials</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation Header */
+        header {
+            background-color: #1e293b;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            color: #06b6d4;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .auth-status-btn {
+            background: none;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .cart-icon {
+            background-color: #06b6d4;
+            color: #0f172a;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Product Catalog Grid */
+        .main-content {
+            padding: 25px 15px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            border-left: 4px solid #06b6d4;
+            padding-left: 10px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .product-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .product-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .product-price {
+            font-size: 1rem;
+            color: #06b6d4;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .buy-btn {
+            background-color: transparent;
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            padding: 6px 0;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Slide-out Sidebar Panel */
+        .cart-sidebar {
+            position: fixed;
+            top: 0; right: -340px;
+            width: 340px; height: 100vh;
+            background-color: #1e293b;
+            border-left: 1px solid #334155;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            z-index: 200;
+            transition: right 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-sidebar.open {
+            right: 0;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+        .close-cart {
+            background: none; border: none; color: #94a3b8;
+            font-size: 1.5rem; cursor: pointer;
+        }
+        
+        .cart-items-list {
+            flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 12px; background-color: #0f172a;
+            padding: 8px; border-radius: 8px;
+        }
+        .cart-item-thumb {
+            width: 40px; height: 40px; object-fit: cover; border-radius: 4px;
+        }
+        .cart-item-details {
+            flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
+        }
+        .cart-item-price { color: #06b6d4; font-weight: bold; }
+
+        /* Custom Checkout Form Layout */
+        .checkout-form-container {
+            display: none; flex-direction: column; gap: 12px;
+            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
+        }
+        .form-row-split {
+            display: flex; gap: 8px;
+        }
+        .input-group {
+            display: flex; flex-direction: column; gap: 4px; width: 100%;
+        }
+        .input-group label {
+            font-size: 0.75rem; color: #94a3b8; font-weight: 600;
+        }
+        .input-group input, .input-group textarea {
+            background-color: #0f172a; border: 1px solid #334155;
+            color: #f8fafc; padding: 8px; border-radius: 6px; font-size: 0.85rem;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #06b6d4; outline: none;
+        }
+
+        /* Payment Mode Selector Grid */
+        .payment-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px;
+        }
+        .pay-option {
+            background-color: #0f172a; border: 1px solid #334155;
+            border-radius: 6px; padding: 8px; text-align: center;
+            font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #94a3b8;
+        }
+        .pay-option.selected {
+            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.1); color: #06b6d4;
+        }
+
+        .cart-total-section {
+            border-top: 1px solid #334155; padding-top: 15px;
+        }
+        .total-row {
+            display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px;
+        }
+        .checkout-btn, .place-order-btn {
+            background-color: #06b6d4; color: #0f172a; border: none;
+            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
+        }
+        .place-order-btn {
+            background-color: #10b981; color: #fff; display: none;
+        }
+
+        /* Custom Animated Overlay Panels */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); z-index: 300;
+            display: flex; justify-content: center; align-items: center;
+            visibility: hidden; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active {
+            visibility: visible; opacity: 1;
+        }
+        .auth-box {
+            background-color: #1e293b; border: 1px solid #334155;
+            padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
+            transform: scale(0.9); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active .auth-box {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute; top: 10px; right: 15px;
+            background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;
+        }
+        .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; }
+        
+        /* NEW: Fully Animated Verification Verification Flow Layout */
+        .otp-container {
+            display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center;
+        }
+        .otp-inputs {
+            display: flex; gap: 10px; justify-content: center; margin: 10px 0;
+        }
+        .otp-field {
+            width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155;
+            border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #fff;
+        }
+        .otp-field:focus { border-color: #06b6d4; outline: none; }
+        .timer-text { font-size: 0.8rem; color: #64748b; }
+        .timer-text span { color: #06b6d4; font-weight: bold; cursor: pointer; }
+
+        .auth-toggle-text {
+            font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center;
+        }
+        .auth-toggle-text span {
+            color: #06b6d4; cursor: pointer; font-weight: bold;
+        }
+        .auth-submit-btn {
+            width: 100%; margin-top: 15px; padding: 10px;
+            background-color: #06b6d4; border: none; border-radius: 6px;
+            font-weight: bold; cursor: pointer; color: #0f172a;
+        }
+
+        /* NEW: Premium Animated Global Toast Notifications Banner UI */
+        .toast-notification {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 330px; background-color: #1e293b; border: 1px solid #334155;
+            padding: 16px; border-radius: 12px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex; align-items: flex-start; gap: 12px;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast-notification.active { top: 20px; }
+        .toast-icon { font-size: 1.5rem; }
+        .toast-body h4 { font-size: 0.9rem; font-weight: bold; margin-bottom: 2px; }
+        .toast-body p { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <!-- Premium Toast Alerts Structure Anchor -->
+    <div class="toast-notification" id="appToast">
+        <div class="toast-icon" id="toastIcon">⚠️</div>
+        <div class="toast-body">
+            <h4 id="toastTitle">Security Notice</h4>
+            <p id="toastMessage">Verification required to access elements setup configuration.</p>
+        </div>
+    </div>
+
+    <!-- Header Block -->
+    <header>
+        <div class="logo">LONE<span>TICS</span></div>
+        <div class="header-actions">
+            <button class="auth-status-btn" id="openAuthModal">Sign In</button>
+            <div class="cart-icon" id="cartToggle">Cart (0)</div>
+        </div>
+    </header>
+
+    <!-- Catalog Layout Items Grid -->
+    <div class="main-content">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="grid">
+            <div class="product-card">
+                <div>
+                    <img class="product-img" src="https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400" alt="Mouse">
+                    <div class="product-title">Wireless Gaming Mouse</div>
+                </div>
+                <div>
+                    <div class="product-price">$49.99</div>
+                    <button class="buy-btn" onclick="addToCart('Wireless Gaming Mouse', 49.99, 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=100')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <img class="product-img" src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400" alt="Keyboard">
+                    <div class="product-title">Mechanical Keyboard</div>
+                </div>
+                <div>
+                    <div class="product-price">$89.99</div>
+                    <button class="buy-btn" onclick="addToCart('Mechanical Keyboard', 89.99, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=100')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-Commerce Sidebar Drawer Panel Container -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 id="sidebarTitle">Your Cart</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        
+        <div class="cart-items-list" id="cartItemsList"></div>
+        
+        <!-- Address + Payment Checkout Step Pane -->
+        <div class="checkout-form-container" id="checkoutForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="custName" placeholder="Enter your name">
+            </div>
+            <div class="form-row-split">
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="custPhone" placeholder="10-digit number">
+                </div>
+                <div class="input-group">
+                    <label>Pincode</label>
+                    <input type="number" id="custPin" placeholder="6-digit code">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Detailed Delivery Address</label>
+                <textarea id="custAddress" rows="2" placeholder="House/Flat No., Street, Area..."></textarea>
+            </div>
+            <div class="form-row-split">
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" id="custCity" placeholder="City">
+                </div>
+                <div class="input-group">
+                    <label>State</label>
+                    <input type="text" id="custState" placeholder="State">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Payment Mode</label>
+                <div class="payment-grid">
+                    <div class="pay-option selected" onclick="selectPayment(this, 'COD')">COD</div>
+                    <div class="pay-option" onclick="selectPayment(this, 'UPI')">UPI</div>
+                    <div class="pay-option" onclick="selectPayment(this, 'CARD')">Card</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-total-section">
+            <div class="total-row">
+                <span>Total Amount:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="proceedBtn">Proceed to Checkout</button>
+            <button class="place-order-btn" id="placeOrderBtn">Confirm & Place Order</button>
+        </div>
+    </div>
+
+    <!-- Authentication overlay popup module block -->
+    <div class="modal-overlay" id="authModal">
+        <div class="auth-box">
+            <button class="modal-close" id="closeAuth">&times;</button>
+            
+            <!-- Standard dynamic Sign In / Sign Up Forms Section Block -->
+            <div id="credentialsForm">
+                <h3 id="authModalTitle">Sign In</h3>
+                <div id="signUpFields" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 12px;">
+                    <div class="input-group">
+                        <label>Your Full Name</label>
+                        <input type="text" id="regName" placeholder="First and last name">
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="input-group">
+                        <label>Email or Mobile Number</label>
+                        <input type="text" id="authIdentity" placeholder="Enter details...">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="authPassword" placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" id="authSubmitBtn">Continue</button>
+                <p class="auth-toggle-text" id="authToggleText">
+                    New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>
+                </p>
+            </div>
+
+            <!-- NEW VIEW: Fully Interactive Verification Panel UI -->
+            <div class="otp-container" id="otpView">
+                <h3>Verify Identity</h3>
+                <p class="auth-toggle-text" style="margin: 0;">We sent a 4-digit code to your credential identity line.</p>
+                <div class="otp-inputs">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                </div>
+                <button class="auth-submit-btn" id="verifyOtpBtn">Verify & Create Account</button>
+                <p class="timer-text" id="otpTimerText">Resend OTP in <span id="secondsLeft">30</span>s</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Target Objects Core Setup definitions
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartToggle = document.getElementById('cartToggle');
+        const closeCart = document.getElementById('closeCart');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const cartTotal = document.getElementById('cartTotal');
+        const proceedBtn = document.getElementById('proceedBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+
+        // Notification Elements
+        const appToast = document.getElementById('appToast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Auth Frameworks DOM Links
+        const authModal = document.getElementById('authModal');
+        const openAuthModal = document.getElementById('openAuthModal');
+        const closeAuth = document.getElementById('closeAuth');
+        const credentialsForm = document.getElementById('credentialsForm');
+        const signUpFields = document.getElementById('signUpFields');
+        const authModalTitle = document.getElementById('authModalTitle');
+        const authToggleText = document.getElementById('authToggleText');
+        const authSubmitBtn = document.getElementById('authSubmitBtn');
+        
+        // OTP Section UI Links
+        const otpView = document.getElementById('otpView');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+        const secondsLeftLabel = document.getElementById('secondsLeft');
+        const otpTimerText = document.getElementById('otpTimerText');
+
+        let cart = [];
+        let isSignUpMode = false;
+        let selectedPayMode = 'COD';
+        let isLoggedIn = false;
+        let timerInterval = null;
+
+        // Custom Animated Notification Generator
+        function showNotification(type, title, text) {
+            toastIcon.textContent = type === 'success' ? '🎉' : '🔒';
+            appToast.style.borderColor = type === 'success' ? '#10b981' : '#ef4444';
+            toastTitle.textContent = title;
+            toastMessage.textContent = text;
+            
+            appToast.classList.add('active');
+            setTimeout(() => appToast.classList.remove('active'), 4000);
+        }
+
+        // Access Controls UI Actions
+        openAuthModal.addEventListener('click', () => {
+            credentialsForm.style.display = 'block';
+            otpView.style.display = 'none';
+            authModal.classList.add('active');
+        });
+        closeAuth.addEventListener('click', () => authModal.classList.remove('active'));
+
+        function toggleAuthView(toSignUp) {
+            isSignUpMode = toSignUp;
+            if (toSignUp) {
+                authModalTitle.textContent = "Create Account (Sign Up)";
+                signUpFields.style.display = 'flex';
+                authToggleText.innerHTML = 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>';
+            } else {
+                authModalTitle.textContent = "Sign In";
+                signUpFields.style.display = 'none';
+                authToggleText.innerHTML = 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
+            }
+        }
+
+        // Processing Auth Phase (Signs In or Triggers dynamic OTP module block)
+        authSubmitBtn.addEventListener('click', () => {
+            const identity = document.getElementById('authIdentity').value.trim();
+            const pass = document.getElementById('authPassword').value.trim();
+            if(!identity || !pass) { showNotification('error', 'Fields Empty', 'Please provide valid identification fields.'); return; }
+            
+            if (isSignUpMode) {
+                // Shift panel seamlessly to display interactive OTP form block interface
+                credentialsForm.style.display = 'none';
+                otpView.style.display = 'flex';
+                startOtpTimer();
+            } else {
+                // Direct login bypass for established profiles accounts
+                isLoggedIn = true;
+                openAuthModal.textContent = "Account Active ✔";
+                authModal.classList.remove('active');
+                showNotification('success', 'Welcome Back!', 'Login authorization confirmed successfully.');
+            }
+        });
+
+        // OTP Input Focus Shift Helper script execution function
+        function moveNext(current) {
+            if (current.value.length >= 1 && current.nextElementSibling) {
+                current.nextElementSibling.focus();
+            }
+        }
+
+        function startOtpTimer() {
+            let timeRemaining = 30;
+            otpTimerText.innerHTML = `Resend OTP in <span id="secondsLeft">${timeRemaining}</span>s`;
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                document.getElementById('secondsLeft').textContent = timeRemaining;
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    otpTimerText.innerHTML = `<span onclick="startOtpTimer()">Resend OTP Code</span>`;
+                }
+            }, 1000);
+        }
+
+        verifyOtpBtn.addEventListener('click', () => {
+            let codeEntered = "";
+            document.querySelectorAll('.otp-field').forEach(input => codeEntered += input.value);
+            
+            if(codeEntered.length < 4) { showNotification('error', 'Incomplete Code', 'Please type the full 4-digit code fields.'); return; }
+            
+            isLoggedIn = true;
+            openAuthModal.textContent = "Account Active ✔";
+            authModal.classList.remove('active');
+            showNotification('success', 'Profile Created!', 'Your verified Lonetics account is now active.');
+        });
+
+        // Cart Drawer Operations View Handlers
+        cartToggle.addEventListener('click', () => {
+            cartItemsList.style.display = 'block';
+            checkoutForm.style.display = 'none';
+            proceedBtn.style.display = 'block';
+            placeOrderBtn.style.display = 'none';
+            sidebarTitle.textContent = "Your Cart";
+            cartSidebar.classList.add('open');
+        });
+        closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
+        function addToCart(name, price, imgSrc) {
+            cart.push({ name, price, imgSrc });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            cartToggle.textContent = `Cart (${cart.length})`;
+            cartItemsList.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price;
+                const itemRow = document.createElement('div');
+                itemRow.classList.add('cart-item');
+                itemRow.innerHTML = `
+                    <img class="cart-item-thumb" src="${item.imgSrc}">
+                    <div class="cart-item-details">
+                        <span>${item.name}</span>
+                        <span class="cart-item-price">$${item.price}</span>
+                    </div>
+                `;
+                cartItemsList.appendChild(itemRow);
+            });
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Dynamic Guard Intercept Action
+        proceedBtn.addEventListener('click', () => {
+            if (cart.length === 0) { showNotification('error', 'Empty Cart', 'Add electronics items before checking out.'); return; }
+            
+            if (!isLoggedIn) {
+                // Slide drawer panel shut cleanly, trigger elegant down animation warning toast notification
+                cartSidebar.classList.remove('open');
+                showNotification('error', 'Security Blocked', 'Please authenticate your profile to access checkout.');
+                setTimeout(() => {
+                    toggleAuthView(false);
+                    credentialsForm.style.display = 'block';
+                    otpView.style.display = 'none';
+                    authModal.classList.add('active');
+                }, 800);
+                return;
+            }
+
+            cartItemsList.style.display = 'none';
+            checkoutForm.style.display = 'flex';
+            proceedBtn.style.display = 'none';
+            placeOrderBtn.style.display = 'block';
+            sidebarTitle.textContent = "Delivery Details";
+        });
+
+        function selectPayment(element, mode) {
+            document.querySelectorAll('.pay-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedPayMode = mode;
+        }
+
+        placeOrderBtn.addEventListener('click', () => {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const pin = document.getElementById('custPin').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+
+            if (!name || !phone || !pin || !address) {
+                showNotification('error', 'Missing Parameters', 'Delivery address inputs and local pincodes are required.');
+                return;
+            }
+
+            // Execute final animated order success notification modal card banner UI
+            showNotification('success', 'Order Confirmed!', `Lonetics shipment dispatched using payment strategy: ${selectedPayMode}.`);
+            
+            // Clean Reset Data States
+            cart = [];
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custPin').value = '';
+            document.getElementById('custAddress').value = '';
+            document.getElementById('custCity').value = '';
+            document.getElementById('custState').value = '';
+            updateCartUI();
+            cartSidebar.classList.remove('open');
+        });
+    </script>
+</body>
+</html>
