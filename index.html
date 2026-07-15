@@ -1,9 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lonetics - Premium Electronics & Essentials</title>
+    <!-- Include the official EmailJS SDK library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Fully initialized with your custom credentials
+        emailjs.init("TIv-gbXH55nrs32nc");
+    </script>
     <style>
         * {
             margin: 0;
@@ -51,7 +58,7 @@
             color: #06b6d4;
         }
         
-        /* Premium Live Search Bar Layout */
+        /* Live Search Bar Layout */
         .search-container {
             width: 100%;
             max-width: 400px;
@@ -218,7 +225,7 @@
             padding-right: 4px;
         }
         
-        /* ADVANCED: Cart Quantity Increments Matrix Setup */
+        /* Cart Item Setup */
         .cart-item {
             display: flex; align-items: center; gap: 10px;
             margin-bottom: 12px; background-color: #0f172a;
@@ -339,7 +346,6 @@
 </head>
 <body>
 
-    <!-- Elite In-App Custom Toast Frame -->
     <div class="toast-notification" id="appToast">
         <div class="toast-icon" id="toastIcon">⚠️</div>
         <div class="toast-body">
@@ -348,7 +354,6 @@
         </div>
     </div>
 
-    <!-- Universal Adaptive Header Block Area -->
     <header>
         <div class="header-top">
             <div class="logo">LONE<span>TICS</span></div>
@@ -362,15 +367,11 @@
         </div>
     </header>
 
-    <!-- Main Dynamic Layout Context Structure -->
     <div class="main-content">
         <h2 class="section-title">Premium Catalog</h2>
-        <div class="grid" id="productGrid">
-            <!-- Dynamic Injection Source targeted by JavaScript mapping matrix values arrays -->
-        </div>
+        <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Multi-tier Interactive Right Side Draw Bar Module Component -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h3 id="sidebarTitle">Your Cart</h3>
@@ -379,7 +380,6 @@
         
         <div class="cart-items-list" id="cartItemsList"></div>
         
-        <!-- Address & Verification Delivery Configuration Pane Frame Setup -->
         <div class="checkout-form-container" id="checkoutForm">
             <div class="input-group">
                 <label>Full Name</label>
@@ -429,7 +429,6 @@
         </div>
     </div>
 
-    <!-- Security Authorization Gateway Central Popup Screen Layout -->
     <div class="modal-overlay" id="authModal">
         <div class="auth-box">
             <button class="modal-close" id="closeAuth">&times;</button>
@@ -444,8 +443,8 @@
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <div class="input-group">
-                        <label>Email or Mobile Number</label>
-                        <input type="text" id="authIdentity" placeholder="Enter account details...">
+                        <label>Email Address</label>
+                        <input type="email" id="authIdentity" placeholder="Enter your email...">
                     </div>
                     <div class="input-group">
                         <label>Password</label>
@@ -458,10 +457,10 @@
                 </p>
             </div>
 
-            <!-- Authentic Simulated OTP Target Viewport Block Container -->
+            <!-- OTP Viewport with actual verification parameters -->
             <div class="otp-container" id="otpView">
-                <h3>Verify Identity</h3>
-                <p class="auth-toggle-text" style="margin: 0;">We dispatched a 4-digit code sequence parameters logs tracking lines.</p>
+                <h3>Verify Email Identity</h3>
+                <p class="auth-toggle-text" style="margin: 0; line-height: 1.4;">We sent a 4-digit verification code to your email.</p>
                 <div class="otp-inputs">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
@@ -475,7 +474,6 @@
     </div>
 
     <script>
-        // High-Tier Master Core Inventory Model Matrix Setup Arrays
         const PRODUCT_CATALOG = [
             { id: "p1", name: "Wireless Gaming Mouse", price: 49.99, image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400" },
             { id: "p2", name: "Mechanical RGB Keyboard", price: 89.99, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400" },
@@ -485,7 +483,6 @@
             { id: "p6", name: "Standalone Next-Gen VR Headset", price: 299.99, image: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400" }
         ];
 
-        // Central Targets Anchors mapping
         const productGrid = document.getElementById('productGrid');
         const cartSidebar = document.getElementById('cartSidebar');
         const cartToggle = document.getElementById('cartToggle');
@@ -498,7 +495,6 @@
         const sidebarTitle = document.getElementById('sidebarTitle');
         const catalogSearch = document.getElementById('catalogSearch');
 
-        // Modals Alerts Components Targets
         const appToast = document.getElementById('appToast');
         const toastIcon = document.getElementById('toastIcon');
         const toastTitle = document.getElementById('toastTitle');
@@ -515,17 +511,22 @@
         const verifyOtpBtn = document.getElementById('verifyOtpBtn');
         const otpTimerText = document.getElementById('otpTimerText');
 
-        let cartMap = {}; // Tracks internal dictionary mappings key hashes values configurations
+        let cartMap = {};
         let isSignUpMode = false;
         let selectedPayMode = 'COD';
         let isLoggedIn = false;
         let timerInterval = null;
 
-        // Dynamic Component Grid Catalog Generator Render Scripts
+        let generatedOtp = "";
+        let userEmailAddress = "";
+
+        const SERVICE_ID = "service_oefkjro";
+        const TEMPLATE_ID = "template_sorgfz4";
+
         function buildMainCatalogUI(items) {
             productGrid.innerHTML = '';
             if (items.length === 0) {
-                productGrid.innerHTML = `<p style="grid-column: span 4; font-size: 0.85rem; color:#64748b; text-align:center; padding:20px;">No matching electronics inventory segments found.</p>`;
+                productGrid.innerHTML = `<p style="grid-column: span 4; font-size: 0.85rem; color:#64748b; text-align:center; padding:20px;">No matching products found.</p>`;
                 return;
             }
             items.forEach(product => {
@@ -545,25 +546,22 @@
             });
         }
 
-        // Live Real-Time Search Filtering Logic Engine
         function filterCatalogSearch() {
             const criteria = catalogSearch.value.toLowerCase().trim();
             const filtered = PRODUCT_CATALOG.filter(item => item.name.toLowerCase().includes(criteria));
             buildMainCatalogUI(filtered);
         }
 
-        // Elastic Header Slides Toast Alert Handler Script
+        // Top Bar Slid Toast Alert Layout Handler
         function emitSlidToastAlert(type, title, message) {
             toastIcon.textContent = type === 'success' ? '🎉' : '🔒';
             appToast.style.borderColor = type === 'success' ? '#10b981' : '#ef4444';
             toastTitle.textContent = title;
             toastMessage.textContent = message;
-            
             appToast.classList.add('active');
             setTimeout(() => appToast.classList.remove('active'), 3500);
         }
 
-        // Access Controls Layout Handlers
         openAuthModal.addEventListener('click', () => {
             credentialsForm.style.display = 'block';
             otpView.style.display = 'none';
@@ -585,19 +583,41 @@
         }
 
         authSubmitBtn.addEventListener('click', () => {
-            const identity = document.getElementById('authIdentity').value.trim();
+            const email = document.getElementById('authIdentity').value.trim();
             const pass = document.getElementById('authPassword').value.trim();
-            if(!identity || !pass) { emitSlidToastAlert('error', 'Fields Empty', 'Please provide validation credentials access logs.'); return; }
             
+            if(!email || !pass || !email.includes('@')) { 
+                emitSlidToastAlert('error', 'Invalid Input', 'Please provide a valid email and password.'); 
+                return; 
+            }
+            
+            userEmailAddress = email;
+
             if (isSignUpMode) {
-                credentialsForm.style.display = 'none';
-                otpView.style.display = 'flex';
-                beginCountdownClock();
+                generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+                emitSlidToastAlert('success', 'Sending OTP...', 'Please wait while we send your code.');
+
+                const templateParams = {
+                    email: userEmailAddress,
+                    otp_code: generatedOtp
+                };
+
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                    .then(() => {
+                        credentialsForm.style.display = 'none';
+                        otpView.style.display = 'flex';
+                        beginCountdownClock();
+                        emitSlidToastAlert('success', 'OTP Dispatched!', `Check your inbox at ${userEmailAddress}`);
+                    }, (error) => {
+                        console.error('Failed to send OTP...', error);
+                        emitSlidToastAlert('error', 'Mail Delivery Failed', 'Verify your API keys configurations.');
+                    });
+
             } else {
                 isLoggedIn = true;
                 openAuthModal.textContent = "Account Active ✔";
                 authModal.classList.remove('active');
-                emitSlidToastAlert('success', 'Authorization Success!', 'Profile authentication access loops verified securely.');
+                emitSlidToastAlert('success', 'Authorization Success!', 'Logged in securely.');
             }
         });
 
@@ -618,24 +638,47 @@
                 if(counterNode) counterNode.textContent = clockSeconds;
                 if (clockSeconds <= 0) {
                     clearInterval(timerInterval);
-                    otpTimerText.innerHTML = `<span onclick="beginCountdownClock()">Resend Verification Code</span>`;
+                    otpTimerText.innerHTML = `<span onclick="resendRealOtp()">Resend Verification Code</span>`;
                 }
             }, 1000);
         }
 
+        function resendRealOtp() {
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            emitSlidToastAlert('success', 'Resending OTP...', 'Sending a new code...');
+            
+            const templateParams = {
+                email: userEmailAddress,
+                otp_code: generatedOtp
+            };
+
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                .then(() => {
+                    beginCountdownClock();
+                    emitSlidToastAlert('success', 'New OTP Sent!', 'Check your inbox.');
+                });
+        }
+
         verifyOtpBtn.addEventListener('click', () => {
-            let sequenceStr = "";
-            document.querySelectorAll('.otp-field').forEach(input => sequenceStr += input.value);
+            let enteredCode = "";
+            document.querySelectorAll('.otp-field').forEach(input => enteredCode += input.value);
             
-            if(sequenceStr.length < 4) { emitSlidToastAlert('error', 'Code Deficient', 'Type the complete 4-digit token grid.'); return; }
+            if(enteredCode.length < 4) { 
+                emitSlidToastAlert('error', 'Incomplete Code', 'Please fill out all 4 slots.'); 
+                return; 
+            }
             
-            isLoggedIn = true;
-            openAuthModal.textContent = "Account Active ✔";
-            authModal.classList.remove('active');
-            emitSlidToastAlert('success', 'Profile Onboarded!', 'Identity security tokens confirmed operations.');
+            if (enteredCode === generatedOtp) {
+                isLoggedIn = true;
+                openAuthModal.textContent = "Account Active ✔";
+                authModal.classList.remove('active');
+                emitSlidToastAlert('success', 'Identity Verified!', 'Account created successfully!');
+            } else {
+                emitSlidToastAlert('error', 'Invalid Code', 'The OTP code you entered is incorrect. Try again.');
+                document.querySelectorAll('.otp-field').forEach(input => input.value = "");
+            }
         });
 
-        // E-Commerce Core Cart Quantity Engine
         cartToggle.addEventListener('click', () => {
             cartItemsList.style.display = 'block';
             checkoutForm.style.display = 'none';
@@ -654,7 +697,7 @@
                 cartMap[prodId] = { ...targetObj, quantity: 1 };
             }
             refreshCartDrawerUI();
-            emitSlidToastAlert('success', 'Cart Appended', `${cartMap[prodId].name} added layout matrix configurations.`);
+            emitSlidToastAlert('success', 'Cart Updated', `${cartMap[prodId].name} added.`);
         }
 
         function adjustQuantity(prodId, delta) {
@@ -697,13 +740,15 @@
             cartTotal.textContent = `$${subtotal.toFixed(2)}`;
         }
 
-        // Security Guard Checkout Interceptor Pipeline
         proceedBtn.addEventListener('click', () => {
-            if (Object.keys(cartMap).length === 0) { emitSlidToastAlert('error', 'Cart Deficit', 'Add electronics products to start checkout sequences.'); return; }
+            if (Object.keys(cartMap).length === 0) { 
+                emitSlidToastAlert('error', 'Empty Cart', 'Please add items to your cart first.'); 
+                return; 
+            }
             
             if (!isLoggedIn) {
                 cartSidebar.classList.remove('open');
-                emitSlidToastAlert('error', 'Blocked Access', 'Please sign in or register to complete dispatch configurations.');
+                emitSlidToastAlert('error', 'Login Required', 'Please sign in to proceed with checkout.');
                 setTimeout(() => {
                     toggleAuthView(false);
                     credentialsForm.style.display = 'block';
@@ -732,15 +777,13 @@
             const pin = document.getElementById('custPin').value.trim();
             const location = document.getElementById('custAddress').value.trim();
 
-            if (!client || !phone || !pin || !location) {
-                emitSlidToastAlert('error', 'Inputs Vacant', 'Provide all name entries, correct pincodes, and tracking metadata address lines.');
+            if (!client || !phone || !pin || location === "") {
+                emitSlidToastAlert('error', 'Empty Fields', 'Please complete all address details.');
                 return;
             }
 
-            emitSlidToastAlert('success', 'Log Dispatched!', `Lonetics fulfillment order routed via payment: ${selectedPayMode}. Check console.`);
-            console.log(`[Lonetics Success Invoice System Log]: Total Charge: ${cartTotal.textContent} | Targeted Area Pin: ${pin}`);
+            emitSlidToastAlert('success', 'Order Placed!', `Your shipment has been dispatched. payment method: ${selectedPayMode}.`);
             
-            // Clean Reset States
             cartMap = {};
             document.getElementById('custName').value = '';
             document.getElementById('custPhone').value = '';
@@ -752,7 +795,6 @@
             cartSidebar.classList.remove('open');
         });
 
-        // Initialize Catalog Injection instantly on launch configuration routines
         buildMainCatalogUI(PRODUCT_CATALOG);
     </script>
 </body>
