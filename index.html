@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
-    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -21,17 +19,18 @@
             console.error("EmailJS initialization failed:", error);
         }
 
-        // Your exact Firebase project configurations from your screenshot!
+        // Your 100% complete, uncut Firebase configuration credentials
         const firebaseConfig = {
-            apiKey: "AIzaSyA5CaVG6SAkGu5Z0ffJoT8",
+            apiKey: "AIzaSyA5CaVG6SAkGu5Z0ffJoT8Qqe1pkhOvNMA",
             authDomain: "lonetics-store.firebaseapp.com",
             projectId: "lonetics-store",
-            storageBucket: "lonetics-store.appspot.com",
+            storageBucket: "lonetics-store.firebasestorage.app",
             messagingSenderId: "1037550611605",
-            appId: "1:1037550611605:web:21645faf"
+            appId: "1:1037550611605:web:21645faf582e61e3947f9c",
+            measurementId: "G-JQ95C6XPED"
         };
 
-        // Initialize Firebase Global Instances
+        // Initialize Firebase Global Instances securely
         let db;
         try {
             firebase.initializeApp(firebaseConfig);
@@ -385,7 +384,6 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Combined Sidebar Drawer -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h3 id="sidebarTitle">Your Cart</h3>
@@ -394,7 +392,6 @@
         
         <div class="cart-items-list" id="cartItemsList"></div>
         
-        <!-- Address Input Elements -->
         <div class="checkout-form-container" id="checkoutForm">
             <div class="input-group">
                 <label>Full Name</label>
@@ -431,7 +428,6 @@
             </div>
         </div>
 
-        <!-- Dynamic Payment Options Block -->
         <div class="payment-gateway-lane" id="paymentForm">
             <p style="font-size: 0.8rem; color:#94a3b8; margin-bottom: 10px;">Select Country Payment Gateway:</p>
             <div id="currencyGatewayOptions"></div>
@@ -447,7 +443,6 @@
         </div>
     </div>
 
-    <!-- Security Gateway Modal -->
     <div class="modal-overlay" id="authModal">
         <div class="auth-box">
             <button class="modal-close" id="closeAuth" style="display:none;">&times;</button>
@@ -476,15 +471,10 @@
 
             <div id="forgotForm" style="display: none;">
                 <h3>Reset Password</h3>
+                <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 12px;">Enter your email to receive a secure password reset link.</p>
                 <div class="input-group" style="margin-bottom: 12px;"><label>Account Email</label><input type="email" id="forgotIdentity" placeholder="name@domain.com"></div>
-                <button class="auth-submit-btn" id="forgotSubmitBtn">Send Verification Code</button>
+                <button class="auth-submit-btn" id="forgotSubmitBtn">Send Reset Link</button>
                 <p class="auth-toggle-text">Back to <span onclick="switchWorkflow('auth')">Sign In</span></p>
-            </div>
-
-            <div id="resetPasswordFields" style="display: none;">
-                <h3>Set New Password</h3>
-                <div class="input-group" style="margin-bottom: 12px;"><label>New Password</label><input type="password" id="newPasswordInput" placeholder="Minimum 6 characters"></div>
-                <button class="auth-submit-btn" id="saveNewPasswordBtn">Update Password</button>
             </div>
 
             <div class="otp-container" id="otpView">
@@ -501,7 +491,6 @@
         </div>
     </div>
 
-    <!-- User Profile Dashboard Modal -->
     <div class="modal-overlay" id="profileModal">
         <div class="auth-box" style="max-width:380px;">
             <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')">&times;</button>
@@ -569,8 +558,6 @@
         const authSubmitBtn = document.getElementById('authSubmitBtn');
         const forgotForm = document.getElementById('forgotForm');
         const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
-        const resetPasswordFields = document.getElementById('resetPasswordFields');
-        const saveNewPasswordBtn = document.getElementById('saveNewPasswordBtn');
         const otpView = document.getElementById('otpView');
         const verifyOtpBtn = document.getElementById('verifyOtpBtn');
         const otpTimerText = document.getElementById('otpTimerText');
@@ -839,9 +826,24 @@
         cartToggle.addEventListener('click', () => { transitionSidebarFlowView('cart'); cartSidebar.classList.add('open'); });
         closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
 
+        // Native Firebase Secure Password Reset Trigger
         forgotSubmitBtn.addEventListener('click', () => {
             const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
-            userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail();
+            if(!email) {
+                emitSlidToastAlert('error', 'Email Required', 'Please enter your email address.');
+                return;
+            }
+            
+            // Native dispatch of Firebase secure reset link direct to inbox
+            firebase.auth().sendPasswordResetEmail(email)
+                .then(() => {
+                    emitSlidToastAlert('success', 'Reset Email Dispatched!', 'Check your inbox/spam for the official link.');
+                    switchWorkflow('auth'); 
+                    toggleAuthView(false);
+                })
+                .catch((error) => {
+                    emitSlidToastAlert('error', 'Reset Failed', error.message);
+                });
         });
 
         function sendOtpEmail() {
@@ -877,28 +879,14 @@
                             emitSlidToastAlert('success', 'Profile Created', 'Cloud database registration complete.');
                         })
                         .catch(err => alert(err.message));
-                } else { 
-                    switchWorkflow('reset'); 
                 }
             }
-        });
-
-        saveNewPasswordBtn.addEventListener('click', () => {
-            const newPass = document.getElementById('newPasswordInput').value.trim();
-            if(newPass.length < 6) return;
-            
-            firebase.auth().sendPasswordResetEmail(userEmailAddress)
-                .then(() => {
-                    emitSlidToastAlert('success', 'Reset Email Sent', 'Check your inbox to finalize password updates.');
-                    switchWorkflow('auth'); toggleAuthView(false);
-                });
         });
 
         function switchWorkflow(target) {
             credentialsForm.style.display = target === 'auth' ? 'block' : 'none';
             forgotForm.style.display = target === 'forgot' ? 'block' : 'none';
             otpView.style.display = target === 'otp' ? 'flex' : 'none';
-            resetPasswordFields.style.display = target === 'reset' ? 'block' : 'none';
         }
 
         function toggleAuthView(toSignUp) {
