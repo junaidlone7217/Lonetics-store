@@ -55,6 +55,7 @@
             font-size: 1.5rem;
             font-weight: 800;
             letter-spacing: -0.5px;
+            cursor: pointer;
         }
         .logo span {
             color: #06b6d4;
@@ -116,6 +117,18 @@
             transform: scale(0.95);
         }
 
+        /* Profile Avatar Circular Header Trigger */
+        .profile-avatar-trigger {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #334155;
+            border: 2px solid #06b6d4;
+            cursor: pointer;
+            object-fit: cover;
+            display: none;
+        }
+
         /* Product Catalog Grid Layout */
         .main-content {
             padding: 25px 15px;
@@ -175,11 +188,16 @@
             font-weight: 700;
             margin-bottom: 10px;
         }
+        .action-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
         .buy-btn {
             background-color: transparent;
             border: 1px solid #06b6d4;
             color: #06b6d4;
-            padding: 7px 0;
+            padding: 6px 0;
             width: 100%;
             border-radius: 6px;
             font-weight: 600;
@@ -190,6 +208,20 @@
         .buy-btn:hover {
             background-color: #06b6d4;
             color: #0f172a;
+        }
+        .buynow-btn {
+            background-color: #06b6d4;
+            color: #0f172a;
+            border: none;
+            padding: 6px 0;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .buynow-btn:hover {
+            background-color: #0891b2;
         }
 
         /* Slide-out Sidebar Panel Drawer UI */
@@ -226,13 +258,58 @@
             flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
             padding-right: 4px;
         }
+
+        .cart-item {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 12px; background-color: #0f172a;
+            padding: 10px; border-radius: 8px;
+            border: 1px solid #334155;
+        }
+        .cart-item-thumb {
+            width: 45px; height: 45px; object-fit: cover; border-radius: 4px;
+        }
+        .cart-item-details {
+            flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
+            gap: 2px;
+        }
+        .cart-item-price { color: #06b6d4; font-weight: bold; }
         
+        .quantity-controller {
+            display: flex;
+            align-items: center;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+        }
+        .qty-btn {
+            background: none; border: none; color: #f8fafc;
+            width: 24px; height: 28px; font-weight: bold; cursor: pointer;
+        }
+        .qty-val {
+            font-size: 0.8rem; font-weight: bold; padding: 0 4px;
+        }
+        
+        /* Interactive Country/State Form Components */
+        .checkout-form-container {
+            display: none; flex-direction: column; gap: 12px;
+            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
+        }
+        .form-row-split { display: flex; gap: 8px; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+        .input-group input, .input-group textarea, .input-group select {
+            background-color: #0f172a; border: 1px solid #334155;
+            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: #06b6d4; outline: none; }
+
         .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
-        .checkout-btn {
+        .checkout-btn, .place-order-btn {
             background-color: #06b6d4; color: #0f172a; border: none;
             width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
         }
+        .place-order-btn { background-color: #10b981; color: #fff; display: none; }
 
         /* Smooth Transform Overlay Modals */
         .modal-overlay {
@@ -253,16 +330,56 @@
             background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;
         }
         .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; text-align: center; }
-        
-        .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
-        .input-group input {
-            background-color: #0f172a; border: 1px solid #334155;
-            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
-        }
-        .input-group input:focus { border-color: #06b6d4; outline: none; }
 
-        /* OTP Styling */
+        /* Profile Dashboard Layout View */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .avatar-upload-box {
+            position: relative;
+            width: 90px;
+            height: 90px;
+        }
+        .profile-preview-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #06b6d4;
+            background-color: #0f172a;
+        }
+        .file-input-label {
+            position: absolute;
+            bottom: 0; right: 0;
+            background-color: #06b6d4;
+            color: #0f172a;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.8rem; font-weight: bold; cursor: pointer;
+        }
+        .history-list {
+            width: 100%;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 110px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .history-item {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            padding: 4px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+        .history-item:last-child { border: none; }
+        
+        /* OTP Form View Layout */
         .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
         .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
         .otp-field {
@@ -307,14 +424,15 @@
 
     <header>
         <div class="header-top">
-            <div class="logo">LONE<span>TICS</span></div>
+            <div class="logo" onclick="window.location.reload()">LONE<span>TICS</span></div>
             <div class="header-actions">
                 <button class="auth-status-btn" id="openAuthModal">Sign In</button>
+                <img class="profile-avatar-trigger" id="profileTrigger" src="" alt="Profile" onclick="openProfilePanel()">
                 <div class="cart-icon" id="cartToggle">Cart (0)</div>
             </div>
         </div>
         <div class="search-container">
-            <input type="text" class="search-input" id="catalogSearch" placeholder="Search premium tech products..." oninput="filterCatalogSearch()">
+            <input type="text" class="search-input" id="catalogSearch" placeholder="Search premium tech products..." onchange="recordSearchHistory()" oninput="filterCatalogSearch()">
         </div>
     </header>
 
@@ -323,11 +441,67 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
+    <!-- Combined Cart & Checkout Sidebar Drawer -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 id="sidebarTitle">Your Cart</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        
+        <div class="cart-items-list" id="cartItemsList"></div>
+        
+        <!-- Advanced Country-Specific Delivery Matrix -->
+        <div class="checkout-form-container" id="checkoutForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="custName" placeholder="Recipient's Name">
+            </div>
+            <div class="input-group">
+                <label>Phone Line</label>
+                <input type="tel" id="custPhone" placeholder="10-digit number">
+            </div>
+            <div class="form-row-split">
+                <div class="input-group">
+                    <label>Country Destination</label>
+                    <select id="custCountry" onchange="populateCountryStates()">
+                        <option value="">Select Country</option>
+                        <option value="IN">India</option>
+                        <option value="US">United States</option>
+                        <option value="AE">United Arab Emirates</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>State / Region</label>
+                    <select id="custState">
+                        <option value="">Select State</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Pincode / Zip</label>
+                <input type="number" id="custPin" placeholder="Location code">
+            </div>
+            <div class="input-group">
+                <label>Street Address Details</label>
+                <textarea id="custAddress" rows="2" placeholder="House/Flat block coordinates, building metrics..."></textarea>
+            </div>
+        </div>
+
+        <div class="cart-total-section">
+            <div class="total-row">
+                <span>Total Invoice:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="proceedBtn">Proceed to Checkout</button>
+            <button class="place-order-btn" id="placeOrderBtn">Confirm Order</button>
+        </div>
+    </div>
+
+    <!-- Security Gateway Modal -->
     <div class="modal-overlay" id="authModal">
         <div class="auth-box">
-            <button class="modal-close" id="closeAuth">&times;</button>
+            <button class="modal-close" id="closeAuth" style="display:none;">&times;</button>
             
-            <!-- Standard Login / Signup Forms -->
             <div id="credentialsForm">
                 <h3 id="authModalTitle">Sign In</h3>
                 <div id="signUpFields" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 12px;">
@@ -357,11 +531,9 @@
                 </p>
             </div>
 
-            <!-- Forgot Password Base Workflow Form -->
             <div id="forgotForm" style="display: none;">
                 <h3>Reset Password</h3>
-                <p class="auth-toggle-text" style="margin: 0 0 15px 0; text-align: left; line-height: 1.4;">Enter your email below to verify your account identification profile.</p>
-                <div class="input-group">
+                <div class="input-group" style="margin-bottom: 12px;">
                     <label>Account Email</label>
                     <input type="email" id="forgotIdentity" placeholder="name@domain.com">
                 </div>
@@ -369,7 +541,6 @@
                 <p class="auth-toggle-text">Back to <span onclick="switchWorkflow('auth')">Sign In</span></p>
             </div>
 
-            <!-- Choose New Password After OTP Success -->
             <div id="resetPasswordFields" style="display: none;">
                 <h3>Set New Password</h3>
                 <div class="input-group" style="margin-bottom: 12px;">
@@ -379,10 +550,8 @@
                 <button class="auth-submit-btn" id="saveNewPasswordBtn">Update Password</button>
             </div>
 
-            <!-- OTP Validation Form Matrix View -->
             <div class="otp-container" id="otpView">
-                <h3>Verify Email Identity</h3>
-                <p class="auth-toggle-text" style="margin: 0; line-height: 1.4;">We sent a 4-digit verification code to your email.</p>
+                <h3>Verify Identity</h3>
                 <div class="otp-inputs">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
                     <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
@@ -395,21 +564,62 @@
         </div>
     </div>
 
+    <!-- User Profile Dashboard Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="auth-box" style="max-width:380px;">
+            <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')">&times;</button>
+            <div class="profile-container">
+                <h3>Your Dashboard Profile</h3>
+                <div class="avatar-upload-box">
+                    <img class="profile-preview-img" id="profileDashboardImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="Avatar">
+                    <label class="file-input-label" for="avatarFilePicker">+</label>
+                    <input type="file" id="avatarFilePicker" accept="image/*" style="display:none;" onchange="handleAvatarProcessing(this)">
+                </div>
+                <div style="text-align:center;">
+                    <h4 id="profileNameString" style="color:#fff; font-weight:bold;">Active User</h4>
+                    <p id="profileEmailString" style="font-size:0.8rem; color:#64748b;">user@domain.com</p>
+                </div>
+                <div style="width:100%;">
+                    <p style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:#06b6d4;">Recent Search Queries:</p>
+                    <div class="history-list" id="historyListContainer">
+                        <div class="history-item">No records yet.</div>
+                    </div>
+                </div>
+                <button class="auth-submit-btn" style="background-color:#ef4444; color:#fff;" onclick="executeLogout()">Sign Out of Account</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const PRODUCT_CATALOG = [
-            { id: "p1", name: "Wireless Gaming Mouse", price: 49.99, image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400" },
-            { id: "p2", name: "Mechanical RGB Keyboard", price: 89.99, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400" },
-            { id: "p3", name: "ANC Wireless Headphones", price: 129.99, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
-            { id: "p4", name: "Premium Smart Watch OLED", price: 199.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" }
+            { id: "p1", name: "Wireless Gaming Mouse Premium", price: 49.99, image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400" },
+            { id: "p2", name: "Mechanical RGB Wireless Keyboard", price: 89.99, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400" },
+            { id: "p3", name: "ANC Studio Noise Headphones", price: 129.99, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
+            { id: "p4", name: "OLED Retina Premium Smart Watch", price: 199.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" }
         ];
 
-        // Native Mock Client Database Storage Arrays (Simulating real DB operations)
-        let registeredUsers = {}; 
+        const GEO_MAP = {
+            IN: ["Jammu & Kashmir", "Delhi", "Mumbai", "Punjab", "Karnataka"],
+            US: ["California", "New York", "Texas", "Florida", "Washington"],
+            AE: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"]
+        };
+
+        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {}; 
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        let currentSessionUser = localStorage.getItem('currentSessionUser') || null;
 
         const productGrid = document.getElementById('productGrid');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartToggle = document.getElementById('cartToggle');
+        const closeCart = document.getElementById('closeCart');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const cartTotal = document.getElementById('cartTotal');
+        const proceedBtn = document.getElementById('proceedBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const sidebarTitle = document.getElementById('sidebarTitle');
         const authModal = document.getElementById('authModal');
         const openAuthModal = document.getElementById('openAuthModal');
-        const closeAuth = document.getElementById('closeAuth');
         const credentialsForm = document.getElementById('credentialsForm');
         const signUpFields = document.getElementById('signUpFields');
         const authModalTitle = document.getElementById('authModalTitle');
@@ -427,13 +637,14 @@
         const toastTitle = document.getElementById('toastTitle');
         const toastMessage = document.getElementById('toastMessage');
         const forgotPasswordLinkContainer = document.getElementById('forgotPasswordLinkContainer');
+        const profileTrigger = document.getElementById('profileTrigger');
 
+        let cartMap = {};
         let isSignUpMode = false;
-        let isLoggedIn = false;
         let timerInterval = null;
         let generatedOtp = "";
         let userEmailAddress = "";
-        let activeWorkflow = "signup"; // signup, login, forgot
+        let activeWorkflow = "signup"; 
 
         const SERVICE_ID = "service_oofkjro";
         const TEMPLATE_ID = "template_sorgfz4";
@@ -450,15 +661,115 @@
                     </div>
                     <div>
                         <div class="product-price">$${product.price.toFixed(2)}</div>
-                        <button class="buy-btn" onclick="executeCartInsertion()">Add to Cart</button>
+                        <div class="action-btn-group">
+                            <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add to Cart</button>
+                            <button class="buynow-btn" onclick="executeBuyNowLane('${product.id}')">Buy Now</button>
+                        </div>
                     </div>
                 `;
                 productGrid.appendChild(card);
             });
         }
 
-        function executeCartInsertion() {
-            emitSlidToastAlert('success', 'Cart Action', 'Item added to buying cache sequence.');
+        function populateCountryStates() {
+            const countryCode = document.getElementById('custCountry').value;
+            const stateSelect = document.getElementById('custState');
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+            if(GEO_MAP[countryCode]) {
+                GEO_MAP[countryCode].forEach(state => {
+                    stateSelect.innerHTML += `<option value="${state}">${state}</option>`;
+                });
+            }
+        }
+
+        // 3-Second Automated Pop-Up Rules Engine Trigger
+        window.addEventListener('DOMContentLoaded', () => {
+            buildMainCatalogUI(PRODUCT_CATALOG);
+            renderSystemSessionState();
+            
+            if(!currentSessionUser) {
+                setTimeout(() => {
+                    if(!currentSessionUser) {
+                        switchWorkflow('auth');
+                        toggleAuthView(false);
+                        authModal.classList.add('active');
+                        emitSlidToastAlert('error', 'Sign In Required', 'Please connect profile configurations to explore storefront.');
+                    }
+                }, 3000);
+            }
+        });
+
+        function renderSystemSessionState() {
+            if(currentSessionUser && registeredUsers[currentSessionUser]) {
+                openAuthModal.style.display = 'none';
+                profileTrigger.style.display = 'block';
+                const storedAvatar = localStorage.getItem(`avatar_${currentSessionUser}`);
+                profileTrigger.src = storedAvatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                document.getElementById('closeAuth').style.display = 'block';
+            } else {
+                openAuthModal.style.display = 'block';
+                profileTrigger.style.display = 'none';
+                document.getElementById('closeAuth').style.display = 'none';
+            }
+        }
+
+        function handleAvatarProcessing(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileDashboardImg').src = e.target.result;
+                    profileTrigger.src = e.target.result;
+                    if(currentSessionUser) {
+                        localStorage.setItem(`avatar_${currentSessionUser}`, e.target.result);
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function openProfilePanel() {
+            if(!currentSessionUser) return;
+            document.getElementById('profileNameString').textContent = registeredUsers[currentSessionUser].name;
+            document.getElementById('profileEmailString').textContent = currentSessionUser;
+            
+            const storedAvatar = localStorage.getItem(`avatar_${currentSessionUser}`);
+            document.getElementById('profileDashboardImg').src = storedAvatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+            
+            const listNode = document.getElementById('historyListContainer');
+            listNode.innerHTML = searchHistory.length === 0 ? '<div class="history-item">No queries recorded.</div>' : '';
+            searchHistory.forEach(item => {
+                listNode.innerHTML += `<div class="history-item">🔍 ${item}</div>`;
+            });
+            
+            document.getElementById('profileModal').classList.add('active');
+        }
+
+        function recordSearchHistory() {
+            const criteria = document.getElementById('catalogSearch').value.trim();
+            if(!criteria) return;
+            if(!searchHistory.includes(criteria)) {
+                searchHistory.unshift(criteria);
+                if(searchHistory.length > 5) searchHistory.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+        }
+
+        function executeLogout() {
+            localStorage.removeItem('currentSessionUser');
+            currentSessionUser = null;
+            document.getElementById('profileModal').classList.remove('active');
+            renderSystemSessionState();
+            window.location.reload();
+        }
+
+        function executeBuyNowLane(prodId) {
+            executeCartInsertion(prodId);
+            cartItemsList.style.display = 'none';
+            checkoutForm.style.display = 'flex';
+            proceedBtn.style.display = 'none';
+            placeOrderBtn.style.display = 'block';
+            sidebarTitle.textContent = "Delivery Setup";
+            cartSidebar.classList.add('open');
         }
 
         function filterCatalogSearch() {
@@ -476,12 +787,96 @@
             setTimeout(() => appToast.classList.remove('active'), 3500);
         }
 
-        openAuthModal.addEventListener('click', () => {
-            switchWorkflow('auth');
-            toggleAuthView(false);
-            authModal.classList.add('active');
+        authSubmitBtn.addEventListener('click', () => {
+            const email = document.getElementById('authIdentity').value.trim().toLowerCase();
+            const pass = document.getElementById('authPassword').value.trim();
+            
+            if(!email || !pass || !email.includes('@')) { 
+                emitSlidToastAlert('error', 'Input Error', 'Please complete login criteria parameters.'); 
+                return; 
+            }
+            
+            userEmailAddress = email;
+
+            if (isSignUpMode) {
+                activeWorkflow = "signup";
+                sendOtpEmail();
+            } else {
+                if (registeredUsers[email]) {
+                    if (registeredUsers[email].password === pass) {
+                        currentSessionUser = email;
+                        localStorage.setItem('currentSessionUser', currentSessionUser);
+                        renderSystemSessionState();
+                        authModal.classList.remove('active');
+                        emitSlidToastAlert('success', 'Logged In', 'Session connected.');
+                    } else {
+                        emitSlidToastAlert('error', 'Auth Failure', 'Incorrect verification configuration password rule.');
+                    }
+                } else {
+                    emitSlidToastAlert('error', 'Not Found', 'No account matrix records matching this address.');
+                }
+            }
         });
-        closeAuth.addEventListener('click', () => authModal.classList.remove('active'));
+
+        // Event bindings
+        document.getElementById('closeAuth').addEventListener('click', () => authModal.classList.remove('active'));
+        openAuthModal.addEventListener('click', () => { switchWorkflow('auth'); toggleAuthView(false); authModal.classList.add('active'); });
+        
+        forgotSubmitBtn.addEventListener('click', () => {
+            const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
+            if(!registeredUsers[email]) { emitSlidToastAlert('error', 'Not Found', 'Account not recorded.'); return; }
+            userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail();
+        });
+
+        function sendOtpEmail() {
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            const templateParams = { email: userEmailAddress, to_email: userEmailAddress, otp_code: generatedOtp };
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams).then(() => {
+                switchWorkflow('otp'); beginCountdownClock(); emitSlidToastAlert('success', 'OTP Dispatched', 'Check spam folder maps.');
+            });
+        }
+
+        function beginCountdownClock() {
+            let clockSeconds = 30;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                clockSeconds--;
+                const updateCounter = document.getElementById('secondsLeft');
+                if(updateCounter) updateCounter.textContent = clockSeconds;
+                if (clockSeconds <= 0) { clearInterval(timerInterval); otpTimerText.innerHTML = `<span onclick="sendOtpEmail()">Resend Code</span>`; }
+            }, 1000);
+        }
+
+        verifyOtpBtn.addEventListener('click', () => {
+            let enteredCode = "";
+            document.querySelectorAll('.otp-field').forEach(input => enteredCode += input.value.trim());
+            if (enteredCode === generatedOtp) {
+                if (activeWorkflow === "signup") {
+                    const name = document.getElementById('regName').value.trim();
+                    const pass = document.getElementById('authPassword').value.trim();
+                    registeredUsers[userEmailAddress] = { name: name || 'User', password: pass };
+                    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+                    currentSessionUser = userEmailAddress;
+                    localStorage.setItem('currentSessionUser', currentSessionUser);
+                    renderSystemSessionState();
+                    authModal.classList.remove('active');
+                    emitSlidToastAlert('success', 'Account Formed', 'Registration metrics fully established.');
+                } else {
+                    switchWorkflow('reset');
+                }
+            } else {
+                emitSlidToastAlert('error', 'Token Bad', 'Wrong token verification sequence.');
+            }
+        });
+
+        saveNewPasswordBtn.addEventListener('click', () => {
+            const newPass = document.getElementById('newPasswordInput').value.trim();
+            if(newPass.length < 6) return;
+            registeredUsers[userEmailAddress].password = newPass;
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            emitSlidToastAlert('success', 'Updated', 'Credentials modified successfully.');
+            switchWorkflow('auth'); toggleAuthView(false);
+        });
 
         function switchWorkflow(target) {
             credentialsForm.style.display = target === 'auth' ? 'block' : 'none';
@@ -492,172 +887,58 @@
 
         function toggleAuthView(toSignUp) {
             isSignUpMode = toSignUp;
-            if (toSignUp) {
-                authModalTitle.textContent = "Create Account (Sign Up)";
-                signUpFields.style.display = 'flex';
-                forgotPasswordLinkContainer.style.display = 'none';
-                authToggleText.innerHTML = 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>';
-            } else {
-                authModalTitle.textContent = "Sign In";
-                signUpFields.style.display = 'none';
-                forgotPasswordLinkContainer.style.display = 'block';
-                authToggleText.innerHTML = 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
-            }
+            authModalTitle.textContent = toSignUp ? "Create Account (Sign Up)" : "Sign In";
+            signUpFields.style.display = toSignUp ? 'flex' : 'none';
+            forgotPasswordLinkContainer.style.display = toSignUp ? 'none' : 'block';
+            authToggleText.innerHTML = toSignUp ? 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>' : 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
         }
 
-        // Handle Login and Sign Up Submissions
-        authSubmitBtn.addEventListener('click', () => {
-            const email = document.getElementById('authIdentity').value.trim().toLowerCase();
-            const pass = document.getElementById('authPassword').value.trim();
-            
-            if(!email || !pass || !email.includes('@')) { 
-                emitSlidToastAlert('error', 'Input Error', 'Please enter valid parameters.'); 
-                return; 
-            }
-            
-            userEmailAddress = email;
+        function executeCartInsertion(prodId) {
+            if (cartMap[prodId]) { cartMap[prodId].quantity += 1; } 
+            else { const targetObj = PRODUCT_CATALOG.find(p => p.id === prodId); cartMap[prodId] = { ...targetObj, quantity: 1 }; }
+            refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Added', 'Cart catalog tracking values updated.');
+        }
 
-            if (isSignUpMode) {
-                // Sign Up Logic
-                activeWorkflow = "signup";
-                sendOtpEmail();
-            } else {
-                // Real Login Verification Logic
-                activeWorkflow = "login";
-                if (registeredUsers[email]) {
-                    if (registeredUsers[email].password === pass) {
-                        isLoggedIn = true;
-                        openAuthModal.textContent = "Account Active ✔";
-                        authModal.classList.remove('active');
-                        emitSlidToastAlert('success', 'Logged In Successfully', `Welcome back, ${registeredUsers[email].name || 'User'}!`);
-                    } else {
-                        emitSlidToastAlert('error', 'Authentication Failed', 'Incorrect password. Please try again.');
-                    }
-                } else {
-                    emitSlidToastAlert('error', 'Account Not Found', 'No account exists with this email address.');
-                }
-            }
+        function adjustQuantity(prodId, delta) {
+            if (!cartMap[prodId]) return;
+            cartMap[prodId].quantity += delta;
+            if (cartMap[prodId].quantity <= 0) delete cartMap[prodId];
+            refreshCartDrawerUI();
+        }
+
+        function refreshCartDrawerUI() {
+            cartItemsList.innerHTML = '';
+            let counterMetrics = 0, subtotal = 0;
+            Object.keys(cartMap).forEach(k => {
+                const ref = cartMap[k]; subtotal += (ref.price * ref.quantity); counterMetrics += ref.quantity;
+                cartItemsList.innerHTML += `<div class="cart-item"><img class="cart-item-thumb" src="${ref.image}"><div class="cart-item-details"><span>${ref.name}</span><span class="cart-item-price">$${ref.price}</span></div><div class="quantity-controller"><button class="qty-btn" onclick="adjustQuantity('${k}', -1)">-</button><span class="qty-val">${ref.quantity}</span><button class="qty-btn" onclick="adjustQuantity('${k}', 1)">+</button></div></div>`;
+            });
+            cartToggle.textContent = `Cart (${counterMetrics})`;
+            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        cartToggle.addEventListener('click', () => {
+            cartItemsList.style.display = 'block'; checkoutForm.style.display = 'none';
+            proceedBtn.style.display = 'block'; placeOrderBtn.style.display = 'none';
+            sidebarTitle.textContent = "Your Cart"; cartSidebar.classList.add('open');
+        });
+        closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
+        proceedBtn.addEventListener('click', () => {
+            if(!currentSessionUser) { cartSidebar.classList.remove('open'); authModal.classList.add('active'); return; }
+            cartItemsList.style.display = 'none'; checkoutForm.style.display = 'flex';
+            proceedBtn.style.display = 'none'; placeOrderBtn.style.display = 'block';
+            sidebarTitle.textContent = "Delivery Matrix Setup";
         });
 
-        // Forgot Password Handle Send OTP Verification
-        forgotSubmitBtn.addEventListener('click', () => {
-            const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
-            if(!email || !email.includes('@')) {
-                emitSlidToastAlert('error', 'Input Error', 'Please enter a valid email address.');
-                return;
-            }
-            
-            if(!registeredUsers[email]) {
-                emitSlidToastAlert('error', 'Not Found', 'No user registered under this account identity.');
-                return;
-            }
-
-            userEmailAddress = email;
-            activeWorkflow = "forgot";
-            sendOtpEmail();
+        placeOrderBtn.addEventListener('click', () => {
+            if(!document.getElementById('custName').value || !document.getElementById('custState').value) return;
+            emitSlidToastAlert('success', 'Order Dispatched', 'Your transaction process execution is complete.');
+            cartMap = {}; refreshCartDrawerUI(); cartSidebar.classList.remove('open');
         });
 
-        function sendOtpEmail() {
-            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            emitSlidToastAlert('success', 'Sending Code...', 'Routing OTP transmission array.');
-
-            const templateParams = {
-                email: userEmailAddress,
-                to_email: userEmailAddress,
-                otp_code: generatedOtp
-            };
-
-            if (typeof emailjs !== 'undefined') {
-                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-                    .then(() => {
-                        switchWorkflow('otp');
-                        beginCountdownClock();
-                        emitSlidToastAlert('success', 'OTP Sent!', 'Check your spam folder.');
-                    }, (err) => {
-                        emitSlidToastAlert('error', 'Mail Pipeline Error', 'Delivery failure detected.');
-                    });
-            }
-        }
-
-        function moveNext(current) {
-            if (current.value.length >= 1 && current.nextElementSibling) {
-                current.nextElementSibling.focus();
-            }
-        }
-
-        function beginCountdownClock() {
-            let clockSeconds = 30;
-            const counterNode = document.getElementById('secondsLeft');
-            if (counterNode) counterNode.textContent = clockSeconds;
-            
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                clockSeconds--;
-                const updateCounter = document.getElementById('secondsLeft');
-                if(updateCounter) updateCounter.textContent = clockSeconds;
-                if (clockSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    otpTimerText.innerHTML = `<span onclick="resendRealOtp()">Resend Code</span>`;
-                }
-            }, 1000);
-        }
-
-        function resendRealOtp() {
-            otpTimerText.innerHTML = `Resend OTP in <span id="secondsLeft">30</span>s`;
-            sendOtpEmail();
-        }
-
-        // Global verification engine handling both workflows
-        verifyOtpBtn.addEventListener('click', () => {
-            let enteredCode = "";
-            document.querySelectorAll('.otp-field').forEach(input => enteredCode += input.value.trim());
-            
-            if(enteredCode.length < 4) { 
-                emitSlidToastAlert('error', 'Incomplete', 'Please fill all 4 slots.'); 
-                return; 
-            }
-            
-            if (enteredCode === generatedOtp) {
-                if (activeWorkflow === "signup") {
-                    // Finalize Sign Up Database Entry
-                    const name = document.getElementById('regName').value.trim();
-                    const pass = document.getElementById('authPassword').value.trim();
-                    registeredUsers[userEmailAddress] = { name: name || 'User', password: pass };
-
-                    isLoggedIn = true;
-                    openAuthModal.textContent = "Account Active ✔";
-                    authModal.classList.remove('active');
-                    emitSlidToastAlert('success', 'Verified Successfully', 'Your account is active!');
-                } else if (activeWorkflow === "forgot") {
-                    // Forward User to New Password Configuration View
-                    switchWorkflow('reset');
-                    emitSlidToastAlert('success', 'Verification Confirmed', 'Please set your new password.');
-                }
-            } else {
-                emitSlidToastAlert('error', 'Invalid Token', 'The verification token is incorrect.');
-                document.querySelectorAll('.otp-field').forEach(input => input.value = "");
-            }
-        });
-
-        // Update Password Database Execution Block
-        saveNewPasswordBtn.addEventListener('click', () => {
-            const newPass = document.getElementById('newPasswordInput').value.trim();
-            if(newPass.length < 6) {
-                emitSlidToastAlert('error', 'Weak Password', 'Minimum 6 character allocation required.');
-                return;
-            }
-
-            if(registeredUsers[userEmailAddress]) {
-                registeredUsers[userEmailAddress].password = newPass;
-                emitSlidToastAlert('success', 'Password Updated', 'Your new credential rules are active. Please Sign In.');
-                switchWorkflow('auth');
-                toggleAuthView(false);
-                document.getElementById('authPassword').value = "";
-                document.getElementById('newPasswordInput').value = "";
-            }
-        });
-
-        buildMainCatalogUI(PRODUCT_CATALOG);
+        function moveNext(current) { if (current.value.length >= 1 && current.nextElementSibling) current.nextElementSibling.focus(); }
     </script>
 </body>
 </html>
