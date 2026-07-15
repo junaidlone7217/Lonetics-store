@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lonetics - Premium Electronics & Essentials</title>
-    <!-- Include the official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         try {
-            // Force pure connection initialization
-            emailjs.init("Tlv-gbXH55nrs32nc");
+            // Updated with the verified capital "I" account token key string
+            emailjs.init("TIv-gbXH55nrs32nc");
         } catch (error) {
             alert("EmailJS Failed to Load: " + error);
         }
@@ -158,7 +157,6 @@
             toastMessage.textContent = "Connecting to your custom mail servers...";
             appToast.classList.add('active');
 
-            // Pure production parameter maps
             const templateParams = {
                 email: userEmailAddress,
                 to_email: userEmailAddress,
@@ -174,7 +172,6 @@
                 })
                 .catch((err) => {
                     appToast.classList.remove('active');
-                    // This explicitly alerts the raw dashboard error string string to find what it dislikes
                     alert("EmailJS Reject Reason:\n" + JSON.stringify(err));
                 });
         });
