@@ -6,7 +6,11 @@
     <title>Lonetics - Premium Electronics & Essentials</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        emailjs.init("Tlv-gbXH55nrs32nc");
+        try {
+            emailjs.init("Tlv-gbXH55nrs32nc");
+        } catch (error) {
+            console.error("EmailJS initialization failed:", error);
+        }
     </script>
     <style>
         * {
@@ -20,6 +24,8 @@
             color: #f8fafc;
             overflow-x: hidden;
         }
+        
+        /* Navigation Header Block */
         header {
             background-color: #1e293b;
             padding: 15px 20px;
@@ -52,9 +58,12 @@
         .logo span {
             color: #06b6d4;
         }
+        
+        /* Live Search Bar Layout */
         .search-container {
             width: 100%;
             max-width: 400px;
+            position: relative;
         }
         .search-input {
             width: 100%;
@@ -64,7 +73,14 @@
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.85rem;
+            transition: all 0.2s ease;
         }
+        .search-input:focus {
+            border-color: #06b6d4;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+        }
+
         .header-actions {
             display: flex;
             align-items: center;
@@ -79,6 +95,11 @@
             font-size: 0.85rem;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .auth-status-btn:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
         }
         .cart-icon {
             background-color: #06b6d4;
@@ -88,7 +109,13 @@
             font-weight: bold;
             font-size: 0.9rem;
             cursor: pointer;
+            transition: transform 0.1s ease;
         }
+        .cart-icon:active {
+            transform: scale(0.95);
+        }
+
+        /* Product Catalog Grid Layout */
         .main-content {
             padding: 25px 15px;
         }
@@ -116,6 +143,11 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+            border-color: #475569;
         }
         .product-img {
             width: 100%;
@@ -129,7 +161,12 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 4px;
+            line-height: 1.3;
             min-height: 36px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .product-price {
             font-size: 1rem;
@@ -147,15 +184,23 @@
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
+        .buy-btn:hover {
+            background-color: #06b6d4;
+            color: #0f172a;
+        }
+
+        /* Slide-out Sidebar Panel Drawer UI */
         .cart-sidebar {
             position: fixed;
             top: 0; right: -360px;
             width: 360px; height: 100vh;
             background-color: #1e293b;
             border-left: 1px solid #334155;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.6);
             z-index: 200;
-            transition: right 0.3s ease;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -175,9 +220,13 @@
             background: none; border: none; color: #94a3b8;
             font-size: 1.5rem; cursor: pointer;
         }
+        
         .cart-items-list {
             flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
+            padding-right: 4px;
         }
+        
+        /* Cart Item Setup */
         .cart-item {
             display: flex; align-items: center; gap: 10px;
             margin-bottom: 12px; background-color: #0f172a;
@@ -189,48 +238,575 @@
         }
         .cart-item-details {
             flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
+            gap: 2px;
         }
+        .cart-item-price { color: #06b6d4; font-weight: bold; }
+        
         .quantity-controller {
-            display: flex; align-items: center; background-color: #1e293b; border: 1px solid #334155; border-radius: 6px;
+            display: flex;
+            align-items: center;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            overflow: hidden;
         }
         .qty-btn {
-            background: none; border: none; color: #f8fafc; width: 24px; height: 28px; cursor: pointer;
+            background: none; border: none; color: #f8fafc;
+            width: 24px; height: 28px; font-weight: bold; cursor: pointer;
+            font-size: 0.85rem;
         }
+        .qty-btn:hover { background-color: #475569; }
         .qty-val {
-            font-size: 0.8rem; font-weight: bold; padding: 0 6px;
+            font-size: 0.8rem; font-weight: bold; padding: 0 6px; min-width: 20px; text-align: center;
         }
+
+        /* Address Checkout View Setup */
         .checkout-form-container {
-            display: none; flex-direction: column; gap: 12px; margin-bottom: 20px;
+            display: none; flex-direction: column; gap: 12px;
+            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
         }
         .form-row-split { display: flex; gap: 8px; }
         .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .input-group label { font-size: 0.75rem; color: #94a3b8; }
+        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
         .input-group input, .input-group textarea {
-            background-color: #0f172a; border: 1px solid #334155; color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
+            background-color: #0f172a; border: 1px solid #334155;
+            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
         }
-        .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .input-group input:focus, .input-group textarea:focus { border-color: #06b6d4; outline: none; }
+
+        .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
         .pay-option {
-            background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 10px; text-align: center; font-size: 0.75rem; cursor: pointer;
+            background-color: #0f172a; border: 1px solid #334155;
+            border-radius: 6px; padding: 10px; text-align: center;
+            font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #94a3b8;
         }
-        .pay-option.selected { border-color: #06b6d4; color: #06b6d4; }
+        .pay-option.selected {
+            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.1); color: #06b6d4;
+        }
+
         .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
         .checkout-btn, .place-order-btn {
-            background-color: #06b6d4; color: #0f172a; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
+            background-color: #06b6d4; color: #0f172a; border: none;
+            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
         }
         .place-order-btn { background-color: #10b981; color: #fff; display: none; }
+
+        /* Smooth Transform Overlay Modals */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 300; display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: all 0.2s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); z-index: 300;
+            display: flex; justify-content: center; align-items: center;
+            visibility: hidden; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
         .auth-box {
-            background-color: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
+            background-color: #1e293b; border: 1px solid #334155;
+            padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
+            transform: scale(0.92); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
-        .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; }
-        .otp-inputs { display: flex; gap: 10px; }
-        .otp-field { width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; text-align: center; font-size: 1.2rem; color: #fff; }
+        .modal-overlay.active .auth-box { transform: scale(1); }
+        .modal-close {
+            position: absolute; top: 10px; right: 15px;
+            background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;
+        }
+        .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; }
+        
+        /* OTP Form UI Setup */
+        .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+        .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
+        .otp-field {
+            width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155;
+            border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #fff;
+        }
+        .otp-field:focus { border-color: #06b6d4; outline: none; }
+        .timer-text { font-size: 0.8rem; color: #64748b; }
+        .timer-text span { color: #06b6d4; font-weight: bold; cursor: pointer; }
+
         .auth-toggle-text { font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center; }
-        .auth-toggle-text span { color: #06b6d4; cursor: pointer; }
+        .auth-toggle-text span { color: #06b6d4; cursor: pointer; font-weight: bold; }
+        .auth-submit-btn {
+            width: 100%; margin-top: 15px; padding: 10px;
+            background-color: #06b6d4; border: none; border-radius: 6px;
+            font-weight: bold; cursor: pointer; color: #0f172a;
+        }
+
+        /* Top Bar Elastic Slid Toast Alert UI Banner Component */
         .toast-notification {
-            position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 3
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 340px; background-color: #1e293b; border: 1px solid #334155;
+            padding: 16px; border-radius: 12px; z-index: 1000; box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            display: flex; align-items: flex-start; gap: 12px;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast-notification.active { top: 20px; }
+        .toast-icon { font-size: 1.4rem; }
+        .toast-body h4 { font-size: 0.9rem; font-weight: bold; margin-bottom: 2px; }
+        .toast-body p { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <div class="toast-notification" id="appToast">
+        <div class="toast-icon" id="toastIcon">⚠️</div>
+        <div class="toast-body">
+            <h4 id="toastTitle">System Event</h4>
+            <p id="toastMessage">Operational parameters updated configurations logs.</p>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-top">
+            <div class="logo">LONE<span>TICS</span></div>
+            <div class="header-actions">
+                <button class="auth-status-btn" id="openAuthModal">Sign In</button>
+                <div class="cart-icon" id="cartToggle">Cart (0)</div>
+            </div>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="catalogSearch" placeholder="Search premium tech products..." oninput="filterCatalogSearch()">
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h2 class="section-title">Premium Catalog</h2>
+        <div class="grid" id="productGrid"></div>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 id="sidebarTitle">Your Cart</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        
+        <div class="cart-items-list" id="cartItemsList"></div>
+        
+        <div class="checkout-form-container" id="checkoutForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="custName" placeholder="Enter full name details">
+            </div>
+            <div class="form-row-split">
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="custPhone" placeholder="10-digit line">
+                </div>
+                <div class="input-group">
+                    <label>Pincode Area Code</label>
+                    <input type="number" id="custPin" placeholder="6-digit code">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Detailed Delivery Address</label>
+                <textarea id="custAddress" rows="2" placeholder="House/Flat block coordinates, building street metrics..."></textarea>
+            </div>
+            <div class="form-row-split">
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" id="custCity" placeholder="City location">
+                </div>
+                <div class="input-group">
+                    <label>State</label>
+                    <input type="text" id="custState" placeholder="State region">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Payment Mode Strategy</label>
+                <div class="payment-grid">
+                    <div class="pay-option selected" onclick="selectPayment(this, 'COD')">COD</div>
+                    <div class="pay-option" onclick="selectPayment(this, 'UPI')">UPI</div>
+                    <div class="pay-option" onclick="selectPayment(this, 'CARD')">Card</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-total-section">
+            <div class="total-row">
+                <span>Total Invoice:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="proceedBtn">Proceed to Checkout</button>
+            <button class="place-order-btn" id="placeOrderBtn">Confirm & Dispatch Order</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="authModal">
+        <div class="auth-box">
+            <button class="modal-close" id="closeAuth">&times;</button>
+            
+            <div id="credentialsForm">
+                <h3 id="authModalTitle">Sign In</h3>
+                <div id="signUpFields" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 12px;">
+                    <div class="input-group">
+                        <label>Your Full Name</label>
+                        <input type="text" id="regName" placeholder="First and last name">
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="authIdentity" placeholder="Enter your email...">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="authPassword" placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" id="authSubmitBtn">Continue</button>
+                <p class="auth-toggle-text" id="authToggleText">
+                    New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>
+                </p>
+            </div>
+
+            <div class="otp-container" id="otpView">
+                <h3>Verify Email Identity</h3>
+                <p class="auth-toggle-text" style="margin: 0; line-height: 1.4;">We sent a 4-digit verification code to your email.</p>
+                <div class="otp-inputs">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                    <input type="text" class="otp-field" maxlength="1" oninput="moveNext(this)">
+                </div>
+                <button class="auth-submit-btn" id="verifyOtpBtn">Verify & Create Account</button>
+                <p class="timer-text" id="otpTimerText">Resend OTP in <span id="secondsLeft">30</span>s</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PRODUCT_CATALOG = [
+            { id: "p1", name: "Wireless Gaming Mouse", price: 49.99, image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400" },
+            { id: "p2", name: "Mechanical RGB Keyboard", price: 89.99, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400" },
+            { id: "p3", name: "ANC Wireless Headphones", price: 129.99, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
+            { id: "p4", name: "Premium Smart Watch OLED", price: 199.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" },
+            { id: "p5", name: "Ultra-Wide 4K Gaming Monitor", price: 349.99, image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400" },
+            { id: "p6", name: "Standalone Next-Gen VR Headset", price: 299.99, image: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400" }
+        ];
+
+        const productGrid = document.getElementById('productGrid');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartToggle = document.getElementById('cartToggle');
+        const closeCart = document.getElementById('closeCart');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const cartTotal = document.getElementById('cartTotal');
+        const proceedBtn = document.getElementById('proceedBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+        const catalogSearch = document.getElementById('catalogSearch');
+
+        const appToast = document.getElementById('appToast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const authModal = document.getElementById('authModal');
+        const openAuthModal = document.getElementById('openAuthModal');
+        const closeAuth = document.getElementById('closeAuth');
+        const credentialsForm = document.getElementById('credentialsForm');
+        const signUpFields = document.getElementById('signUpFields');
+        const authModalTitle = document.getElementById('authModalTitle');
+        const authToggleText = document.getElementById('authToggleText');
+        const authSubmitBtn = document.getElementById('authSubmitBtn');
+        const otpView = document.getElementById('otpView');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+        const otpTimerText = document.getElementById('otpTimerText');
+
+        let cartMap = {};
+        let isSignUpMode = false;
+        let selectedPayMode = 'COD';
+        let isLoggedIn = false;
+        let timerInterval = null;
+
+        let generatedOtp = "";
+        let userEmailAddress = "";
+
+        const SERVICE_ID = "service_oofkjro";
+        const TEMPLATE_ID = "template_sorgfz4";
+
+        function buildMainCatalogUI(items) {
+            productGrid.innerHTML = '';
+            if (items.length === 0) {
+                productGrid.innerHTML = `<p style="grid-column: span 4; font-size: 0.85rem; color:#64748b; text-align:center; padding:20px;">No matching products found.</p>`;
+                return;
+            }
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.classList.add('product-card');
+                card.innerHTML = `
+                    <div>
+                        <img class="product-img" src="${product.image}" alt="${product.name}">
+                        <div class="product-title">${product.name}</div>
+                    </div>
+                    <div>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add to Cart</button>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        function filterCatalogSearch() {
+            const criteria = catalogSearch.value.toLowerCase().trim();
+            const filtered = PRODUCT_CATALOG.filter(item => item.name.toLowerCase().includes(criteria));
+            buildMainCatalogUI(filtered);
+        }
+
+        function emitSlidToastAlert(type, title, message) {
+            toastIcon.textContent = type === 'success' ? '🎉' : '🔒';
+            appToast.style.borderColor = type === 'success' ? '#10b981' : '#ef4444';
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            appToast.classList.add('active');
+            setTimeout(() => appToast.classList.remove('active'), 3500);
+        }
+
+        openAuthModal.addEventListener('click', () => {
+            credentialsForm.style.display = 'block';
+            otpView.style.display = 'none';
+            authModal.classList.add('active');
+        });
+        closeAuth.addEventListener('click', () => authModal.classList.remove('active'));
+
+        function toggleAuthView(toSignUp) {
+            isSignUpMode = toSignUp;
+            if (toSignUp) {
+                authModalTitle.textContent = "Create Account (Sign Up)";
+                signUpFields.style.display = 'flex';
+                authToggleText.innerHTML = 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>';
+            } else {
+                authModalTitle.textContent = "Sign In";
+                signUpFields.style.display = 'none';
+                authToggleText.innerHTML = 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
+            }
+        }
+
+        authSubmitBtn.addEventListener('click', () => {
+            const email = document.getElementById('authIdentity').value.trim();
+            const pass = document.getElementById('authPassword').value.trim();
+            
+            if(!email || !pass || !email.includes('@')) { 
+                emitSlidToastAlert('error', 'Invalid Input', 'Please provide a valid email and password.'); 
+                return; 
+            }
+            
+            userEmailAddress = email;
+
+            if (isSignUpMode) {
+                generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+                emitSlidToastAlert('success', 'Sending OTP...', 'Please wait while we send your code.');
+
+                const templateParams = {
+                    email: userEmailAddress,
+                    to_email: userEmailAddress,
+                    otp_code: generatedOtp
+                };
+
+                if (typeof emailjs !== 'undefined') {
+                    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                        .then(() => {
+                            credentialsForm.style.display = 'none';
+                            otpView.style.display = 'flex';
+                            beginCountdownClock();
+                            emitSlidToastAlert('success', 'OTP Dispatched!', `Check your inbox at ${userEmailAddress}`);
+                        }, (error) => {
+                            console.error('Failed to send OTP...', error);
+                            emitSlidToastAlert('error', 'Mail Delivery Failed', 'Verify your API keys configurations.');
+                        });
+                } else {
+                    emitSlidToastAlert('error', 'System Error', 'EmailJS library failed to load.');
+                }
+
+            } else {
+                isLoggedIn = true;
+                openAuthModal.textContent = "Account Active ✔";
+                authModal.classList.remove('active');
+                emitSlidToastAlert('success', 'Authorization Success!', 'Logged in securely.');
+            }
+        });
+
+        function moveNext(current) {
+            if (current.value.length >= 1 && current.nextElementSibling) {
+                current.nextElementSibling.focus();
+            }
+        }
+
+        function beginCountdownClock() {
+            let clockSeconds = 30;
+            otpTimerText.innerHTML = `Resend OTP in <span id="secondsLeft">${clockSeconds}</span>s`;
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                clockSeconds--;
+                const counterNode = document.getElementById('secondsLeft');
+                if(counterNode) counterNode.textContent = clockSeconds;
+                if (clockSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    otpTimerText.innerHTML = `<span onclick="resendRealOtp()">Resend Verification Code</span>`;
+                }
+            }, 1000);
+        }
+
+        function resendRealOtp() {
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            emitSlidToastAlert('success', 'Resending OTP...', 'Sending a new code...');
+            
+            const templateParams = {
+                email: userEmailAddress,
+                to_email: userEmailAddress,
+                otp_code: generatedOtp
+            };
+
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                    .then(() => {
+                        beginCountdownClock();
+                        emitSlidToastAlert('success', 'New OTP Sent!', 'Check your inbox.');
+                    });
+            }
+        }
+
+        verifyOtpBtn.addEventListener('click', () => {
+            let enteredCode = "";
+            document.querySelectorAll('.otp-field').forEach(input => enteredCode += input.value);
+            
+            if(enteredCode.length < 4) { 
+                emitSlidToastAlert('error', 'Incomplete Code', 'Please fill out all 4 slots.'); 
+                return; 
+            }
+            
+            if (enteredCode === generatedOtp) {
+                isLoggedIn = true;
+                openAuthModal.textContent = "Account Active ✔";
+                authModal.classList.remove('active');
+                emitSlidToastAlert('success', 'Identity Verified!', 'Account created successfully!');
+            } else {
+                emitSlidToastAlert('error', 'Invalid Code', 'The OTP code you entered is incorrect. Try again.');
+                document.querySelectorAll('.otp-field').forEach(input => input.value = "");
+            }
+        });
+
+        cartToggle.addEventListener('click', () => {
+            cartItemsList.style.display = 'block';
+            checkoutForm.style.display = 'none';
+            proceedBtn.style.display = 'block';
+            placeOrderBtn.style.display = 'none';
+            sidebarTitle.textContent = "Your Cart";
+            cartSidebar.classList.add('open');
+        });
+        closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
+        function executeCartInsertion(prodId) {
+            if (cartMap[prodId]) {
+                cartMap[prodId].quantity += 1;
+            } else {
+                const targetObj = PRODUCT_CATALOG.find(p => p.id === prodId);
+                cartMap[prodId] = { ...targetObj, quantity: 1 };
+            }
+            refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Cart Updated', `${cartMap[prodId].name} added.`);
+        }
+
+        function adjustQuantity(prodId, delta) {
+            if (!cartMap[prodId]) return;
+            cartMap[prodId].quantity += delta;
+            if (cartMap[prodId].quantity <= 0) {
+                delete cartMap[prodId];
+            }
+            refreshCartDrawerUI();
+        }
+
+        function refreshCartDrawerUI() {
+            cartItemsList.innerHTML = '';
+            let subtotal = 0;
+            let counterMetrics = 0;
+
+            Object.keys(cartMap).forEach(keyId => {
+                const reference = cartMap[keyId];
+                subtotal += (reference.price * reference.quantity);
+                counterMetrics += reference.quantity;
+
+                const itemRow = document.createElement('div');
+                itemRow.classList.add('cart-item');
+                itemRow.innerHTML = `
+                    <img class="cart-item-thumb" src="${reference.image}">
+                    <div class="cart-item-details">
+                        <span>${reference.name}</span>
+                        <span class="cart-item-price">$${reference.price.toFixed(2)}</span>
+                    </div>
+                    <div class="quantity-controller">
+                        <button class="qty-btn" onclick="adjustQuantity('${keyId}', -1)">-</button>
+                        <span class="qty-val">${reference.quantity}</span>
+                        <button class="qty-btn" onclick="adjustQuantity('${keyId}', 1)">+</button>
+                    </div>
+                `;
+                cartItemsList.appendChild(itemRow);
+            });
+
+            cartToggle.textContent = `Cart (${counterMetrics})`;
+            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        proceedBtn.addEventListener('click', () => {
+            if (Object.keys(cartMap).length === 0) { 
+                emitSlidToastAlert('error', 'Empty Cart', 'Please add items to your cart first.'); 
+                return; 
+            }
+            
+            if (!isLoggedIn) {
+                cartSidebar.classList.remove('open');
+                emitSlidToastAlert('error', 'Login Required', 'Please sign in to proceed with checkout.');
+                setTimeout(() => {
+                    toggleAuthView(false);
+                    credentialsForm.style.display = 'block';
+                    otpView.style.display = 'none';
+                    authModal.classList.add('active');
+                }, 750);
+                return;
+            }
+
+            cartItemsList.style.display = 'none';
+            checkoutForm.style.display = 'flex';
+            proceedBtn.style.display = 'none';
+            placeOrderBtn.style.display = 'block';
+            sidebarTitle.textContent = "Delivery Setup";
+        });
+
+        function selectPayment(element, mode) {
+            document.querySelectorAll('.pay-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedPayMode = mode;
+        }
+
+        placeOrderBtn.addEventListener('click', () => {
+            const client = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const pin = document.getElementById('custPin').value.trim();
+            const addressValue = document.getElementById('custAddress').value.trim();
+
+            if (!client || !phone || !pin || addressValue === "") {
+                emitSlidToastAlert('error', 'Empty Fields', 'Please complete all address details.');
+                return;
+            }
+
+            emitSlidToastAlert('success', 'Order Placed!', `Your shipment has been dispatched. payment method: ${selectedPayMode}.`);
+            
+            cartMap = {};
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custPin').value = '';
+            document.getElementById('custAddress').value = '';
+            document.getElementById('custCity').value = '';
+            document.getElementById('custState').value = '';
+            refreshCartDrawerUI();
+            cartSidebar.classList.remove('open');
+        });
+
+        try {
+            buildMainCatalogUI(PRODUCT_CATALOG);
+        } catch (err) {
+            console.error("Failed to render product catalog:", err);
+        }
+    </script>
+</body>
+</html>
