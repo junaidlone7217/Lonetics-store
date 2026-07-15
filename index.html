@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lonetics - Premium Electronics & Essentials</title>
-    <!-- Include the official EmailJS SDK library -->
+    
+    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <script type="text/javascript">
+        // Initialize EmailJS with your verified account token
         try {
             emailjs.init("TIv-gbXH55nrs32nc");
         } catch (error) {
             console.error("EmailJS initialization failed:", error);
+        }
+
+        // Your exact Firebase project configurations from your screenshot!
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5CaVG6SAkGu5Z0ffJoT8",
+            authDomain: "lonetics-store.firebaseapp.com",
+            projectId: "lonetics-store",
+            storageBucket: "lonetics-store.appspot.com",
+            messagingSenderId: "1037550611605",
+            appId: "1:1037550611605:web:21645faf"
+        };
+
+        // Initialize Firebase Global Instances
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        } catch (error) {
+            console.error("Firebase App link crashed:", error);
         }
     </script>
     <style>
@@ -111,7 +138,6 @@
             font-weight: bold;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.1s ease;
         }
 
         .profile-avatar-trigger {
@@ -275,7 +301,7 @@
             background-color: #0f172a; border: 1px solid #334155;
             border-radius: 8px; padding: 14px; display: flex;
             align-items: center; justify-content: space-between;
-            cursor: pointer; transition: border-color 0.2s;
+            cursor: pointer; transition: border-color 0.2s; margin-bottom: 8px;
         }
         .gateway-card-select.selected {
             border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.05);
@@ -359,7 +385,7 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Combined Cart, Address & Payment Sidebar Drawer -->
+    <!-- Combined Sidebar Drawer -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h3 id="sidebarTitle">Your Cart</h3>
@@ -368,7 +394,7 @@
         
         <div class="cart-items-list" id="cartItemsList"></div>
         
-        <!-- Step 2: Address Input Flow Panel -->
+        <!-- Address Input Elements -->
         <div class="checkout-form-container" id="checkoutForm">
             <div class="input-group">
                 <label>Full Name</label>
@@ -405,9 +431,9 @@
             </div>
         </div>
 
-        <!-- Step 3: Currency Dependent Dynamic Payment Channel Screen -->
+        <!-- Dynamic Payment Options Block -->
         <div class="payment-gateway-lane" id="paymentForm">
-            <p style="font-size: 0.8rem; color:#94a3b8; margin-bottom: 5px;">Select Region Gateway Method:</p>
+            <p style="font-size: 0.8rem; color:#94a3b8; margin-bottom: 10px;">Select Country Payment Gateway:</p>
             <div id="currencyGatewayOptions"></div>
         </div>
 
@@ -416,7 +442,6 @@
                 <span>Total Invoice:</span>
                 <span id="cartTotal">$0.00</span>
             </div>
-            <!-- Dynamic Navigation Buttons Layer Layout -->
             <button class="flow-btn primary-flow-btn" id="proceedBtn">Proceed to Checkout</button>
             <button class="flow-btn success-flow-btn" id="placeOrderBtn">Confirm & Authorize Order</button>
         </div>
@@ -476,7 +501,7 @@
         </div>
     </div>
 
-    <!-- Profile Dashboard Modal -->
+    <!-- User Profile Dashboard Modal -->
     <div class="modal-overlay" id="profileModal">
         <div class="auth-box" style="max-width:380px;">
             <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')">&times;</button>
@@ -515,14 +540,14 @@
         };
 
         const CURRENCY_PAYMENT_MAP = {
-            IN: { label: "INR (₹)", rate: 83.5, gateways: [{ id: "in_upi", name: "UPI Apps Lane", desc: "Pay via GPay, PhonePe, or BHIM" }, { id: "in_cod", name: "Cash on Delivery", desc: "Pay cash upon arrival" }] },
-            US: { label: "USD ($)", rate: 1.0, gateways: [{ id: "us_stripe", name: "Stripe Secured Credit Card", desc: "Visa, Mastercard, Amex" }, { id: "us_paypal", name: "PayPal Express Hub", desc: "Instant wallet payment balance" }] },
-            AE: { label: "AED", rate: 3.67, gateways: [{ id: "ae_apple", name: "Apple Pay Token", desc: "Secure multi-factor iOS launch" }, { id: "ae_card", name: "Mashreq Bank Gateway", desc: "Local credit/debit card allocation" }] }
+            IN: { label: "INR (₹)", rate: 83.5, gateways: [{ id: "in_upi", name: "UPI Apps Lane Redirect", desc: "Instantly launch GPay, PhonePe, or BHIM" }, { id: "in_cod", name: "Cash on Delivery", desc: "Pay cash at door when package arrives" }] },
+            US: { label: "USD ($)", rate: 1.0, gateways: [{ id: "us_stripe", name: "Stripe Secure Credit Card", desc: "Visa, Mastercard, Discover, Amex" }, { id: "us_paypal", name: "PayPal Express Hub", desc: "Secure multi-device authentication routing" }] },
+            AE: { label: "AED", rate: 3.67, gateways: [{ id: "ae_apple", name: "Apple Pay Dashboard Link", desc: "Biometric secure processing verification" }, { id: "ae_card", name: "Mashreq Bank Gateway", desc: "Local credit/debit card secure authorization" }] }
         };
 
-        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {}; 
         let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-        let currentSessionUser = localStorage.getItem('currentSessionUser') || null;
+        let currentSessionUser = null;
+        let userDataCache = {};
 
         const productGrid = document.getElementById('productGrid');
         const cartSidebar = document.getElementById('cartSidebar');
@@ -562,11 +587,30 @@
         let generatedOtp = "";
         let userEmailAddress = "";
         let activeWorkflow = "signup"; 
-        let currentCheckoutStep = "cart"; // cart, address, payment
+        let currentCheckoutStep = "cart"; 
         let selectedGatewayId = "";
 
         const SERVICE_ID = "service_oofkjro";
         const TEMPLATE_ID = "template_sorgfz4";
+
+        // Real-Time Firebase Auth listener
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                currentSessionUser = user.email;
+                db.collection("users").doc(currentSessionUser).get().then((doc) => {
+                    if (doc.exists) {
+                        userDataCache = doc.data();
+                    } else {
+                        userDataCache = { name: "User Account" };
+                    }
+                    renderSystemSessionState();
+                });
+            } else {
+                currentSessionUser = null;
+                userDataCache = {};
+                renderSystemSessionState();
+            }
+        });
 
         function buildMainCatalogUI(items) {
             productGrid.innerHTML = '';
@@ -632,26 +676,27 @@
             selectedGatewayId = id;
         }
 
+        // Run UI Builders
         window.addEventListener('DOMContentLoaded', () => {
             buildMainCatalogUI(PRODUCT_CATALOG);
-            renderSystemSessionState();
             
             setTimeout(() => {
                 if(!currentSessionUser) {
                     switchWorkflow('auth');
                     toggleAuthView(false);
                     authModal.classList.add('active');
-                    emitSlidToastAlert('error', 'Sign In Required', 'Please connect profile configurations.');
+                    emitSlidToastAlert('error', 'Authentication Required', 'Please sign in to proceed.');
                 }
             }, 3000);
         });
 
         function renderSystemSessionState() {
-            if(currentSessionUser && registeredUsers[currentSessionUser]) {
+            if(currentSessionUser) {
                 openAuthModal.style.display = 'none';
                 profileTrigger.style.display = 'block';
                 profileTrigger.src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
                 document.getElementById('closeAuth').style.display = 'block';
+                authModal.classList.remove('active');
             } else {
                 openAuthModal.style.display = 'block';
                 profileTrigger.style.display = 'none';
@@ -673,12 +718,12 @@
 
         function openProfilePanel() {
             if(!currentSessionUser) return;
-            document.getElementById('profileNameString').textContent = registeredUsers[currentSessionUser].name;
+            document.getElementById('profileNameString').textContent = userDataCache.name || "User";
             document.getElementById('profileEmailString').textContent = currentSessionUser;
             document.getElementById('profileDashboardImg').src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
             
             const listNode = document.getElementById('historyListContainer');
-            listNode.innerHTML = searchHistory.length === 0 ? '<div class="history-item">No queries recorded.</div>' : '';
+            listNode.innerHTML = searchHistory.length === 0 ? '<div class="history-item">No records yet.</div>' : '';
             searchHistory.forEach(item => { listNode.innerHTML += `<div class="history-item">🔍 ${item}</div>`; });
             document.getElementById('profileModal').classList.add('active');
         }
@@ -694,9 +739,10 @@
         }
 
         function executeLogout() {
-            localStorage.removeItem('currentSessionUser');
-            currentSessionUser = null;
-            window.location.reload();
+            firebase.auth().signOut().then(() => {
+                document.getElementById('profileModal').classList.remove('active');
+                window.location.reload();
+            });
         }
 
         function executeBuyNowLane(prodId) {
@@ -721,32 +767,20 @@
             setTimeout(() => appToast.classList.remove('active'), 3500);
         }
 
-        // Navigation Management Interface Step Switching Function
         function transitionSidebarFlowView(step) {
             currentCheckoutStep = step;
             if(step === 'cart') {
                 sidebarTitle.textContent = "Your Cart";
-                cartItemsList.style.display = "block";
-                checkoutForm.style.display = "none";
-                paymentForm.style.display = "none";
-                proceedBtn.style.display = "block";
-                proceedBtn.textContent = "Proceed to Checkout";
-                placeOrderBtn.style.display = "none";
+                cartItemsList.style.display = "block"; checkoutForm.style.display = "none"; paymentForm.style.display = "none";
+                proceedBtn.style.display = "block"; proceedBtn.textContent = "Proceed to Checkout"; placeOrderBtn.style.display = "none";
             } else if(step === 'address') {
                 sidebarTitle.textContent = "Delivery Address Setup";
-                cartItemsList.style.display = "none";
-                checkoutForm.style.display = "flex";
-                paymentForm.style.display = "none";
-                proceedBtn.style.display = "block";
-                proceedBtn.textContent = "Continue to Payment";
-                placeOrderBtn.style.display = "none";
+                cartItemsList.style.display = "none"; checkoutForm.style.display = "flex"; paymentForm.style.display = "none";
+                proceedBtn.style.display = "block"; proceedBtn.textContent = "Continue to Payment"; placeOrderBtn.style.display = "none";
             } else if(step === 'payment') {
                 sidebarTitle.textContent = "Select Payment Option";
-                cartItemsList.style.display = "none";
-                checkoutForm.style.display = "none";
-                paymentForm.style.display = "flex";
-                proceedBtn.style.display = "none";
-                placeOrderBtn.style.display = "block";
+                cartItemsList.style.display = "none"; checkoutForm.style.display = "none"; paymentForm.style.display = "flex";
+                proceedBtn.style.display = "none"; placeOrderBtn.style.display = "block";
             }
         }
 
@@ -756,7 +790,6 @@
                 if(!currentSessionUser) { cartSidebar.classList.remove('open'); authModal.classList.add('active'); return; }
                 transitionSidebarFlowView('address');
             } else if(currentCheckoutStep === 'address') {
-                // Validation of fields
                 const name = document.getElementById('custName').value.trim();
                 const phone = document.getElementById('custPhone').value.trim();
                 const country = document.getElementById('custCountry').value;
@@ -765,7 +798,7 @@
                 const address = document.getElementById('custAddress').value.trim();
 
                 if(!name || !phone || !country || !state || !pin || !address) {
-                    emitSlidToastAlert('error', 'Missing Fields', 'Please complete all address fields layout details.');
+                    emitSlidToastAlert('error', 'Missing Fields', 'Please complete all address details.');
                     return;
                 }
                 transitionSidebarFlowView('payment');
@@ -773,19 +806,13 @@
         });
 
         placeOrderBtn.addEventListener('click', () => {
-            if(!selectedGatewayId) { emitSlidToastAlert('error', 'Selection Required', 'Please tap a billing gateway lane.'); return; }
-            
-            emitSlidToastAlert('success', 'Order Placed!', 'Your transaction process execution routing is complete.');
+            if(!selectedGatewayId) return;
+            emitSlidToastAlert('success', 'Order Placed!', 'Your order has been authorized.');
             cartMap = {}; 
-            document.getElementById('custName').value = "";
-            document.getElementById('custPhone').value = "";
-            document.getElementById('custCountry').value = "";
-            document.getElementById('custState').innerHTML = '<option value="">Select State</option>';
-            document.getElementById('custPin').value = "";
-            document.getElementById('custAddress').value = "";
-            refreshCartDrawerUI(); 
-            transitionSidebarFlowView('cart');
-            cartSidebar.classList.remove('open');
+            document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
+            document.getElementById('custCountry').value = ""; document.getElementById('custState').innerHTML = '<option value="">Select State</option>';
+            document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
+            refreshCartDrawerUI(); transitionSidebarFlowView('cart'); cartSidebar.classList.remove('open');
         });
 
         authSubmitBtn.addEventListener('click', () => {
@@ -797,13 +824,13 @@
             if (isSignUpMode) {
                 activeWorkflow = "signup"; sendOtpEmail();
             } else {
-                if (registeredUsers[email] && registeredUsers[email].password === pass) {
-                    currentSessionUser = email; localStorage.setItem('currentSessionUser', currentSessionUser);
-                    renderSystemSessionState(); authModal.classList.remove('active');
-                    emitSlidToastAlert('success', 'Session Synced', 'Welcome back!');
-                } else {
-                    emitSlidToastAlert('error', 'Auth Failure', 'Bad parameters configuration.');
-                }
+                firebase.auth().signInWithEmailAndPassword(email, pass)
+                    .then(() => {
+                        emitSlidToastAlert('success', 'Authenticated ✔', 'Session connected.');
+                    })
+                    .catch((error) => {
+                        emitSlidToastAlert('error', 'Login Refused', error.message);
+                    });
             }
         });
 
@@ -814,15 +841,15 @@
 
         forgotSubmitBtn.addEventListener('click', () => {
             const email = document.getElementById('forgotIdentity').value.trim().toLowerCase();
-            if(registeredUsers[email]) { userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail(); }
+            userEmailAddress = email; activeWorkflow = "forgot"; sendOtpEmail();
         });
 
         function sendOtpEmail() {
             generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
             const templateParams = { email: userEmailAddress, to_email: userEmailAddress, otp_code: generatedOtp };
             emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams).then(() => {
-                switchWorkflow('otp'); beginCountdownClock(); emitSlidToastAlert('success', 'OTP Sent', 'Check spam box.');
-            });
+                switchWorkflow('otp'); beginCountdownClock(); emitSlidToastAlert('success', 'OTP Sent', 'Check your spam folder.');
+            }).catch(() => { emitSlidToastAlert('error', 'Mail Error', 'OTP delivery failed.'); });
         }
 
         function beginCountdownClock() {
@@ -843,20 +870,28 @@
                 if (activeWorkflow === "signup") {
                     const name = document.getElementById('regName').value.trim();
                     const pass = document.getElementById('authPassword').value.trim();
-                    registeredUsers[userEmailAddress] = { name: name || 'User', password: pass };
-                    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-                    currentSessionUser = userEmailAddress; localStorage.setItem('currentSessionUser', currentSessionUser);
-                    renderSystemSessionState(); authModal.classList.remove('active');
-                } else { switchWorkflow('reset'); }
+                    
+                    firebase.auth().createUserWithEmailAndPassword(userEmailAddress, pass)
+                        .then(() => {
+                            db.collection("users").doc(userEmailAddress).set({ name: name || "User Profile" });
+                            emitSlidToastAlert('success', 'Profile Created', 'Cloud database registration complete.');
+                        })
+                        .catch(err => alert(err.message));
+                } else { 
+                    switchWorkflow('reset'); 
+                }
             }
         });
 
         saveNewPasswordBtn.addEventListener('click', () => {
             const newPass = document.getElementById('newPasswordInput').value.trim();
             if(newPass.length < 6) return;
-            registeredUsers[userEmailAddress].password = newPass;
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            switchWorkflow('auth'); toggleAuthView(false);
+            
+            firebase.auth().sendPasswordResetEmail(userEmailAddress)
+                .then(() => {
+                    emitSlidToastAlert('success', 'Reset Email Sent', 'Check your inbox to finalize password updates.');
+                    switchWorkflow('auth'); toggleAuthView(false);
+                });
         });
 
         function switchWorkflow(target) {
@@ -868,7 +903,7 @@
 
         function toggleAuthView(toSignUp) {
             isSignUpMode = toSignUp;
-            authModalTitle.textContent = toSignUp ? "Create Account (Sign Up)" : "Sign In";
+            authModalTitle.textContent = toSignUp ? "Create Account" : "Sign In";
             signUpFields.style.display = toSignUp ? 'flex' : 'none';
             forgotPasswordLinkContainer.style.display = toSignUp ? 'none' : 'block';
             authToggleText.innerHTML = toSignUp ? 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>' : 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
