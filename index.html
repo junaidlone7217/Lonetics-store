@@ -6,11 +6,7 @@
     <title>Lonetics - Premium Electronics & Essentials</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        try {
-            emailjs.init("Tlv-gbXH55nrs32nc");
-        } catch (error) {
-            console.error("EmailJS initialization failed:", error);
-        }
+        emailjs.init("Tlv-gbXH55nrs32nc");
     </script>
     <style>
         * {
@@ -24,8 +20,6 @@
             color: #f8fafc;
             overflow-x: hidden;
         }
-        
-        /* Navigation Header Block */
         header {
             background-color: #1e293b;
             padding: 15px 20px;
@@ -58,12 +52,9 @@
         .logo span {
             color: #06b6d4;
         }
-        
-        /* Live Search Bar Layout */
         .search-container {
             width: 100%;
             max-width: 400px;
-            position: relative;
         }
         .search-input {
             width: 100%;
@@ -73,14 +64,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.85rem;
-            transition: all 0.2s ease;
         }
-        .search-input:focus {
-            border-color: #06b6d4;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
-        }
-
         .header-actions {
             display: flex;
             align-items: center;
@@ -95,11 +79,6 @@
             font-size: 0.85rem;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .auth-status-btn:hover {
-            border-color: #06b6d4;
-            color: #06b6d4;
         }
         .cart-icon {
             background-color: #06b6d4;
@@ -109,13 +88,7 @@
             font-weight: bold;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.1s ease;
         }
-        .cart-icon:active {
-            transform: scale(0.95);
-        }
-
-        /* Product Catalog Grid Layout */
         .main-content {
             padding: 25px 15px;
         }
@@ -143,11 +116,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-            border-color: #475569;
         }
         .product-img {
             width: 100%;
@@ -161,12 +129,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 4px;
-            line-height: 1.3;
             min-height: 36px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
         .product-price {
             font-size: 1rem;
@@ -184,23 +147,15 @@
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
-        .buy-btn:hover {
-            background-color: #06b6d4;
-            color: #0f172a;
-        }
-
-        /* Slide-out Sidebar Panel Drawer UI */
         .cart-sidebar {
             position: fixed;
             top: 0; right: -360px;
             width: 360px; height: 100vh;
             background-color: #1e293b;
             border-left: 1px solid #334155;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.6);
             z-index: 200;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: right 0.3s ease;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -220,13 +175,9 @@
             background: none; border: none; color: #94a3b8;
             font-size: 1.5rem; cursor: pointer;
         }
-        
         .cart-items-list {
             flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
-            padding-right: 4px;
         }
-        
-        /* Cart Item Setup */
         .cart-item {
             display: flex; align-items: center; gap: 10px;
             margin-bottom: 12px; background-color: #0f172a;
@@ -238,79 +189,48 @@
         }
         .cart-item-details {
             flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem;
-            gap: 2px;
         }
-        .cart-item-price { color: #06b6d4; font-weight: bold; }
-        
         .quantity-controller {
-            display: flex;
-            align-items: center;
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 6px;
-            overflow: hidden;
+            display: flex; align-items: center; background-color: #1e293b; border: 1px solid #334155; border-radius: 6px;
         }
         .qty-btn {
-            background: none; border: none; color: #f8fafc;
-            width: 24px; height: 28px; font-weight: bold; cursor: pointer;
-            font-size: 0.85rem;
+            background: none; border: none; color: #f8fafc; width: 24px; height: 28px; cursor: pointer;
         }
-        .qty-btn:hover { background-color: #475569; }
         .qty-val {
-            font-size: 0.8rem; font-weight: bold; padding: 0 6px; min-width: 20px; text-align: center;
+            font-size: 0.8rem; font-weight: bold; padding: 0 6px;
         }
-
-        /* Address Checkout View Setup */
         .checkout-form-container {
-            display: none; flex-direction: column; gap: 12px;
-            margin-bottom: 20px; overflow-y: auto; flex-grow: 1;
+            display: none; flex-direction: column; gap: 12px; margin-bottom: 20px;
         }
         .form-row-split { display: flex; gap: 8px; }
         .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+        .input-group label { font-size: 0.75rem; color: #94a3b8; }
         .input-group input, .input-group textarea {
-            background-color: #0f172a; border: 1px solid #334155;
-            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
+            background-color: #0f172a; border: 1px solid #334155; color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
         }
-        .input-group input:focus, .input-group textarea:focus { border-color: #06b6d4; outline: none; }
-
-        .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
+        .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .pay-option {
-            background-color: #0f172a; border: 1px solid #334155;
-            border-radius: 6px; padding: 10px; text-align: center;
-            font-size: 0.75rem; font-weight: bold; cursor: pointer; color: #94a3b8;
+            background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 10px; text-align: center; font-size: 0.75rem; cursor: pointer;
         }
-        .pay-option.selected {
-            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.1); color: #06b6d4;
-        }
-
+        .pay-option.selected { border-color: #06b6d4; color: #06b6d4; }
         .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
         .checkout-btn, .place-order-btn {
-            background-color: #06b6d4; color: #0f172a; border: none;
-            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
+            background-color: #06b6d4; color: #0f172a; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
         }
         .place-order-btn { background-color: #10b981; color: #fff; display: none; }
-
-        /* Smooth Transform Overlay Modals */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); z-index: 300;
-            display: flex; justify-content: center; align-items: center;
-            visibility: hidden; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 300; display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: all 0.2s ease;
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
         .auth-box {
-            background-color: #1e293b; border: 1px solid #334155;
-            padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
-            transform: scale(0.92); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
         }
-        .modal-overlay.active .auth-box { transform: scale(1); }
-        .modal-close {
-            position: absolute; top: 10px; right: 15px;
-            background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;
-        }
-        .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; }
-        
-        /* OTP Form UI Setup */
-        .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center
+        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; }
+        .otp-inputs { display: flex; gap: 10px; }
+        .otp-field { width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; text-align: center; font-size: 1.2rem; color: #fff; }
+        .auth-toggle-text { font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center; }
+        .auth-toggle-text span { color: #06b6d4; cursor: pointer; }
+        .toast-notification {
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 3
