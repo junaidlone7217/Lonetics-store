@@ -9,7 +9,7 @@
   "icons": [
     {
       "src": "SmartSelect_20260716_152135_TrebEdit.jpg",
-      "sizes": "512x512",
+      "sizes": "any",
       "type": "image/jpeg",
       "purpose": "any maskable"
     }
