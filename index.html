@@ -40,7 +40,7 @@
             --text-muted: #64748b;
             --border-color: #1e293b;
             --card-radius: 12px;
-            --spring-transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            --spring-transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -83,13 +83,14 @@
         }
         .logo span { color: var(--accent-light); }
 
-        .top-profile-wrapper { display: flex; align-items: center; }
+        .top-profile-wrapper { display: flex; align-items: center; min-width: 34px; }
         .top-profile-img {
             width: 34px; height: 34px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--border-color);
             cursor: pointer;
+            display: none;
         }
 
         .search-wrapper { padding: 12px 16px; background-color: var(--bg-primary); }
@@ -98,7 +99,6 @@
             border-radius: 8px; padding: 10px 14px; color: var(--text-main); font-size: 0.9rem; outline: none;
         }
 
-        /* Video Feed Component */
         .video-reel-section { padding: 12px 16px; }
         .video-reel-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--accent-light); }
         .video-reel-container { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
@@ -106,7 +106,6 @@
         .video-reel-card { flex: 0 0 140px; height: 210px; border-radius: 8px; overflow: hidden; background-color: #000; position: relative; }
         .video-reel-card video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* App Item Display Lanes */
         .main-content { padding: 12px 16px; }
         .section-headline { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
         
@@ -129,7 +128,6 @@
         .product-price { font-size: 0.95rem; color: var(--accent-light); font-weight: 700; margin-bottom: 8px; }
         .buy-btn { width: 100%; padding: 8px 0; border: none; border-radius: 6px; background-color: var(--accent); color: white; font-weight: 700; font-size: 0.75rem; cursor: pointer; }
 
-        /* Mobile Bottom Actions Navigation Interface (Flipkart Layout Standard) */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
             background-color: var(--bg-surface); border-top: 1px solid var(--border-color);
@@ -142,12 +140,11 @@
         .nav-cart-badge-wrapper { position: relative; }
         .nav-cart-counter { position: absolute; top: -6px; right: -12px; background-color: #ef4444; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
 
-        /* Hardware-Accelerated Native-App Bottom Sheets */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 500; display: flex; align-items: flex-end; justify-content: center;
-            visibility: hidden; opacity: 0; transition: opacity 0.3s linear;
+            visibility: hidden; opacity: 0; transition: opacity 0.2s linear;
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
         
@@ -161,12 +158,11 @@
         .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
         .sheet-box h3 { margin-bottom: 20px; font-size: 1.15rem; font-weight: 700; text-align: center; }
 
-        /* Empty Shopping Cart Architecture View */
         .empty-cart-state {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; padding: 30px 10px; gap: 14px;
         }
-        .empty-cart-icon { font-size: 3.5rem; filter: drop-shadow(0 4px 10px rgba(96,165,250,0.2)); }
+        .empty-cart-icon { font-size: 3.5rem; }
         .empty-cart-text h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
         .empty-cart-text p { font-size: 0.8rem; color: var(--text-muted); }
 
@@ -182,6 +178,7 @@
         .side-menu-drawer.open { left: 0; }
         .side-menu-item { padding: 14px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.9rem; cursor: pointer; }
 
+        .admin-image-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px dashed var(--border-color); margin-top: 8px; display: none; }
         .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; background-color: var(--bg-surface); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; z-index: 2000; display: flex; gap: 10px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast-notification.active { top: 20px; }
     </style>
@@ -207,7 +204,7 @@
         <div class="burger-menu-icon" onclick="toggleDrawer(true)">☰</div>
         <a class="logo" href="#">LONE<span>TICS</span></a>
         <div class="top-profile-wrapper">
-            <img class="top-profile-img" id="profileTrigger" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="Avatar" onclick="openProfilePanel()">
+            <img class="top-profile-img" id="profileTrigger" src="" alt="Avatar" onclick="openProfilePanel()">
         </div>
     </header>
 
@@ -225,7 +222,6 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Persistent Bottom Bar -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchNavTab(this, 'home')">
             <div class="nav-icon">🏠</div>
@@ -248,12 +244,10 @@
         </div>
     </div>
 
-    <!-- Admin Panel Sheet -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Admin System Console</h3>
-            
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:12px; margin-bottom:12px;">
                 <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--accent-light);">INVENTORY CONTROLS</h4>
                 <div class="input-group"><label>Product Title</label><input type="text" id="admProdName" placeholder="Enter clean name"></div>
@@ -261,23 +255,21 @@
                 <div class="input-group"><label>Product Photo File</label><input type="file" id="admProdImageFile" accept="image/*" onchange="processFileToDataString(this, 'product')"><img id="admProdPreview" class="admin-image-preview"></div>
                 <button class="submit-action-btn" onclick="saveProductToCloud()">Upload New Item</button>
             </div>
-
             <div>
-                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--accent-light);">VIDEO SHOWCASE MANAGER (Max 4)</h4>
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--accent-light);">VIDEO SHOWCASE MANAGER</h4>
                 <div class="input-group"><label>Select Gallery Video</label><input type="file" id="admVideoFile" accept="video/*" onchange="processFileToDataString(this, 'video')"></div>
                 <button class="submit-action-btn" style="background-color:#10b981;" onclick="saveVideoToCloud()">Publish Video Showcase</button>
             </div>
         </div>
     </div>
 
-    <!-- Profile Management Sheet -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Account Settings Dashboard</h3>
             <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:16px;">
                 <div class="avatar-upload-box" style="position:relative; width:80px; height:80px;">
-                    <img id="profileDashboardImg" src="" style="width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid var(--accent-light);">
+                    <img id="profileDashboardImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" style="width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid var(--accent-light);">
                     <label class="file-input-label" for="userAvatarPicker" style="position:absolute; bottom:0; right:0; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; font-size:0.8rem;">📷</label>
                     <input type="file" id="userAvatarPicker" accept="image/*" style="display:none;" onchange="processFileToDataString(this, 'avatar')">
                 </div>
@@ -286,24 +278,19 @@
             <div class="input-group"><label>Full Name</label><input type="text" id="profileNameInput"></div>
             <div class="input-group">
                 <label>Billing Destination Country</label>
-                <select id="profileCountrySelect" onchange="syncSelectedProfileCountryCurrencyConfig()">
-                    <!-- Countries populated dynamically by JS matrix array -->
-                </select>
+                <select id="profileCountrySelect" onchange="syncSelectedProfileCountryCurrencyConfig()"></select>
             </div>
             <button class="submit-action-btn" onclick="updateUserProfileDataMetadata()">Save Profile Configurations</button>
         </div>
     </div>
 
-    <!-- Smart Cart Sheet with Empty Core State Feature Matrix -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box" style="max-width:440px;">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3 id="cartModalTitle">Your Cart</h3>
             
-            <!-- Structural Container for populated items list -->
             <div class="cart-items-list" id="cartItemsList"></div>
             
-            <!-- Smart Dynamic Empty Core View Wrapper -->
             <div id="emptyCartWrapper" class="empty-cart-state" style="display:none;">
                 <div class="empty-cart-icon">🛒</div>
                 <div class="empty-cart-text">
@@ -335,10 +322,7 @@
                 <h3 id="authModalTitle">Sign In</h3>
                 <div id="signUpFields" style="display:none; flex-direction:column;">
                     <div class="input-group"><label>Your Full Name</label><input type="text" id="regName"></div>
-                    <div class="input-group">
-                        <label>Select Profile Location Context</label>
-                        <select id="regCountry"></select>
-                    </div>
+                    <div class="input-group"><label>Select Profile Location Context</label><select id="regCountry"></select></div>
                 </div>
                 <div class="input-group"><label>Email Address</label><input type="email" id="authIdentity"></div>
                 <div class="input-group"><label>Password</label><input type="password" id="authPassword"></div>
@@ -357,25 +341,18 @@
             CA: { name: "Canada", currency: "CAD ($)", rate: 1.37, symbol: "C$" },
             AU: { name: "Australia", currency: "AUD ($)", rate: 1.51, symbol: "A$" },
             DE: { name: "Germany", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            FR: { name: "France", currency: "EUR (€)", rate: 0.92, symbol: "€" },
             SA: { name: "Saudi Arabia", currency: "SAR", rate: 3.75, symbol: "SR " },
-            ZA: { name: "South Africa", currency: "ZAR", rate: 18.4, symbol: "R " },
             JP: { name: "Japan", currency: "JPY (¥)", rate: 158.2, symbol: "¥" },
-            SG: { name: "Singapore", currency: "SGD ($)", rate: 1.35, symbol: "S$" },
             PK: { name: "Pakistan", currency: "PKR", rate: 278.5, symbol: "Rs " },
-            BD: { name: "Bangladesh", currency: "BDT", rate: 117.5, symbol: "৳ " },
-            LK: { name: "Sri Lanka", currency: "LKR", rate: 303.0, symbol: "Rs " }
+            BD: { name: "Bangladesh", currency: "BDT", rate: 117.5, symbol: "৳ " }
         };
 
         let currentActiveTargetCurrencyRate = 83.5;
         let currentActiveTargetCurrencySymbol = "₹";
         let activeSelectedCheckoutCountryCode = "IN";
-        
-        let cartMap = {};
-        let currentCheckoutStep = "cart";
-        let generatedProductFileCacheString = "";
-        let generatedVideoFileCacheString = "";
-        let generatedAvatarFileCacheString = "";
+        let currentSessionUser = null;
+        let userDataCache = { name: "User Profile", country: "IN" };
+        let PRODUCT_CATALOG = [];
 
         function buildCountrySelectionDropdownDOMNodeTrees() {
             const selects = [document.getElementById('regCountry'), document.getElementById('profileCountrySelect')];
@@ -515,23 +492,26 @@
             });
         }
 
-        // Master Verification Condition Fix: Secure lowcase mapping sync execution
         function renderSystemSessionState() {
             buildCountrySelectionDropdownDOMNodeTrees();
+            const profImg = document.getElementById('profileTrigger');
+            const adminTab = document.getElementById('adminNavTab');
+
             if(currentSessionUser) {
                 document.getElementById('openAuthModal').style.display = 'none';
-                document.getElementById('profileTrigger').style.display = 'block';
-                document.getElementById('profileTrigger').src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                profImg.src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                profImg.style.display = 'block';
                 
                 if (currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com') {
-                    document.getElementById('adminNavTab').style.style.setProperty('display', 'flex', 'important');
+                    adminTab.style.setProperty('display', 'flex', 'important');
                 } else {
-                    document.getElementById('adminNavTab').style.display = 'none';
+                    adminTab.style.display = 'none';
                 }
             } else {
                 document.getElementById('openAuthModal').style.display = 'block';
-                document.getElementById('profileTrigger').style.display = 'none';
-                document.getElementById('adminNavTab').style.display = 'none';
+                profImg.src = "";
+                profImg.style.display = 'none';
+                adminTab.style.display = 'none';
             }
         }
 
@@ -558,7 +538,6 @@
             const cartKeys = Object.keys(cartMap);
             
             if (cartKeys.length === 0) {
-                // Render pure interactive empty state metrics
                 list.style.display = 'none';
                 emptyState.style.display = 'flex';
                 footerActions.style.display = 'none';
@@ -658,7 +637,7 @@
             } else { firebase.auth().signInWithEmailAndPassword(email, pass).then(() => { closeAllModals(); }); }
         }
 
-        function executeLogout() { firebase.auth().signOut().then(() => window.location.reload()); }
+        function executeLogout() { firebase.auth().signOut().then(() => { localStorage.removeItem(`avatar_${currentSessionUser}`); window.location.reload(); }); }
         function emitSlidToastAlert(type, title, msg) {
             document.getElementById('toastTitle').textContent = title; document.getElementById('toastMessage').textContent = msg;
             appToast.classList.add('active'); setTimeout(() => appToast.classList.remove('active'), 3000);
