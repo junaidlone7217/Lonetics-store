@@ -1,0 +1,17 @@
+{
+  "name": "Lonetics Premium Electronics",
+  "short_name": "Lonetics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060b13",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/SmartSelect_20260716_152135_TrebEdit.jpg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
