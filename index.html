@@ -140,10 +140,40 @@
             border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.9rem;
             font-weight: 700; cursor: pointer; display: none; justify-content: center; align-items: center; z-index: 10;
         }
-        .product-img-frame { width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 10px; }
+        
+        .edit-product-badge {
+            position: absolute; top: 8px; right: 38px; background-color: rgba(37, 99, 235, 0.9); color: white;
+            border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.7rem;
+            font-weight: 700; cursor: pointer; display: none; justify-content: center; align-items: center; z-index: 10;
+        }
+
+        .product-img-frame { position: relative; width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 10px; }
         .product-img { width: 100%; height: 100%; object-fit: cover; }
-        .product-title { font-size: 0.85rem; font-weight: 600; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px; color: var(--text-main); }
-        .product-price { font-size: 1rem; color: var(--accent-light); font-weight: 700; margin-bottom: 10px; }
+        
+        .fake-discount-corner {
+            position: absolute; top: 0; left: 0; background-color: #ef4444; color: white;
+            padding: 4px 8px; font-size: 0.65rem; font-weight: 900; border-radius: 0 0 8px 0;
+            z-index: 5; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .product-title { font-size: 0.85rem; font-weight: 600; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; color: var(--text-main); }
+        
+        .live-viewer-row { font-size: 0.65rem; color: #ef4444; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+        .pulse-dot { width: 6px; height: 6px; background-color: #ef4444; border-radius: 50%; animation: pulseAnim 1.5s infinite; }
+        @keyframes pulseAnim {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        /* NEW STOCK BAR CSS */
+        .stock-info-row { display:flex; justify-content:space-between; font-size:0.65rem; color:#f8fafc; font-weight:bold; margin-bottom:4px; margin-top:2px; }
+        .stock-bar-bg { width:100%; background:var(--bg-primary); height:4px; border-radius:2px; margin-bottom:8px; border: 1px solid var(--border-color); overflow: hidden;}
+        .stock-bar-fill { background:#ef4444; height:100%; border-radius:2px; }
+
+        .product-price { font-size: 1rem; color: var(--accent-light); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; }
+        .strike-price { text-decoration: line-through; color: var(--text-muted); font-size: 0.75rem; margin-left: 6px; font-weight: 500; }
+        
         .buy-btn { width: 100%; padding: 10px 0; border: none; border-radius: 8px; background-color: var(--accent); color: white; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
 
         .bottom-nav {
@@ -248,6 +278,18 @@
         .admin-image-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px dashed var(--border-color); margin-top: 8px; display: none; }
         .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; z-index: 2000; display: flex; gap: 10px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .toast-notification.active { top: 20px; }
+
+        /* NEW SOCIAL PROOF POPUP CSS */
+        .social-proof-popup {
+            position: fixed; bottom: 85px; left: -100%; width: calc(100% - 32px); max-width: 350px; margin: 0 16px;
+            background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px;
+            z-index: 99; display: flex; align-items: center; gap: 12px;
+            transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .social-proof-popup.show { left: 0; }
+        .social-proof-img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .social-proof-text { font-size: 0.75rem; color: var(--text-main); line-height: 1.3; }
+        .social-proof-time { font-size: 0.65rem; color: var(--accent-light); font-weight: bold; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -257,6 +299,15 @@
         <div>
             <h4 id="toastTitle">Notification</h4>
             <p id="toastMessage" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"></p>
+        </div>
+    </div>
+
+    <!-- NEW SOCIAL PROOF POPUP UI -->
+    <div class="social-proof-popup" id="socialProofPopup">
+        <img id="spImage" class="social-proof-img" src="">
+        <div>
+            <div id="spMessage" class="social-proof-text"></div>
+            <div id="spTime" class="social-proof-time"></div>
         </div>
     </div>
 
@@ -501,6 +552,8 @@
             BD: { name: "Bangladesh", currency: "BDT", rate: 117.5, symbol: "৳ " }
         };
 
+        const CITIES_SOCIAL_PROOF = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Srinagar"];
+
         let currentActiveTargetCurrencyRate = 83.5;
         let currentActiveTargetCurrencySymbol = "₹";
         let activeSelectedCheckoutCountryCode = "IN";
@@ -518,6 +571,9 @@
         let generatedProductFileCacheString = "";
         let generatedVideoFileCacheString = "";
         let generatedAvatarFileCacheString = "";
+        
+        /* NEW FEATURE: IDLE TIMER */
+        let userIdleTimeTimer = 0;
 
         function buildCountrySelectionDropdownDOMNodeTrees() {
             const selects = [document.getElementById('regCountry'), document.getElementById('profileCountrySelect')];
@@ -557,6 +613,45 @@
                 setTimeout(() => { openSmartApplicationInstallationPromptSheet(); }, 2000);
             }
         });
+
+        /* NEW FEATURE: INITIALIZE BACKGROUND TIMERS */
+        function startMarketingEngines() {
+            // Social Proof Engine
+            setInterval(() => {
+                if (PRODUCT_CATALOG.length === 0) return;
+                const randomProduct = PRODUCT_CATALOG[Math.floor(Math.random() * PRODUCT_CATALOG.length)];
+                const randomCity = CITIES_SOCIAL_PROOF[Math.floor(Math.random() * CITIES_SOCIAL_PROOF.length)];
+                const randomTime = Math.floor(Math.random() * 59) + 1;
+                
+                document.getElementById('spImage').src = randomProduct.image;
+                document.getElementById('spMessage').innerHTML = `Someone in <strong>${randomCity}</strong> just bought <strong>${randomProduct.name}</strong>`;
+                document.getElementById('spTime').innerText = `Verified Purchase • ${randomTime} minutes ago`;
+                
+                const popup = document.getElementById('socialProofPopup');
+                popup.classList.add('show');
+                
+                setTimeout(() => { popup.classList.remove('show'); }, 4000);
+            }, 25000); // Pops up every 25 seconds
+
+            // Idle Engagement Engine
+            setInterval(() => {
+                userIdleTimeTimer++;
+                if (userIdleTimeTimer === 45) { // If idle for 45 seconds
+                    emitSlidToastAlert('success', 'Special Offer Unlocked!', 'Still deciding? Use code LONE25 for 25% OFF your entire cart right now.');
+                }
+            }, 1000);
+        }
+
+        // Reset idle timer on interaction
+        window.onload = resetIdleTimer;
+        window.onmousemove = resetIdleTimer;
+        window.ontouchstart = resetIdleTimer;
+        window.onscroll = resetIdleTimer;
+        window.onkeypress = resetIdleTimer;
+        
+        function resetIdleTimer() {
+            userIdleTimeTimer = 0;
+        }
 
         function openSmartApplicationInstallationPromptSheet() {
             closeAllModals();
@@ -641,6 +736,16 @@
                 emitSlidToastAlert('success', 'Status Synchronized', `Order updated to ${newStatus.toUpperCase()}`);
             }).catch(err => console.error(err));
         }
+        
+        function editProductPrice(id, currentPrice) {
+            event.stopPropagation();
+            const newPrice = prompt("Enter the new Base Price in INR (₹):", currentPrice);
+            if (newPrice !== null && newPrice !== "" && !isNaN(newPrice)) {
+                db.collection("products").doc(id).update({ price: parseFloat(newPrice) }).then(() => {
+                    emitSlidToastAlert('success', 'Price Updated', 'Live price synced to database.');
+                });
+            }
+        }
 
         function buildMainCatalogUI(items) {
             const productGrid = document.getElementById('productGrid');
@@ -655,14 +760,44 @@
                 const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
                 const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
                 
+                const seededDiscount = (product.name.charCodeAt(0) % 40) + 20; 
+                const fakeOriginalPrice = (calculatedPriceVal / (1 - (seededDiscount / 100))).toFixed(2);
+                const randomViewers = (product.name.length % 15) + 3;
+                
+                /* NEW FEATURE: LOW STOCK BAR GENERATOR */
+                const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; // Always generates a stock number between 2 and 10
+                const stockPercentage = (randomStockCount / 20) * 100; // Visual bar fill
+
                 const card = document.createElement('div');
                 card.classList.add('product-card');
                 card.innerHTML = `
                     <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
-                    <div class="product-img-frame"><img class="product-img" src="${product.image}"></div>
+                    <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
+                    
+                    <div class="product-img-frame">
+                        <div class="fake-discount-corner">${seededDiscount}% OFF</div>
+                        <img class="product-img" src="${product.image}">
+                    </div>
+                    
                     <div class="product-title">${product.name}</div>
+                    
+                    <div class="live-viewer-row">
+                        <span class="pulse-dot"></span> ${randomViewers} viewing now
+                    </div>
+                    
+                    <div class="stock-info-row">
+                        <span>🔥 Selling Fast</span>
+                        <span>Only ${randomStockCount} left</span>
+                    </div>
+                    <div class="stock-bar-bg">
+                        <div class="stock-bar-fill" style="width: ${stockPercentage}%;"></div>
+                    </div>
+                    
                     <div>
-                        <div class="product-price">${currentActiveTargetCurrencySymbol}${calculatedPriceVal}</div>
+                        <div class="product-price">
+                            ${currentActiveTargetCurrencySymbol}${calculatedPriceVal}
+                            <span class="strike-price">${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}</span>
+                        </div>
                         <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add To Cart</button>
                     </div>
                 `;
@@ -770,6 +905,8 @@
         }
 
         function executeCartInsertion(id) {
+            if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback if phone supports it
+            
             if (cartMap[id]) { cartMap[id].quantity += 1; }
             else { const match = PRODUCT_CATALOG.find(p => p.id === id); cartMap[id] = { ...match, quantity: 1 }; }
             
@@ -1132,7 +1269,10 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => { listenToProductsAndVideos(); });
+        window.addEventListener('DOMContentLoaded', () => { 
+            listenToProductsAndVideos(); 
+            startMarketingEngines(); // Starts the popups and idle timer!
+        });
     </script>
 </body>
 </html>
