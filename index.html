@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
+    <!-- Link the PWA config manifest file -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -221,6 +226,10 @@
         .admin-action-row { display: flex; gap: 8px; margin-top: 6px; width: 100%; }
         .adm-ctrl-btn { flex: 1; padding: 8px; font-size: 0.75rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; color: white; text-transform: uppercase; }
 
+        .app-install-sheet-container { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 5px; gap: 16px; }
+        .app-install-icon-frame { width: 75px; height: 75px; border-radius: 18px; border: 2px solid var(--border-color); background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .ios-guidance-instruction-box { display: none; width: 100%; background: var(--bg-primary); border: 1px dashed var(--border-color); border-radius: 10px; padding: 14px; text-align: left; flex-direction: column; gap: 8px; }
+
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
         .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); }
         .discount-strike { text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem; margin-right: 6px; }
@@ -256,6 +265,7 @@
         </div>
         <div class="side-menu-item" onclick="toggleDrawer(false); openProfilePanel();">Edit Profile Settings</div>
         <div class="side-menu-item" onclick="toggleDrawer(false); openUserOrdersTrackingPortal();">My Orders Track</div>
+        <div class="side-menu-item" style="color:var(--accent-light); font-weight:bold;" onclick="toggleDrawer(false); openSmartApplicationInstallationPromptSheet();">Download Mobile App</div>
         <div class="side-menu-item" onclick="toggleDrawer(false); emitSlidToastAlert('success','Support Help','Customer care routing active.');">Help Center & Docs</div>
         <div class="side-menu-item" style="color:#ef4444; font-weight:700;" onclick="executeLogout()">Sign Out Account</div>
     </div>
@@ -311,6 +321,31 @@
         </div>
     </div>
 
+    <!-- Smart Application Installation Prompt Sheet -->
+    <div class="modal-overlay" id="appInstallModal">
+        <div class="sheet-box">
+            <button class="modal-close" onclick="closeAllModals()">&times;</button>
+            <h3>Install Lonetics App</h3>
+            <div class="app-install-sheet-container">
+                <div class="app-install-icon-frame">⚡</div>
+                <div>
+                    <h4 style="font-size:1rem; font-weight:bold;">Lonetics Mobile Store</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">Enjoy 25% off checkout codes, direct tracking, and lightning fast access.</p>
+                </div>
+                
+                <button class="flow-btn primary-flow-btn" id="androidNativeInstallBtnAction" style="display:block;" onclick="triggerAndroidNativePwaInstall()">Install Application</button>
+                
+                <div class="ios-guidance-instruction-box" id="iosManualInstallGuidanceBox">
+                    <p style="font-size:0.85rem; font-weight:700; color:var(--accent-light);">⚠️ iPhone Installation Steps:</p>
+                    <p style="font-size:0.8rem;">1. Look at the bottom menu bar of your Safari browser and tap the <strong>Share Button</strong> (square with an up arrow 📤).</p>
+                    <p style="font-size:0.8rem;">2. Scroll down the option list and tap <strong>'Add to Home Screen'</strong> (➕).</p>
+                    <p style="font-size:0.8rem;">3. Click <strong>'Add'</strong> in the top right corner to finish!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Layout -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -338,6 +373,7 @@
         </div>
     </div>
 
+    <!-- Profile Management -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -359,6 +395,7 @@
         </div>
     </div>
 
+    <!-- Tracking Modal -->
     <div class="modal-overlay" id="ordersTrackingModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -367,6 +404,7 @@
         </div>
     </div>
 
+    <!-- Shopping Cart Modal Sheet -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -434,6 +472,7 @@
         </div>
     </div>
 
+    <!-- Security Gateway -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -479,6 +518,7 @@
         let activeAppliedCouponCodeString = ""; 
         let isSignUpMode = false;
         
+        let deferredAppInstallPrompt = null; 
         let generatedProductFileCacheString = "";
         let generatedVideoFileCacheString = "";
         let generatedAvatarFileCacheString = "";
@@ -511,6 +551,42 @@
                 renderSystemSessionState();
             }
         });
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); 
+            deferredAppInstallPrompt = e; 
+            setTimeout(() => {
+                openSmartApplicationInstallationPromptSheet();
+            }, 3000);
+        });
+
+        function openSmartApplicationInstallationPromptSheet() {
+            closeAllModals();
+            const isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            if (isIphone) {
+                document.getElementById('androidNativeInstallBtnAction').style.display = 'none';
+                document.getElementById('iosManualInstallGuidanceBox').style.setProperty('display', 'flex', 'important');
+            } else {
+                document.getElementById('androidNativeInstallBtnAction').style.display = 'block';
+                document.getElementById('iosManualInstallGuidanceBox').style.display = 'none';
+            }
+            document.getElementById('appInstallModal').classList.add('active');
+        }
+
+        function triggerAndroidNativePwaInstall() {
+            if (deferredAppInstallPrompt) {
+                deferredAppInstallPrompt.prompt(); 
+                deferredAppInstallPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        emitSlidToastAlert('success', 'Installing...', 'Adding Lonetics to your home app drawer!');
+                    }
+                    deferredAppInstallPrompt = null;
+                    closeAllModals();
+                });
+            } else {
+                emitSlidToastAlert('success', 'Support Active', 'Tap the 3 dots in Chrome and click "Install app" manually.');
+            }
+        }
 
         function listenToProductsAndVideos() {
             db.collection("products").onSnapshot((snapshot) => {
@@ -701,7 +777,6 @@
             emitSlidToastAlert('success', 'Cart Added', 'Item appended to checkout list.');
         }
 
-        // Fixed interactive toggle rules inside state increments configuration scope
         function filterCatalogSearch() {
             const val = document.getElementById('catalogSearch').value.toLowerCase().trim();
             const filtered = PRODUCT_CATALOG.filter(p => p.name.toLowerCase().includes(val));
@@ -916,7 +991,7 @@
                   });
               }).catch(err => {
                   console.error(err);
-                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>`;
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>';
               });
               
             document.getElementById('ordersTrackingModal').classList.add('active');
@@ -1046,6 +1121,15 @@
             document.getElementById('toastMessage').textContent = msg;
             appToast.classList.add('active'); 
             setTimeout(() => appToast.classList.remove('active'), 3000);
+        }
+
+        // Native Service Worker Registration Initialization block
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log("SW Registered Successfully"))
+                    .catch(err => console.error("SW Registration Fail:", err));
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => { listenToProductsAndVideos(); });
