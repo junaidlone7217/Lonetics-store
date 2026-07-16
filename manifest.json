@@ -8,8 +8,8 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "SmartSelect_20260716_152135_TrebEdit.jpg",
-      "sizes": "any",
+      "src": "/SmartSelect_20260716_152135_TrebEdit.jpg",
+      "sizes": "192x192 512x512 any",
       "type": "image/jpeg",
       "purpose": "any maskable"
     }
