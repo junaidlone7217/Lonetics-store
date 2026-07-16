@@ -227,9 +227,7 @@
         .adm-ctrl-btn { flex: 1; padding: 8px; font-size: 0.75rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; color: white; text-transform: uppercase; }
 
         .app-install-sheet-container { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 5px; gap: 16px; }
-        /* Updated design with your custom high-end branded logo */
         .app-install-icon-frame { width: 90px; height: 90px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .app-install-icon-frame img { width: 100%; height: 100%; object-fit: cover; }
         .ios-guidance-instruction-box { display: none; width: 100%; background: var(--bg-primary); border: 1px dashed var(--border-color); border-radius: 10px; padding: 14px; text-align: left; flex-direction: column; gap: 8px; }
 
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
@@ -329,7 +327,7 @@
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Install Lonetics App</h3>
             <div class="app-install-sheet-container">
-                <div class="app-install-icon-frame"><img src="https://i.ibb.co/FkVrZ03/lonetics-logo.png" alt="Lonetics Logo"></div>
+                <div class="app-install-icon-frame" style="display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #a855f7, #3b82f6, #ec4899); font-size:2.5rem;">🛍️</div>
                 <div>
                     <h4 style="font-size:1rem; font-weight:bold;">Lonetics Mobile Store</h4>
                     <p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">Enjoy 25% off checkout codes, direct tracking, and lightning fast access.</p>
@@ -782,7 +780,6 @@
             emitSlidToastAlert('success', 'Cart Added', 'Item appended to checkout list.');
         }
 
-        // Search engine filter node implementation
         function filterCatalogSearch() {
             const val = document.getElementById('catalogSearch').value.toLowerCase().trim();
             const filtered = PRODUCT_CATALOG.filter(p => p.name.toLowerCase().includes(val));
@@ -1129,7 +1126,6 @@
             setTimeout(() => appToast.classList.remove('active'), 3000);
         }
 
-        // Native Service Worker Registration block initialization
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
