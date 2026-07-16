@@ -12,14 +12,12 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
-        // Initialize EmailJS with your verified account token
         try {
             emailjs.init("TIv-gbXH55nrs32nc");
         } catch (error) {
             console.error("EmailJS initialization failed:", error);
         }
 
-        // Your 100% complete, uncut Firebase configuration credentials
         const firebaseConfig = {
             apiKey: "AIzaSyA5CaVG6SAkGu5Z0ffJoT8Qqe1pkhOvNMA",
             authDomain: "lonetics-store.firebaseapp.com",
@@ -30,7 +28,6 @@
             measurementId: "G-JQ95C6XPED"
         };
 
-        // Initialize Firebase Global Instances securely
         let db;
         try {
             firebase.initializeApp(firebaseConfig);
@@ -40,73 +37,64 @@
         }
     </script>
     <style>
+        :root {
+            --bg-primary: #080f1d;
+            --bg-surface: #131c2e;
+            --bg-surface-hover: #1b263f;
+            --accent: #00d2ff;
+            --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #22314d;
+            --card-radius: 16px;
+            --transition-premium: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
             overflow-x: hidden;
+            letter-spacing: -0.2px;
         }
-        
-        /* Navigation Header Block */
+
+        /* Premium Modern Header Layout (Amazon/Flipkart Pro Inspired) */
         header {
-            background-color: #1e293b;
-            padding: 15px 20px;
+            background: rgba(19, 28, 46, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            border-bottom: 1px solid #334155;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        @media (min-width: 600px) {
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
+
         .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
         }
+
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
             cursor: pointer;
-        }
-        .logo span {
-            color: #06b6d4;
-        }
-        
-        /* Live Search Bar Layout */
-        .search-container {
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            color: #f8fafc;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-        }
-        .search-input:focus {
-            border-color: #06b6d4;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header-actions {
@@ -114,289 +102,401 @@
             align-items: center;
             gap: 12px;
         }
+
         .auth-status-btn {
-            background: none;
-            border: 1px solid #475569;
-            color: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 6px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-premium);
+        }
+
+        .auth-status-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+        }
+
+        .admin-trigger-btn {
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: var(--transition-premium);
+        }
+
+        .admin-trigger-btn:active {
+            transform: scale(0.95);
+        }
+
+        .cart-icon {
+            background: var(--accent-gradient);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
             font-size: 0.85rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            transition: var(--transition-premium);
+            box-shadow: 0 4px 12px rgba(0, 210, 255, 0.2);
         }
-        .auth-status-btn:hover {
-            border-color: #06b6d4;
-            color: #06b6d4;
-        }
-        .cart-icon {
-            background-color: #06b6d4;
-            color: #0f172a;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
+
+        .cart-icon:active {
+            transform: scale(0.95);
         }
 
         .profile-avatar-trigger {
-            width: 35px;
-            height: 35px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background-color: #334155;
-            border: 2px solid #06b6d4;
+            border: 2px solid var(--accent);
             cursor: pointer;
             object-fit: cover;
             display: none;
+            transition: var(--transition-premium);
         }
 
-        /* Private Admin Access Button */
-        .admin-trigger-btn {
-            background-color: #e11d48;
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
+        /* Search Layout */
+        .search-container {
+            width: 100%;
+            position: relative;
         }
 
-        /* Product Catalog Grid Layout */
+        .search-input {
+            width: 100%;
+            background-color: rgba(8, 15, 29, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            transition: var(--transition-premium);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            background-color: rgba(8, 15, 29, 0.9);
+            box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.15);
+        }
+
+        /* Modern Grid Architecture (Premium App Standard) */
         .main-content {
-            padding: 25px 15px;
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
+
         .section-title {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            border-left: 4px solid #06b6d4;
-            padding-left: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
+            gap: 12px;
         }
+
         @media (min-width: 768px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
             }
         }
+
+        /* Sophisticated Flipkart/Amazon Style Cards */
         .product-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 12px;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            transition: var(--transition-premium);
         }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
         .delete-product-badge {
             position: absolute;
             top: 8px;
             right: 8px;
-            background-color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.9);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            width: 26px;
+            height: 26px;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 5;
+            backdrop-filter: blur(4px);
         }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 130px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--bg-primary);
+            margin-bottom: 8px;
+        }
+
         .product-img {
             width: 100%;
-            height: 110px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background-color: #0f172a;
+            transition: var(--transition-premium);
         }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
         .product-title {
             font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            line-height: 1.3;
             min-height: 36px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .product-price {
-            font-size: 1rem;
-            color: #06b6d4;
+            font-size: 1.05rem;
+            color: var(--accent);
             font-weight: 700;
             margin-bottom: 10px;
         }
+
         .action-btn-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
+
         .buy-btn, .buynow-btn {
-            padding: 7px 0;
+            padding: 8px 0;
             width: 100%;
-            border-radius: 6px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-weight: 700;
             font-size: 0.8rem;
             cursor: pointer;
             text-align: center;
-        }
-        .buy-btn {
-            background-color: transparent;
-            border: 1px solid #06b6d4;
-            color: #06b6d4;
-        }
-        .buynow-btn {
-            background-color: #06b6d4;
-            color: #0f172a;
+            transition: var(--transition-premium);
             border: none;
-            font-weight: 700;
         }
 
-        /* Slide-out Sidebar Panel Drawer UI */
+        .buy-btn {
+            background-color: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            color: var(--accent);
+        }
+
+        .buy-btn:hover {
+            background-color: rgba(0, 210, 255, 0.2);
+        }
+
+        .buynow-btn {
+            background: var(--accent-gradient);
+            color: #000;
+        }
+
+        .buynow-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Slide-out Sidebar Engine */
         .cart-sidebar {
             position: fixed;
-            top: 0; right: -380px;
-            width: 380px; height: 100vh;
-            background-color: #1e293b;
-            border-left: 1px solid #334155;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.6);
+            top: 0; right: -100%;
+            width: 100%; max-width: 420px; height: 100vh;
+            background-color: var(--bg-surface);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 40px rgba(0,0,0,0.5);
             z-index: 200;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px;
+            transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 24px;
             display: flex;
             flex-direction: column;
         }
+
         .cart-sidebar.open {
             right: 0;
         }
+
         .cart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 10px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
         }
+
         .close-cart {
-            background: none; border: none; color: #94a3b8;
-            font-size: 1.5rem; cursor: pointer;
+            background: none; border: none; color: var(--text-muted);
+            font-size: 1.8rem; cursor: pointer; transition: var(--transition-premium);
         }
+
+        .close-cart:hover { color: var(--text-main); }
         
         .cart-items-list {
             flex-grow: 1; overflow-y: auto; margin-bottom: 20px;
         }
 
         .cart-item {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 12px; background-color: #0f172a;
-            padding: 10px; border-radius: 8px;
-            border: 1px solid #334155;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 12px; background-color: var(--bg-primary);
+            padding: 12px; border-radius: 12px;
+            border: 1px solid var(--border-color);
         }
-        .cart-item-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
+        .cart-item-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
         .cart-item-details { flex-grow: 1; display: flex; flex-direction: column; font-size: 0.8rem; gap: 2px; }
-        .cart-item-price { color: #06b6d4; font-weight: bold; }
+        .cart-item-price { color: var(--accent); font-weight: bold; }
         
-        .quantity-controller { display: flex; align-items: center; background-color: #1e293b; border: 1px solid #334155; border-radius: 6px; }
-        .qty-btn { background: none; border: none; color: #f8fafc; width: 24px; height: 26px; cursor: pointer; font-weight: bold; }
-        .qty-val { font-size: 0.8rem; font-weight: bold; padding: 0 4px; }
+        .quantity-controller { display: flex; align-items: center; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+        .qty-btn { background: none; border: none; color: var(--text-main); width: 28px; height: 28px; cursor: pointer; font-weight: bold; }
+        .qty-btn:hover { background-color: var(--border-color); }
+        .qty-val { font-size: 0.8rem; font-weight: bold; padding: 0 6px; }
         
-        /* Checkout Views Matrix */
+        /* Form Mechanics Fixes */
         .checkout-form-container {
-            display: none; flex-direction: column; gap: 12px;
+            display: none; flex-direction: column; gap: 14px;
             overflow-y: auto; flex-grow: 1; margin-bottom: 10px;
-            padding-bottom: 10px;
         }
-        .form-row-split { display: flex; gap: 8px; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .input-group label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+        .form-row-split { display: flex; gap: 10px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+        .input-group label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        
         .input-group input, .input-group textarea, .input-group select {
-            background-color: #0f172a; border: 1px solid #334155;
-            color: #f8fafc; padding: 9px; border-radius: 6px; font-size: 0.85rem;
+            background-color: var(--bg-primary); border: 1px solid var(--border-color);
+            color: var(--text-main); padding: 12px; border-radius: 10px; font-size: 0.9rem;
+            transition: var(--transition-premium); width: 100%;
         }
 
-        /* Currency Wise Payment Engine Interface */
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            border-color: var(--accent); outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.1);
+        }
+
         .payment-gateway-lane {
             display: none; flex-direction: column; gap: 14px;
             overflow-y: auto; flex-grow: 1;
         }
+
         .gateway-card-select {
-            background-color: #0f172a; border: 1px solid #334155;
-            border-radius: 8px; padding: 14px; display: flex;
+            background-color: var(--bg-primary); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 16px; display: flex;
             align-items: center; justify-content: space-between;
-            cursor: pointer; transition: border-color 0.2s; margin-bottom: 8px;
+            cursor: pointer; transition: var(--transition-premium); margin-bottom: 8px;
         }
         .gateway-card-select.selected {
-            border-color: #06b6d4; background-color: rgba(6, 182, 212, 0.05);
+            border-color: var(--accent); background-color: rgba(0, 210, 255, 0.04);
         }
         .gateway-details h4 { font-size: 0.9rem; font-weight: bold; }
-        .gateway-details p { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+        .gateway-details p { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
-        .cart-total-section { border-top: 1px solid #334155; padding-top: 15px; }
-        .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
+        .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; }
+        .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.15rem; margin-bottom: 16px; }
         
-        /* Navigation Button Blocks */
         .flow-btn {
-            width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; text-align: center;
+            width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; text-align: center;
+            transition: var(--transition-premium); font-size: 0.95rem;
         }
-        .primary-flow-btn { background-color: #06b6d4; color: #0f172a; }
-        .success-flow-btn { background-color: #10b981; color: white; display: none; }
+        .primary-flow-btn { background: var(--accent-gradient); color: #000; box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2); }
+        .success-flow-btn { background-color: #10b981; color: white; display: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
 
-        /* Smooth Transform Overlay Modals */
+        .flow-btn:active { transform: scale(0.98); }
+
+        /* Premium Overlay Architecture */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); z-index: 300;
+            background-color: rgba(5, 8, 15, 0.8); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); z-index: 300;
             display: flex; justify-content: center; align-items: center;
-            visibility: hidden; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden; opacity: 0; transition: var(--transition-premium);
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
+        
         .auth-box {
-            background-color: #1e293b; border: 1px solid #334155;
-            padding: 25px; border-radius: 12px; width: 90%; max-width: 350px; position: relative;
+            background-color: var(--bg-surface); border: 1px solid var(--border-color);
+            padding: 32px 24px; border-radius: 20px; width: 92%; max-width: 400px; position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: var(--transition-premium);
+            transform: scale(0.9);
         }
-        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
-        .auth-box h3 { margin-bottom: 15px; font-size: 1.25rem; text-align: center; }
+        .modal-overlay.active .auth-box {
+            transform: scale(1);
+        }
 
-        /* Dashboard Components */
-        .profile-container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .avatar-upload-box { position: relative; width: 90px; height: 90px; }
-        .profile-preview-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #06b6d4; background-color: #0f172a; }
-        .file-input-label { position: absolute; bottom: 0; right: 0; background-color: #06b6d4; color: #0f172a; width: 26px; height: 26px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
-        .history-list { width: 100%; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; max-height: 110px; overflow-y: auto; }
-        .history-item { font-size: 0.75rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid #1e293b; }
+        .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
+        .auth-box h3 { margin-bottom: 20px; font-size: 1.3rem; text-align: center; font-weight: 700; }
+
+        .profile-container { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .avatar-upload-box { position: relative; width: 96px; height: 96px; }
+        .profile-preview-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); background-color: var(--bg-primary); }
+        .file-input-label { position: absolute; bottom: 0; right: 0; background: var(--accent-gradient); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        
+        .history-list { width: 100%; background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; max-height: 120px; overflow-y: auto; }
+        .history-item { font-size: 0.8rem; color: var(--text-muted); padding: 6px 0; border-bottom: 1px solid var(--bg-surface); }
         
         .otp-container { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
         .otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
-        .otp-field { width: 45px; height: 45px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .auth-toggle-text { font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center; }
-        .auth-toggle-text span { color: #06b6d4; cursor: pointer; font-weight: bold; }
-        .auth-submit-btn { width: 100%; margin-top: 15px; padding: 10px; background-color: #06b6d4; border: none; border-radius: 6px; font-weight: bold; color: #0f172a; cursor: pointer; }
+        .otp-field { width: 48px; height: 48px; background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; text-align: center; font-size: 1.3rem; font-weight: bold; color: #fff; }
         
-        /* Style adjustments for image input preview in admin panel */
+        .auth-toggle-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 16px; text-align: center; }
+        .auth-toggle-text span { color: var(--accent); cursor: pointer; font-weight: bold; }
+        .auth-submit-btn { width: 100%; margin-top: 16px; padding: 12px; background: var(--accent-gradient); border: none; border-radius: 12px; font-weight: bold; color: #000; cursor: pointer; transition: var(--transition-premium); }
+        
         .admin-image-preview {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px dashed #334155;
-            background-color: #0f172a;
-            margin-top: 4px;
-            display: none;
+            width: 100%; height: 120px; object-fit: cover; border-radius: 10px;
+            border: 1px dashed var(--border-color); background-color: var(--bg-primary);
+            margin-top: 8px; display: none;
         }
 
-        .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 340px; background-color: #1e293b; border: 1px solid #334155; padding: 16px; border-radius: 12px; z-index: 1000; box-shadow: 0 12px 30px rgba(0,0,0,0.6); display: flex; align-items: flex-start; gap: 12px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        /* High-End Toast Bar Notification Alert */
+        .toast-notification { 
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%); 
+            width: 92%; max-width: 380px; background-color: var(--bg-surface); 
+            border: 1px solid var(--border-color); padding: 16px; border-radius: 16px; 
+            z-index: 1000; box-shadow: 0 16px 32px rgba(0,0,0,0.5); 
+            display: flex; align-items: flex-start; gap: 14px; 
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
         .toast-notification.active { top: 20px; }
-        .toast-icon { font-size: 1.4rem; }
-        .toast-body h4 { font-size: 0.9rem; font-weight: bold; margin-bottom: 2px; }
-        .toast-body p { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+        .toast-icon { font-size: 1.5rem; }
+        .toast-body h4 { font-size: 0.95rem; font-weight: bold; margin-bottom: 2px; }
+        .toast-body p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -425,7 +525,9 @@
     </header>
 
     <div class="main-content">
-        <h2 class="section-title">Premium Catalog</h2>
+        <div class="section-title">
+            <span>Premium Catalog</span>
+        </div>
         <div class="grid" id="productGrid"></div>
     </div>
 
@@ -474,7 +576,7 @@
         </div>
 
         <div class="payment-gateway-lane" id="paymentForm">
-            <p style="font-size: 0.8rem; color:#94a3b8; margin-bottom: 10px;">Select Country Payment Gateway:</p>
+            <p style="font-size: 0.8rem; color:var(--text-muted); margin-bottom: 10px;">Select Country Payment Gateway:</p>
             <div id="currencyGatewayOptions"></div>
         </div>
 
@@ -498,6 +600,14 @@
                         <label>Your Full Name</label>
                         <input type="text" id="regName" placeholder="First and last name">
                     </div>
+                    <div class="input-group">
+                        <label>Select Your Profile Country</label>
+                        <select id="regCountry">
+                            <option value="IN">India (₹)</option>
+                            <option value="US">United States ($)</option>
+                            <option value="AE">United Arab Emirates (AED)</option>
+                        </select>
+                    </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <div class="input-group">
@@ -509,14 +619,14 @@
                         <input type="password" id="authPassword" placeholder="Minimum 6 characters">
                     </div>
                 </div>
-                <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: 8px;"><span onclick="switchWorkflow('forgot')" style="color: #06b6d4; font-size: 0.75rem; cursor: pointer; font-weight: 600;">Forgot Password?</span></div>
+                <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: 8px;"><span onclick="switchWorkflow('forgot')" style="color: var(--accent); font-size: 0.75rem; cursor: pointer; font-weight: 600;">Forgot Password?</span></div>
                 <button class="auth-submit-btn" id="authSubmitBtn">Continue</button>
                 <p class="auth-toggle-text" id="authToggleText">New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span></p>
             </div>
 
             <div id="forgotForm" style="display: none;">
                 <h3>Reset Password</h3>
-                <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 12px;">Enter your email to receive a secure password reset link.</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 12px;">Enter your email to receive a secure password reset link.</p>
                 <div class="input-group" style="margin-bottom: 12px;"><label>Account Email</label><input type="email" id="forgotIdentity" placeholder="name@domain.com"></div>
                 <button class="auth-submit-btn" id="forgotSubmitBtn">Send Reset Link</button>
                 <p class="auth-toggle-text">Back to <span onclick="switchWorkflow('auth')">Sign In</span></p>
@@ -540,7 +650,7 @@
         <div class="auth-box" style="max-width: 400px;">
             <button class="modal-close" onclick="document.getElementById('adminModal').classList.remove('active')">&times;</button>
             <h3>Admin Product Manager</h3>
-            <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 15px; text-align: center;">Add new premium items live to the database.</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px; text-align: center;">Add new premium items live to the database.</p>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <div class="input-group">
@@ -553,7 +663,7 @@
                 </div>
                 <div class="input-group">
                     <label>Product Photo (Upload from Gallery)</label>
-                    <input type="file" id="admProdImageFile" accept="image/*" onchange="processAdminProductPhoto(this)" style="background-color: #0f172a; border: 1px solid #334155; color: #f8fafc; padding: 6px; border-radius: 6px; font-size: 0.85rem;">
+                    <input type="file" id="admProdImageFile" accept="image/*" onchange="processAdminProductPhoto(this)">
                     <img id="admProdPreview" class="admin-image-preview">
                 </div>
                 <button class="auth-submit-btn" onclick="saveProductToCloud()" style="background-color: #10b981; color: white; margin-top: 10px;">Upload Live</button>
@@ -573,10 +683,10 @@
                 </div>
                 <div style="text-align:center;">
                     <h4 id="profileNameString" style="color:#fff; font-weight:bold;">Active User</h4>
-                    <p id="profileEmailString" style="font-size:0.8rem; color:#64748b;">user@domain.com</p>
+                    <p id="profileEmailString" style="font-size:0.8rem; color:var(--text-muted);">user@domain.com</p>
                 </div>
                 <div style="width:100%;">
-                    <p style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:#06b6d4;">Recent Search Queries:</p>
+                    <p style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:var(--accent);">Recent Search Queries:</p>
                     <div class="history-list" id="historyListContainer"><div class="history-item">No records yet.</div></div>
                 </div>
                 <button class="auth-submit-btn" style="background-color:#ef4444; color:#fff;" onclick="executeLogout()">Sign Out</button>
@@ -585,12 +695,11 @@
     </div>
 
     <script>
-        // Global variables
         let PRODUCT_CATALOG = [];
         let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
         let currentSessionUser = null;
-        let userDataCache = {};
-        let processedProductImageString = ""; // Cache for file upload
+        let userDataCache = { name: "User Profile", country: "IN" }; // Default tracking config mapping rule
+        let processedProductImageString = ""; 
 
         const productGrid = document.getElementById('productGrid');
         const cartSidebar = document.getElementById('cartSidebar');
@@ -642,8 +751,8 @@
         };
 
         const CURRENCY_PAYMENT_MAP = {
-            IN: { label: "INR (₹)", rate: 83.5, gateways: [{ id: "in_upi", name: "UPI Apps Lane Redirect", desc: "Instantly launch GPay, PhonePe, or BHIM" }, { id: "in_cod", name: "Cash on Delivery", desc: "Pay cash at door when package arrives" }] },
-            US: { label: "USD ($)", rate: 1.0, gateways: [{ id: "us_stripe", name: "Stripe Secure Credit Card", desc: "Visa, Mastercard, Discover, Amex" }, { id: "us_paypal", name: "PayPal Express Hub", desc: "Secure multi-device authentication routing" }] },
+            IN: { label: "INR (₹)", rate: 83.5, gateways: [{ id: "in_upi", name: "UPI Apps Redirect", desc: "Instantly launch GPay, PhonePe, or BHIM" }, { id: "in_cod", name: "Cash on Delivery", desc: "Pay cash at door when package arrives" }] },
+            US: { label: "USD ($)", rate: 1.0, gateways: [{ id: "us_stripe", name: "Stripe Secure Credit Card", desc: "Visa, Mastercard, Discover, Amex" }, { id: "us_paypal", name: "PayPal Express Hub", desc: "Secure multi-device routing authentication" }] },
             AE: { label: "AED", rate: 3.67, gateways: [{ id: "ae_apple", name: "Apple Pay Dashboard Link", desc: "Biometric secure processing verification" }, { id: "ae_card", name: "Mashreq Bank Gateway", desc: "Local credit/debit card secure authorization" }] }
         };
 
@@ -655,18 +764,23 @@
                     if (doc.exists) {
                         userDataCache = doc.data();
                     } else {
-                        userDataCache = { name: "User Account" };
+                        userDataCache = { name: "User Profile", country: "IN" };
+                    }
+                    // Auto setup checkout preferences to user sync profile location profile metrics rule config
+                    if(userDataCache.country) {
+                        document.getElementById('custCountry').value = userDataCache.country;
+                        populateCountryStates();
+                        evaluateCountryCurrencyConfig();
                     }
                     renderSystemSessionState();
                 });
             } else {
                 currentSessionUser = null;
-                userDataCache = {};
+                userDataCache = { name: "User Profile", country: "IN" };
                 renderSystemSessionState();
             }
         });
 
-        // Live Firestore Listener: Loads products automatically!
         function listenToProducts() {
             db.collection("products").onSnapshot((snapshot) => {
                 PRODUCT_CATALOG = [];
@@ -682,19 +796,30 @@
         function buildMainCatalogUI(items) {
             productGrid.innerHTML = '';
             if (items.length === 0) {
-                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 20px;">No products listed yet. Click Admin Panel to add some!</p>';
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 4px;">No products listed yet. Click Admin Panel to add some!</p>';
                 return;
             }
             items.forEach(product => {
                 const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
+                
+                // Active calculation of pricing array map engine values relative to currency profiles rule logic configurations
+                let displayPriceString = `$${Number(product.price).toFixed(2)}`;
+                const selectTargetCountry = document.getElementById('custCountry').value || userDataCache.country || "IN";
+                if(CURRENCY_PAYMENT_MAP[selectTargetCountry]) {
+                    const trackingMap = CURRENCY_PAYMENT_MAP[selectTargetCountry];
+                    displayPriceString = `${trackingMap.label} ${(Number(product.price) * trackingMap.rate).toFixed(2)}`;
+                }
+
                 const card = document.createElement('div');
                 card.classList.add('product-card');
                 card.innerHTML = `
                     <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
-                    <img class="product-img" src="${product.image}">
+                    <div class="product-img-wrapper">
+                        <img class="product-img" src="${product.image}">
+                    </div>
                     <div class="product-title">${product.name}</div>
                     <div>
-                        <div class="product-price">$${Number(product.price).toFixed(2)}</div>
+                        <div class="product-price">${displayPriceString}</div>
                         <div class="action-btn-group">
                             <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add to Cart</button>
                             <button class="buynow-btn" onclick="executeBuyNowLane('${product.id}')">Buy Now</button>
@@ -705,7 +830,6 @@
             });
         }
 
-        // Processing photo file uploaded from phone storage to data string
         function processAdminProductPhoto(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -713,13 +837,12 @@
                     const preview = document.getElementById('admProdPreview');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
-                    processedProductImageString = e.target.result; // store data string inside global cache
+                    processedProductImageString = e.target.result; 
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Add Product to Cloud Firestore (Securely)
         function saveProductToCloud() {
             const name = document.getElementById('admProdName').value.trim();
             const price = parseFloat(document.getElementById('admProdPrice').value);
@@ -748,7 +871,6 @@
             });
         }
 
-        // Delete Product from Cloud Firestore (Securely)
         function deleteProductFromCloud(productId) {
             event.stopPropagation();
             if (confirm("Are you sure you want to delete this product?")) {
@@ -793,12 +915,13 @@
                                 <h4>${gate.name}</h4>
                                 <p>${gate.desc}</p>
                             </div>
-                            <span style="font-size:0.8rem; color:#06b6d4;">✔</span>
+                            <span style="font-size:0.8rem; color:var(--accent);">✔</span>
                         </div>
                     `;
                 });
             }
             refreshCartDrawerUI();
+            buildMainCatalogUI(PRODUCT_CATALOG); // Force re-rendering currency log outputs immediately!
         }
 
         function selectPaymentGateway(id) {
@@ -808,7 +931,6 @@
             selectedGatewayId = id;
         }
 
-        // Run UI Builders & Load Live Products
         window.addEventListener('DOMContentLoaded', () => {
             listenToProducts();
             
@@ -830,10 +952,8 @@
                 document.getElementById('closeAuth').style.display = 'block';
                 authModal.classList.remove('active');
 
-                // Check if you are the exclusive admin
                 if (currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com') {
                     adminPanelBtn.style.setProperty('display', 'block', 'important');
-                    adminPanelBtn.style.display = 'block';
                 } else {
                     adminPanelBtn.style.display = 'none';
                 }
@@ -949,12 +1069,35 @@
 
         placeOrderBtn.addEventListener('click', () => {
             if(!selectedGatewayId) return;
-            emitSlidToastAlert('success', 'Order Placed!', 'Your order has been authorized.');
-            cartMap = {}; 
-            document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
-            document.getElementById('custCountry').value = ""; document.getElementById('custState').innerHTML = '<option value="">Select State</option>';
-            document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
-            refreshCartDrawerUI(); transitionSidebarFlowView('cart'); cartSidebar.classList.remove('open');
+            
+            // EmailJS Parameters Construction Injection
+            let checkoutItemsSummary = "";
+            Object.keys(cartMap).forEach(key => {
+                checkoutItemsSummary += `${cartMap[key].name} (Qty: ${cartMap[key].quantity}) - Base: $${cartMap[key].price}\n`;
+            });
+
+            const currentCurrencyMappingValue = document.getElementById('cartTotal').textContent;
+            const buyerAddressSummaryText = `
+                Name: ${document.getElementById('custName').value}
+                Phone: ${document.getElementById('custPhone').value}
+                Location: ${document.getElementById('custAddress').value}, ${document.getElementById('custState').value}, ${document.getElementById('custCountry').value} - ${document.getElementById('custPin').value}
+            `;
+
+            const emailPayload = {
+                email: currentSessionUser,
+                to_email: "junaidlone7217@gmail.com", // Forwards transaction details right to you!
+                otp_code: `ORDER INVOICE TOTAL: ${currentCurrencyMappingValue}\n\nITEMS BUY MATRIX:\n${checkoutItemsSummary}\n\nDELIVERY ADDRESS PROFILE:\n${buyerAddressSummaryText}`
+            };
+
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, emailPayload).then(() => {
+                emitSlidToastAlert('success', 'Order Authorized!', 'Vendor confirmation email routed smoothly.');
+                cartMap = {}; 
+                document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
+                document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
+                refreshCartDrawerUI(); transitionSidebarFlowView('cart'); cartSidebar.classList.remove('open');
+            }).catch(() => {
+                emitSlidToastAlert('error', 'Routing Failure', 'Invoice transmission dropped.');
+            });
         });
 
         authSubmitBtn.addEventListener('click', () => {
@@ -1024,10 +1167,14 @@
                 if (activeWorkflow === "signup") {
                     const name = document.getElementById('regName').value.trim();
                     const pass = document.getElementById('authPassword').value.trim();
+                    const country = document.getElementById('regCountry').value;
                     
                     firebase.auth().createUserWithEmailAndPassword(userEmailAddress, pass)
                         .then(() => {
-                            db.collection("users").doc(userEmailAddress).set({ name: name || "User Profile" });
+                            db.collection("users").doc(userEmailAddress).set({ 
+                                name: name || "User Profile",
+                                country: country || "IN"
+                            });
                             emitSlidToastAlert('success', 'Profile Created', 'Cloud database registration complete.');
                         })
                         .catch(err => alert(err.message));
@@ -1053,6 +1200,7 @@
             if (cartMap[prodId]) { cartMap[prodId].quantity += 1; } 
             else { const targetObj = PRODUCT_CATALOG.find(p => p.id === prodId); cartMap[prodId] = { ...targetObj, quantity: 1 }; }
             refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Cart Updated', 'Item added to your shopping cart.');
         }
 
         function adjustQuantity(prodId, delta) {
@@ -1067,7 +1215,14 @@
                 cartItemsList.innerHTML = '';
                 Object.keys(cartMap).forEach(k => {
                     const ref = cartMap[k];
-                    cartItemsList.innerHTML += `<div class="cart-item"><img class="cart-item-thumb" src="${ref.image}"><div class="cart-item-details"><span>${ref.name}</span><span class="cart-item-price">$${ref.price}</span></div><div class="quantity-controller"><button class="qty-btn" onclick="adjustQuantity('${k}', -1)">-</button><span class="qty-val">${ref.quantity}</span><button class="qty-btn" onclick="adjustQuantity('${k}', 1)">+</button></div></div>`;
+                    
+                    let itemPriceString = `$${ref.price.toFixed(2)}`;
+                    const selectTargetCountry = document.getElementById('custCountry').value || userDataCache.country || "IN";
+                    if(CURRENCY_PAYMENT_MAP[selectTargetCountry]) {
+                        itemPriceString = `${CURRENCY_PAYMENT_MAP[selectTargetCountry].label} ${(ref.price * CURRENCY_PAYMENT_MAP[selectTargetCountry].rate).toFixed(2)}`;
+                    }
+
+                    cartItemsList.innerHTML += `<div class="cart-item"><img class="cart-item-thumb" src="${ref.image}"><div class="cart-item-details"><span>${ref.name}</span><span class="cart-item-price">${itemPriceString}</span></div><div class="quantity-controller"><button class="qty-btn" onclick="adjustQuantity('${k}', -1)">-</button><span class="qty-val">${ref.quantity}</span><button class="qty-btn" onclick="adjustQuantity('${k}', 1)">+</button></div></div>`;
                 });
             }
 
@@ -1075,7 +1230,7 @@
             Object.keys(cartMap).forEach(k => { baseUsdTotal += (cartMap[k].price * cartMap[k].quantity); counterMetrics += cartMap[k].quantity; });
             cartToggle.textContent = `Cart (${counterMetrics})`;
 
-            const countryCode = document.getElementById('custCountry').value;
+            const countryCode = document.getElementById('custCountry').value || userDataCache.country || "IN";
             if(countryCode && CURRENCY_PAYMENT_MAP[countryCode]) {
                 const config = CURRENCY_PAYMENT_MAP[countryCode];
                 const convertedPrice = baseUsdTotal * config.rate;
