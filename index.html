@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
-    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -209,7 +207,6 @@
         .upi-string-display { flex-grow: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; color: var(--accent-light); }
         .upi-copy-action-btn { background: var(--accent); color: white; border: none; padding: 10px 16px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 
-        /* Order Tracking & Admin Control Elements */
         .orders-tracking-container { display: flex; flex-direction: column; gap: 14px; width: 100%; padding-bottom: 20px; }
         .order-tracking-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .order-track-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
@@ -221,7 +218,6 @@
         
         .order-delivery-eta-banner { background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-light); padding: 8px 12px; font-size: 0.78rem; font-weight: 600; color: #bae6fd; border-radius: 0 6px 6px 0; margin-top: 2px; }
 
-        /* Admin Dashboard Actions */
         .admin-action-row { display: flex; gap: 8px; margin-top: 6px; width: 100%; }
         .adm-ctrl-btn { flex: 1; padding: 8px; font-size: 0.75rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; color: white; text-transform: uppercase; }
 
@@ -315,13 +311,11 @@
         </div>
     </div>
 
-    <!-- Admin Panel Layout -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Admin System Console</h3>
             
-            <!-- Mobile Live Incoming Orders Management Interface Module -->
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:#10b981; font-weight:800; letter-spacing:0.3px;">CUSTOMER ORDERS TRACKING DESK</h4>
                 <div class="orders-tracking-container" id="admOrdersManagerDeckList" style="max-height: 25vh; overflow-y: auto;">
@@ -344,7 +338,6 @@
         </div>
     </div>
 
-    <!-- Profile Management -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -366,7 +359,6 @@
         </div>
     </div>
 
-    <!-- Tracking Modal -->
     <div class="modal-overlay" id="ordersTrackingModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -375,7 +367,6 @@
         </div>
     </div>
 
-    <!-- Shopping Cart Modal Sheet -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -443,7 +434,6 @@
         </div>
     </div>
 
-    <!-- Security Gateway -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -538,7 +528,6 @@
                 });
             });
 
-            // Live-listening sync engine for Admin panel execution metrics
             db.collection("orders").onSnapshot((snapshot) => {
                 const admDeck = document.getElementById('admOrdersManagerDeckList');
                 if(!admDeck) return;
@@ -710,6 +699,13 @@
             localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
             refreshCartDrawerUI();
             emitSlidToastAlert('success', 'Cart Added', 'Item appended to checkout list.');
+        }
+
+        // Fixed interactive toggle rules inside state increments configuration scope
+        function filterCatalogSearch() {
+            const val = document.getElementById('catalogSearch').value.toLowerCase().trim();
+            const filtered = PRODUCT_CATALOG.filter(p => p.name.toLowerCase().includes(val));
+            buildMainCatalogUI(filtered);
         }
 
         function adjustQuantity(id, delta) {
@@ -898,7 +894,7 @@
                       } else if (order.status === "shipped") {
                           displayStatusText = "Package Shipped Out";
                           badgeClass = "status-shipped";
-                          etaBannerHTML = `<div class="order-delivery-eta-banner">🚀 Out for delivery - Arriving shortly metrics</div>`;
+                          etaBannerHTML = `<div class="order-delivery-eta-banner">🚀 Out for delivery - Arriving shortly</div>`;
                       }
 
                       listDeck.innerHTML += `
@@ -920,7 +916,7 @@
                   });
               }).catch(err => {
                   console.error(err);
-                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>';
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>`;
               });
               
             document.getElementById('ordersTrackingModal').classList.add('active');
