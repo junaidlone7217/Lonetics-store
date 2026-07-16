@@ -117,7 +117,6 @@
             100% { background-position: 200% center; }
         }
 
-        /* NEW HYPE DROP CSS */
         .hype-drop-container {
             margin: 16px;
             background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
@@ -396,7 +395,7 @@
         <div class="video-reel-container" id="videoReelGrid"></div>
     </div>
 
-    <!-- NEW SECTION: THE WEEKLY HYPE DROP -->
+    <!-- WEEKLY HYPE DROP -->
     <div class="hype-drop-container" id="hypeDropMasterContainer" style="display: none;">
         <div class="hype-badge">Drop</div>
         <div class="hype-drop-header">
@@ -409,6 +408,13 @@
     <div class="main-content">
         <div class="section-headline">Everyday Catalog</div>
         <div class="grid" id="productGrid"></div>
+    </div>
+
+    <!-- NEW SECTION: AFFILIATE PARTNER CATALOG -->
+    <div class="main-content" style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 10px;">
+        <div class="section-headline" style="color: #10b981;">Partner Catalog (Global Sourcing)</div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Endless deals automatically sourced from our global retail partners.</p>
+        <div class="grid" id="affiliateGrid"></div>
     </div>
 
     <div class="bottom-nav">
@@ -470,6 +476,17 @@
 
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:var(--accent-light); font-weight:800; letter-spacing:0.3px;">STORE CATALOG MANAGEMENT</h4>
+                
+                <!-- NEW FEATURE: MAGIC AUTO-FETCHER SCRAPER -->
+                <div style="background: rgba(37, 99, 235, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 14px; border: 1px dashed var(--accent-light);">
+                    <label style="font-size: 0.75rem; color: var(--accent-light); font-weight: 700;">MAGIC SCRAPER (Paste Amazon/Flipkart Link)</label>
+                    <div style="display:flex; gap:6px; margin-top:8px;">
+                        <input type="text" id="admMagicUrl" placeholder="https://..." style="flex-grow:1; background:var(--bg-primary); border:1px solid var(--border-color); color:white; padding:8px; border-radius:6px; font-size:0.8rem; outline:none;">
+                        <button onclick="executeMagicFetch()" style="background:var(--accent); color:white; border:none; padding:0 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Fetch</button>
+                    </div>
+                    <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 6px;">Automatically pulls Title & HD Image from the link.</p>
+                </div>
+
                 <div class="input-group"><label>Product Title</label><input type="text" id="admProdName" placeholder="Enter clean descriptive name"></div>
                 <div class="input-group"><label>Product Base Price (INR)</label><input type="number" id="admProdPrice" placeholder="e.g. 1499"></div>
                 <div class="input-group"><label>Product Photo File</label><input type="file" id="admProdImageFile" accept="image/*" onchange="processFileToDataString(this, 'product')"><img id="admProdPreview" class="admin-image-preview"></div>
@@ -671,7 +688,87 @@
             }
         });
 
-        /* NEW ENGINE: HYPE DROP COUNTDOWN MATH */
+        /* MAGIC SCRAPER FUNCTION */
+        async function executeMagicFetch() {
+            const url = document.getElementById('admMagicUrl').value.trim();
+            if(!url) return emitSlidToastAlert('error', 'Missing Link', 'Paste a URL first!');
+            
+            emitSlidToastAlert('success', 'Scanning...', 'Fetching product details from link...');
+            
+            try {
+                // Using Microlink API (Free open graph extraction)
+                const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    document.getElementById('admProdName').value = data.data.title || '';
+                    if(data.data.image && data.data.image.url) {
+                        // Store the external URL directly into our cache string instead of Base64
+                        generatedProductFileCacheString = data.data.image.url;
+                        document.getElementById('admProdPreview').src = data.data.image.url;
+                        document.getElementById('admProdPreview').style.display = 'block';
+                    }
+                    emitSlidToastAlert('success', 'Fetch Complete', 'Title and Image captured!');
+                } else {
+                    emitSlidToastAlert('error', 'Fetch Failed', 'Could not extract data from that link.');
+                }
+            } catch(e) {
+                emitSlidToastAlert('error', 'Network Error', 'The scraper was blocked by the target site.');
+            }
+        }
+
+        /* AFFILIATE CATALOG GENERATOR */
+        function loadAffiliateCatalog() {
+            // Using a free mock API to simulate pulling live electronics from a partner network
+            fetch('https://fakestoreapi.com/products/category/electronics?limit=4')
+            .then(res => res.json())
+            .then(products => {
+                const affGrid = document.getElementById('affiliateGrid');
+                if(!affGrid) return;
+                affGrid.innerHTML = '';
+                
+                products.forEach(p => {
+                    // Convert external USD to INR and automatically add your 15% hidden margin markup!
+                    const calculatedMarkupInrPrice = (p.price * 83.5 * 1.15).toFixed(2); 
+                    
+                    affGrid.innerHTML += `
+                        <div class="product-card" style="border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div style="position:absolute; top:0; left:0; background:#10b981; color:white; font-size:0.6rem; padding:3px 6px; border-radius:0 0 8px 0; z-index:5; font-weight:bold; text-transform:uppercase;">Partner Sourced</div>
+                            
+                            <div class="product-img-frame" style="background:white; padding:10px;">
+                                <img class="product-img" src="${p.image}" style="object-fit:contain;">
+                            </div>
+                            
+                            <div class="product-title">${p.title}</div>
+                            
+                            <div>
+                                <div class="product-price">
+                                    ${currentActiveTargetCurrencySymbol}${((calculatedMarkupInrPrice / 83.5) * currentActiveTargetCurrencyRate).toFixed(2)}
+                                </div>
+                                <button class="buy-btn" style="background:#10b981;" onclick="executeAffiliateCartInsertion('aff_${p.id}', '${p.title.replace(/'/g, "")}', ${calculatedMarkupInrPrice}, '${p.image}')">Add To Cart</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }).catch(err => console.log("Affiliate API blocked by browser extensions."));
+        }
+
+        function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            // Re-convert INR back to base USD for the internal math engine
+            const internalUsdPrice = inrPrice / 83.5; 
+
+            if (cartMap[id]) { cartMap[id].quantity += 1; }
+            else { 
+                cartMap[id] = { id: id, name: name, price: internalUsdPrice, image: imgUrl, quantity: 1 }; 
+            }
+            
+            localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
+            refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Cart Added', 'Partner item appended to checkout list.');
+        }
+
         function startWeeklyHypeCountdownTimer() {
             const timerBox = document.getElementById('hypeCountdownTimer');
             if(!timerBox) return;
@@ -680,14 +777,13 @@
                 let now = new Date();
                 let nextFriday = new Date();
                 
-                // Calculate days until next Friday (Friday = 5)
                 let daysUntilFriday = (5 - now.getDay() + 7) % 7;
                 if (daysUntilFriday === 0 && now.getHours() > 23) {
-                    daysUntilFriday = 7; // It's Friday, but past midnight, target next week
+                    daysUntilFriday = 7; 
                 }
                 
                 nextFriday.setDate(now.getDate() + daysUntilFriday);
-                nextFriday.setHours(23, 59, 59, 0); // End of the day Friday
+                nextFriday.setHours(23, 59, 59, 0); 
 
                 let diff = nextFriday - now;
                 let days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -695,13 +791,13 @@
                 let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                // Format with leading zeros for style
                 timerBox.innerText = `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
             }, 1000);
         }
 
         function startMarketingEngines() {
             startWeeklyHypeCountdownTimer();
+            loadAffiliateCatalog();
 
             setInterval(() => {
                 if (PRODUCT_CATALOG.length === 0) return;
@@ -734,34 +830,6 @@
         window.onkeypress = resetIdleTimer;
         
         function resetIdleTimer() { userIdleTimeTimer = 0; }
-
-        function openSmartApplicationInstallationPromptSheet() {
-            closeAllModals();
-            const isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            if (isIphone) {
-                document.getElementById('androidNativeInstallBtnAction').style.display = 'none';
-                document.getElementById('iosManualInstallGuidanceBox').style.setProperty('display', 'flex', 'important');
-            } else {
-                document.getElementById('androidNativeInstallBtnAction').style.display = 'block';
-                document.getElementById('iosManualInstallGuidanceBox').style.display = 'none';
-            }
-            document.getElementById('appInstallModal').classList.add('active');
-        }
-
-        function triggerAndroidNativePwaInstall() {
-            if (deferredAppInstallPrompt) {
-                deferredAppInstallPrompt.prompt(); 
-                deferredAppInstallPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        emitSlidToastAlert('success', 'Installing App...', 'Adding Lonetics Standalone App drawer icon!');
-                    }
-                    deferredAppInstallPrompt = null;
-                    closeAllModals();
-                });
-            } else {
-                emitSlidToastAlert('success', 'Bypassing Core...', 'Tap Chrome 3-dots top right -> Select premium "Install app" option.');
-            }
-        }
 
         function listenToProductsAndVideos() {
             db.collection("products").onSnapshot((snapshot) => {
@@ -829,7 +897,6 @@
             }
         }
 
-        /* NEW GENERATOR: SPLIT CATALOG FOR HYPE DROP */
         function buildMainCatalogUI(items) {
             const productGrid = document.getElementById('productGrid');
             const hypeGrid = document.getElementById('hypeDropGrid');
@@ -845,7 +912,6 @@
                 return;
             }
 
-            // We automatically put the first 2 products into the Weekly Drop to test the UI!
             let hypeItems = items.slice(0, 2);
             let regularItems = items.slice(2);
 
@@ -934,6 +1000,10 @@
             db.collection("products").add({ name, price, image: generatedProductFileCacheString }).then(() => {
                 emitSlidToastAlert('success', 'Catalog Updated', 'Product pushed live.');
                 closeAllModals();
+                document.getElementById('admProdName').value = "";
+                document.getElementById('admProdPrice').value = "";
+                document.getElementById('admMagicUrl').value = "";
+                document.getElementById('admProdPreview').style.display = 'none';
             });
         }
 
@@ -956,6 +1026,7 @@
             currentActiveTargetCurrencySymbol = COUNTRIES_GLOBAL_MAP[selectedLocale].symbol;
             activeSelectedCheckoutCountryCode = selectedLocale;
             buildMainCatalogUI(PRODUCT_CATALOG);
+            loadAffiliateCatalog();
             refreshCartDrawerUI();
         }
 
