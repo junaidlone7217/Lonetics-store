@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
+    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -207,18 +209,21 @@
         .upi-string-display { flex-grow: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; color: var(--accent-light); }
         .upi-copy-action-btn { background: var(--accent); color: white; border: none; padding: 10px 16px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 
-        /* Mature App Order Tracking System UI Dashboard elements */
+        /* Order Tracking & Admin Control Elements */
         .orders-tracking-container { display: flex; flex-direction: column; gap: 14px; width: 100%; padding-bottom: 20px; }
         .order-tracking-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .order-track-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
         
-        /* Specialized Trust Status Badge Architectures */
         .status-badge { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
         .status-verification { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
         .status-confirmed { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
         .status-processing { background: rgba(37, 99, 235, 0.15); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3); }
         
         .order-delivery-eta-banner { background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-light); padding: 8px 12px; font-size: 0.78rem; font-weight: 600; color: #bae6fd; border-radius: 0 6px 6px 0; margin-top: 2px; }
+
+        /* Admin Dashboard Actions */
+        .admin-action-row { display: flex; gap: 8px; margin-top: 6px; width: 100%; }
+        .adm-ctrl-btn { flex: 1; padding: 8px; font-size: 0.75rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; color: white; text-transform: uppercase; }
 
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
         .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); }
@@ -234,6 +239,8 @@
         .side-menu-item { padding: 14px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.9rem; cursor: pointer; }
 
         .admin-image-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px dashed var(--border-color); margin-top: 8px; display: none; }
+        .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; z-index: 2000; display: flex; gap: 10px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .toast-notification.active { top: 20px; }
     </style>
 </head>
 <body>
@@ -308,10 +315,20 @@
         </div>
     </div>
 
+    <!-- Admin Panel Layout -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Admin System Console</h3>
+            
+            <!-- Mobile Live Incoming Orders Management Interface Module -->
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
+                <h4 style="font-size:0.8rem; margin-bottom:10px; color:#10b981; font-weight:800; letter-spacing:0.3px;">CUSTOMER ORDERS TRACKING DESK</h4>
+                <div class="orders-tracking-container" id="admOrdersManagerDeckList" style="max-height: 25vh; overflow-y: auto;">
+                    <p style="text-align:center; padding:10px; font-size:0.8rem; color:var(--text-muted);">Syncing incoming requests...</p>
+                </div>
+            </div>
+
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:var(--accent-light); font-weight:800; letter-spacing:0.3px;">STORE CATALOG MANAGEMENT</h4>
                 <div class="input-group"><label>Product Title</label><input type="text" id="admProdName" placeholder="Enter clean descriptive name"></div>
@@ -327,6 +344,7 @@
         </div>
     </div>
 
+    <!-- Profile Management -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -348,6 +366,7 @@
         </div>
     </div>
 
+    <!-- Tracking Modal -->
     <div class="modal-overlay" id="ordersTrackingModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -356,6 +375,7 @@
         </div>
     </div>
 
+    <!-- Shopping Cart Modal Sheet -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -423,6 +443,7 @@
         </div>
     </div>
 
+    <!-- Security Gateway -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -516,6 +537,46 @@
                     reel.innerHTML += `<div class="video-reel-card"><video src="${doc.data().video}" autoplay loop muted playsinline></video></div>`;
                 });
             });
+
+            // Live-listening sync engine for Admin panel execution metrics
+            db.collection("orders").onSnapshot((snapshot) => {
+                const admDeck = document.getElementById('admOrdersManagerDeckList');
+                if(!admDeck) return;
+                admDeck.innerHTML = "";
+                
+                if(snapshot.empty) {
+                    admDeck.innerHTML = '<p style="text-align:center; padding:10px; font-size:0.8rem; color:var(--text-muted);">No incoming requests logged.</p>';
+                    return;
+                }
+
+                let globalOrdersLog = [];
+                snapshot.forEach(doc => {
+                    let d = doc.data(); d.id = doc.id; globalOrdersLog.push(d);
+                });
+
+                globalOrdersLog.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                globalOrdersLog.forEach(ord => {
+                    admDeck.innerHTML += `
+                        <div style="background:var(--bg-primary); border:1px solid var(--border-color); padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.78rem; display:flex; flex-direction:column; gap:4px;">
+                            <div><strong>Buyer:</strong> ${ord.buyerName} (${ord.buyerPhone})</div>
+                            <div><strong>Items:</strong> ${ord.itemsSummary}</div>
+                            <div><strong>Bill:</strong> ${ord.totalValue} | <strong>Status:</strong> <span style="color:var(--accent-light); font-weight:bold;">${ord.status}</span></div>
+                            ${ord.txnId ? `<div><strong>UTR:</strong> ${ord.txnId}</div>` : ''}
+                            <div class="admin-action-row">
+                                <button class="adm-ctrl-btn" style="background:#10b981;" onclick="updateOrderStatusFromClientApp('${ord.id}', 'confirmed')">Confirm Payment</button>
+                                <button class="adm-ctrl-btn" style="background:#2563eb;" onclick="updateOrderStatusFromClientApp('${ord.id}', 'shipped')">Mark Shipped</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function updateOrderStatusFromClientApp(orderId, newStatus) {
+            db.collection("orders").doc(orderId).update({ status: newStatus }).then(() => {
+                emitSlidToastAlert('success', 'Status Synchronized', `Order updated to ${newStatus.toUpperCase()}`);
+            }).catch(err => console.error(err));
         }
 
         function buildMainCatalogUI(items) {
@@ -796,7 +857,6 @@
             });
         }
 
-        // Bypassed query index sorting error by executing sorting filtering directly inside locally compiled arrays
         function openUserOrdersTrackingPortal() {
             if(!currentSessionUser) { openAuthenticationModalOverlaySheet(); return; }
             closeAllModals();
@@ -814,19 +874,11 @@
                       return;
                   }
                   
-                  // Sort local snapshot variables manually to bypass Index Required bugs
                   let ordersArray = [];
                   snapshot.forEach(doc => {
-                      let data = doc.data();
-                      data.id = doc.id;
-                      ordersArray.push(data);
+                      let data = doc.data(); data.id = doc.id; ordersArray.push(data);
                   });
-                  
-                  ordersArray.sort((a, b) => {
-                      let tA = a.timestamp ? a.timestamp.seconds : 0;
-                      let tB = b.timestamp ? b.timestamp.seconds : 0;
-                      return tB - tA;
-                  });
+                  ordersArray.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
                   ordersArray.forEach(order => {
                       const formattedDate = order.timestamp ? new Date(order.timestamp.seconds * 1000).toLocaleDateString() : "Just Now";
@@ -846,7 +898,7 @@
                       } else if (order.status === "shipped") {
                           displayStatusText = "Package Shipped Out";
                           badgeClass = "status-shipped";
-                          etaBannerHTML = `<div class="order-delivery-eta-banner">🚀 Out for delivery - Arriving shortly</div>`;
+                          etaBannerHTML = `<div class="order-delivery-eta-banner">🚀 Out for delivery - Arriving shortly metrics</div>`;
                       }
 
                       listDeck.innerHTML += `
@@ -868,7 +920,7 @@
                   });
               }).catch(err => {
                   console.error(err);
-                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>`;
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>';
               });
               
             document.getElementById('ordersTrackingModal').classList.add('active');
@@ -896,7 +948,7 @@
                 paymentMethod: activePaymentRouteSelection,
                 couponUsed: activeAppliedCouponCodeString || "None",
                 txnId: activePaymentRouteSelection === "upi" ? txnIdInputVal : "",
-                status: computedStatusString, // Initial baseline state
+                status: computedStatusString, 
                 buyerName: document.getElementById('custName').value,
                 buyerPhone: document.getElementById('custPhone').value,
                 buyerAddress: document.getElementById('custAddress').value,
