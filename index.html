@@ -40,7 +40,7 @@
             --text-muted: #64748b;
             --border-color: #1e293b;
             --card-radius: 12px;
-            --transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --spring-transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -52,13 +52,12 @@
         body {
             background-color: var(--bg-primary);
             color: var(--text-main);
-            padding-bottom: 70px;
+            padding-bottom: 80px;
         }
 
-        /* Top Header Structure */
         header {
             background-color: var(--bg-surface);
-            padding: 12px 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -84,11 +83,7 @@
         }
         .logo span { color: var(--accent-light); }
 
-        .top-profile-wrapper {
-            display: flex;
-            align-items: center;
-        }
-
+        .top-profile-wrapper { display: flex; align-items: center; }
         .top-profile-img {
             width: 34px; height: 34px;
             border-radius: 50%;
@@ -97,132 +92,93 @@
             cursor: pointer;
         }
 
-        /* Search Layout Component */
-        .search-wrapper {
-            padding: 10px 16px;
-            background-color: var(--bg-primary);
-        }
+        .search-wrapper { padding: 12px 16px; background-color: var(--bg-primary); }
         .search-box {
-            width: 100%;
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
+            width: 100%; background-color: var(--bg-surface); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 10px 14px; color: var(--text-main); font-size: 0.9rem; outline: none;
         }
 
-        /* Video Feed Carousels */
-        .video-reel-section {
-            padding: 12px 16px;
-        }
-        .video-reel-title {
-            font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--accent-light);
-        }
-        .video-reel-container {
-            display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
-        }
+        /* Video Feed Component */
+        .video-reel-section { padding: 12px 16px; }
+        .video-reel-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--accent-light); }
+        .video-reel-container { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
         .video-reel-container::-webkit-scrollbar { display: none; }
-        .video-reel-card {
-            flex: 0 0 140px; height: 210px; border-radius: 8px; overflow: hidden; background-color: #000; position: relative;
-        }
-        .video-reel-card video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        .video-reel-card { flex: 0 0 140px; height: 210px; border-radius: 8px; overflow: hidden; background-color: #000; position: relative; }
+        .video-reel-card video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* E-Commerce Flipkart Grid Architecture */
+        /* App Item Display Lanes */
         .main-content { padding: 12px 16px; }
         .section-headline { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
         
-        .grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-        }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 
         .product-card {
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
+            background-color: var(--bg-surface); border: 1px solid var(--border-color);
+            border-radius: var(--card-radius); padding: 10px; display: flex;
+            flex-direction: column; justify-content: space-between; position: relative;
         }
         .delete-product-badge {
-            position: absolute; top: 6px; right: 6px;
-            background-color: #ef4444; color: white; border: none;
-            border-radius: 50%; width: 22px; height: 22px;
-            font-size: 0.8rem; font-weight: 700; cursor: pointer;
-            display: none; justify-content: center; align-items: center; z-index: 10;
+            position: absolute; top: 6px; right: 6px; background-color: #ef4444; color: white;
+            border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem;
+            font-weight: 700; cursor: pointer; display: none; justify-content: center; align-items: center; z-index: 10;
         }
-        .product-img-frame {
-            width: 100%; height: 120px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 8px;
-        }
+        .product-img-frame { width: 100%; height: 120px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 8px; }
         .product-img { width: 100%; height: 100%; object-fit: cover; }
         .product-title { font-size: 0.8rem; font-weight: 600; min-height: 32px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px; }
         .product-price { font-size: 0.95rem; color: var(--accent-light); font-weight: 700; margin-bottom: 8px; }
-        
-        .buy-btn {
-            width: 100%; padding: 8px 0; border: none; border-radius: 6px;
-            background-color: var(--accent); color: white; font-weight: 700; font-size: 0.75rem; cursor: pointer;
-        }
+        .buy-btn { width: 100%; padding: 8px 0; border: none; border-radius: 6px; background-color: var(--accent); color: white; font-weight: 700; font-size: 0.75rem; cursor: pointer; }
 
-        /* Persistent Mobile Bottom Navigation (Flipkart Standard UI) */
+        /* Mobile Bottom Actions Navigation Interface (Flipkart Layout Standard) */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
             background-color: var(--bg-surface); border-top: 1px solid var(--border-color);
             display: flex; justify-content: space-around; align-items: center; z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: var(--text-muted); font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: none;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: none; }
         .nav-item.active { color: var(--accent-light); }
-        .nav-icon { font-size: 1.25rem; }
-        
+        .nav-icon { font-size: 1.3rem; }
         .nav-cart-badge-wrapper { position: relative; }
-        .nav-cart-counter {
-            position: absolute; top: -6px; right: -12px;
-            background-color: #ef4444; color: white; font-size: 0.65rem;
-            padding: 2px 6px; border-radius: 10px; font-weight: 700;
-        }
+        .nav-cart-counter { position: absolute; top: -6px; right: -12px; background-color: #ef4444; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
 
-        /* Modals and Sheets Base */
+        /* Hardware-Accelerated Native-App Bottom Sheets */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-            z-index: 500; display: flex; justify-content: center; align-items: center;
-            visibility: hidden; opacity: 0; transition: var(--transition-premium);
+            background-color: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 500; display: flex; align-items: flex-end; justify-content: center;
+            visibility: hidden; opacity: 0; transition: opacity 0.3s linear;
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
+        
         .sheet-box {
-            background-color: var(--bg-surface); border: 1px solid var(--border-color);
-            border-radius: 16px; padding: 24px; width: 92%; max-width: 400px;
-            position: relative; max-height: 85vh; overflow-y: auto;
+            background-color: var(--bg-surface); border-top: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0; padding: 24px 20px; width: 100%; max-width: 480px;
+            max-height: 85vh; overflow-y: auto;
+            transform: translateY(100%); transition: var(--spring-transition);
         }
-        .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
-        .sheet-box h3 { margin-bottom: 16px; font-size: 1.15rem; font-weight: 700; text-align: center; }
+        .modal-overlay.active .sheet-box { transform: translateY(0); }
+        .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .sheet-box h3 { margin-bottom: 20px; font-size: 1.15rem; font-weight: 700; text-align: center; }
+
+        /* Empty Shopping Cart Architecture View */
+        .empty-cart-state {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 30px 10px; gap: 14px;
+        }
+        .empty-cart-icon { font-size: 3.5rem; filter: drop-shadow(0 4px 10px rgba(96,165,250,0.2)); }
+        .empty-cart-text h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+        .empty-cart-text p { font-size: 0.8rem; color: var(--text-muted); }
 
         .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; width: 100%; }
         .input-group label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; }
         .input-group input, .input-group select, .input-group textarea {
             background-color: var(--bg-primary); border: 1px solid var(--border-color);
-            color: var(--text-main); padding: 10px; border-radius: 8px; font-size: 0.85rem; outline: none; width: 100%;
+            color: var(--text-main); padding: 12px; border-radius: 8px; font-size: 0.85rem; outline: none; width: 100%;
         }
 
-        .submit-action-btn {
-            width: 100%; padding: 12px; background-color: var(--accent); color: white;
-            border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 8px;
-        }
-
-        /* Drawer Overlay Side Panel Components */
-        .side-menu-drawer {
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
-            background-color: var(--bg-surface); border-right: 1px solid var(--border-color);
-            z-index: 600; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
-        }
+        .submit-action-btn { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 8px; }
+        .side-menu-drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background-color: var(--bg-surface); border-right: 1px solid var(--border-color); z-index: 600; transition: left 0.3s ease; padding: 20px; }
         .side-menu-drawer.open { left: 0; }
         .side-menu-item { padding: 14px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.9rem; cursor: pointer; }
 
@@ -240,7 +196,6 @@
         </div>
     </div>
 
-    <!-- Burger Drawer Navigation Menu Row -->
     <div class="side-menu-drawer" id="sideDrawer">
         <h3 style="margin-bottom:20px; font-size:1.1rem;">Menu Options</h3>
         <div class="side-menu-item" onclick="toggleDrawer(false); openProfilePanel();">Edit Profile</div>
@@ -252,7 +207,7 @@
         <div class="burger-menu-icon" onclick="toggleDrawer(true)">☰</div>
         <a class="logo" href="#">LONE<span>TICS</span></a>
         <div class="top-profile-wrapper">
-            <img class="top-profile-img" id="profileTrigger" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User Avatar" onclick="openProfilePanel()">
+            <img class="top-profile-img" id="profileTrigger" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="Avatar" onclick="openProfilePanel()">
         </div>
     </header>
 
@@ -260,12 +215,9 @@
         <input type="text" class="search-box" id="catalogSearch" placeholder="Search brands, items and categories..." oninput="filterCatalogSearch()">
     </div>
 
-    <!-- Live Dynamic Visual Video Showcase Module Grid Layout -->
     <div class="video-reel-section">
         <div class="video-reel-title">Product Showcases</div>
-        <div class="video-reel-container" id="videoReelGrid">
-            <!-- Videos inject here dynamically -->
-        </div>
+        <div class="video-reel-container" id="videoReelGrid"></div>
     </div>
 
     <div class="main-content">
@@ -273,7 +225,7 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- Persistent Bottom Operations Navigation Frame (Amazon/Flipkart UI Sync) -->
+    <!-- Persistent Bottom Bar -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchNavTab(this, 'home')">
             <div class="nav-icon">🏠</div>
@@ -287,7 +239,7 @@
             <div class="nav-icon">🛠️</div>
             <div>Admin</div>
         </div>
-        <div class="nav-item nav-item-cart" onclick="openCartDrawer()">
+        <div class="nav-item" onclick="openCartDrawer()">
             <div class="nav-cart-badge-wrapper">
                 <div class="nav-icon">🛒</div>
                 <div class="nav-cart-counter" id="cartBadgeCount">0</div>
@@ -296,7 +248,7 @@
         </div>
     </div>
 
-    <!-- Product Control Hub Admin Overlay Panel Modal Interface Screen -->
+    <!-- Admin Panel Sheet -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -318,7 +270,7 @@
         </div>
     </div>
 
-    <!-- Comprehensive Dynamic Profile Configurations Sheet Drawer Overlay -->
+    <!-- Profile Management Sheet -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -335,21 +287,33 @@
             <div class="input-group">
                 <label>Billing Destination Country</label>
                 <select id="profileCountrySelect" onchange="syncSelectedProfileCountryCurrencyConfig()">
-                    <!-- Country parameters injected by structural matrix database mapper loop -->
+                    <!-- Countries populated dynamically by JS matrix array -->
                 </select>
             </div>
             <button class="submit-action-btn" onclick="updateUserProfileDataMetadata()">Save Profile Configurations</button>
         </div>
     </div>
 
-    <!-- Active Shopping Cart Inventory Checklist Drawer Panel Overlay Sheet Matrix -->
+    <!-- Smart Cart Sheet with Empty Core State Feature Matrix -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box" style="max-width:440px;">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3 id="cartModalTitle">Your Cart</h3>
+            
+            <!-- Structural Container for populated items list -->
             <div class="cart-items-list" id="cartItemsList"></div>
             
-            <div class="checkout-form-container" id="checkoutForm">
+            <!-- Smart Dynamic Empty Core View Wrapper -->
+            <div id="emptyCartWrapper" class="empty-cart-state" style="display:none;">
+                <div class="empty-cart-icon">🛒</div>
+                <div class="empty-cart-text">
+                    <h4>Your Cart is Empty</h4>
+                    <p>Add some premium gear to get started.</p>
+                </div>
+                <button class="submit-action-btn" style="max-width:200px; margin-top:5px;" onclick="closeAllModals()">Continue Shopping</button>
+            </div>
+            
+            <div class="checkout-form-container" id="checkoutForm" style="display:none;">
                 <div class="input-group"><label>Full Name</label><input type="text" id="custName"></div>
                 <div class="input-group"><label>Phone Line</label><input type="tel" id="custPhone"></div>
                 <div class="input-group"><label>Pincode</label><input type="number" id="custPin"></div>
@@ -357,15 +321,14 @@
                 <div class="payment-gateway-lane" id="paymentForm" style="display:block;"><div id="currencyGatewayOptions"></div></div>
             </div>
 
-            <div class="cart-total-section">
-                <div class="total-row"><span>Total Invoice:</span><span id="cartTotal">$0.00</span></div>
+            <div class="cart-total-section" id="cartFooterActions">
+                <div class="total-row"><span>Total Invoice:</span><span id="cartTotal">₹0.00</span></div>
                 <button class="flow-btn primary-flow-btn" id="proceedBtn" onclick="handleCheckoutProgressionStep()">Proceed to Checkout</button>
                 <button class="flow-btn success-flow-btn" id="placeOrderBtn" onclick="executeFinalCheckoutPurchaseOrderRouting()">Confirm Purchase Order</button>
             </div>
         </div>
     </div>
 
-    <!-- Native System Registration Security Gateway Account Form Panel Sheet -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <div id="credentialsForm">
@@ -386,7 +349,6 @@
     </div>
 
     <script>
-        // Massive Geolocation Currency Parameter Mapping Data Array Configuration Loop Matrix
         const COUNTRIES_GLOBAL_MAP = {
             IN: { name: "India", currency: "INR (₹)", rate: 83.5, symbol: "₹" },
             US: { name: "United States", currency: "USD ($)", rate: 1.0, symbol: "$" },
@@ -396,50 +358,13 @@
             AU: { name: "Australia", currency: "AUD ($)", rate: 1.51, symbol: "A$" },
             DE: { name: "Germany", currency: "EUR (€)", rate: 0.92, symbol: "€" },
             FR: { name: "France", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            IT: { name: "Italy", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            ES: { name: "Spain", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            NL: { name: "Netherlands", currency: "EUR (€)", rate: 0.92, symbol: "€" },
             SA: { name: "Saudi Arabia", currency: "SAR", rate: 3.75, symbol: "SR " },
             ZA: { name: "South Africa", currency: "ZAR", rate: 18.4, symbol: "R " },
             JP: { name: "Japan", currency: "JPY (¥)", rate: 158.2, symbol: "¥" },
             SG: { name: "Singapore", currency: "SGD ($)", rate: 1.35, symbol: "S$" },
-            NZ: { name: "New Zealand", currency: "NZD ($)", rate: 1.63, symbol: "NZ$" },
-            CH: { name: "Switzerland", currency: "CHF", rate: 0.89, symbol: "CHF " },
-            BR: { name: "Brazil", currency: "BRL (R$)", rate: 5.42, symbol: "R$" },
-            MX: { name: "Mexico", currency: "MXN ($)", rate: 18.25, symbol: "Mex$" },
-            HK: { name: "Hong Kong", currency: "HKD ($)", rate: 7.81, symbol: "HK$" },
-            KR: { name: "South Korea", currency: "KRW (₩)", rate: 1380.0, symbol: "₩" },
-            MY: { name: "Malaysia", currency: "MYR", rate: 4.72, symbol: "RM " },
-            TH: { name: "Thailand", currency: "THB (฿)", rate: 36.6, symbol: "฿" },
-            ID: { name: "Indonesia", currency: "IDR (Rp)", rate: 16400.0, symbol: "Rp " },
-            PH: { name: "Philippines", currency: "PHP (₱)", rate: 58.7, symbol: "₱" },
-            IE: { name: "Ireland", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            BE: { name: "Belgium", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            AT: { name: "Austria", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            SE: { name: "Sweden", currency: "SEK", rate: 10.45, symbol: "kr " },
-            NO: { name: "Norway", currency: "NOK", rate: 10.62, symbol: "kr " },
-            DK: { name: "Denmark", currency: "DKK", rate: 6.88, symbol: "kr " },
-            FI: { name: "Finland", currency: "EUR (€)", rate: 0.92, symbol: "€" },
-            PL: { name: "Poland", currency: "PLN", rate: 4.04, symbol: "zł " },
-            TR: { name: "Turkey", currency: "TRY", rate: 32.8, symbol: "₺" },
-            EG: { name: "Egypt", currency: "EGP", rate: 47.9, symbol: "E£" },
-            IL: { name: "Israel", currency: "ILS (₪)", rate: 3.72, symbol: "₪" },
-            OM: { name: "Oman", currency: "OMR", rate: 0.385, symbol: "RO " },
-            QA: { name: "Qatar", currency: "QAR", rate: 3.64, symbol: "QR " },
-            KW: { name: "Kuwait", currency: "KWD", rate: 0.31, symbol: "KD " },
-            BH: { name: "Bahrain", currency: "BHD", rate: 0.38, symbol: "BD " },
-            VN: { name: "Vietnam", currency: "VND (₫)", rate: 25450.0, symbol: "₫ " },
-            CN: { name: "China", currency: "CNY (¥)", rate: 7.26, symbol: "¥" },
-            RU: { name: "Russia", currency: "RUB (₽)", rate: 88.3, symbol: "₽" },
-            AR: { name: "Argentina", currency: "ARS", rate: 905.0, symbol: "$" },
-            CL: { name: "Chile", currency: "CLP", rate: 935.0, symbol: "CLP$" },
-            CO: { name: "Colombia", currency: "COP", rate: 4150.0, symbol: "COL$" },
-            PE: { name: "Peru", currency: "PEN", rate: 3.80, symbol: "S/. " },
             PK: { name: "Pakistan", currency: "PKR", rate: 278.5, symbol: "Rs " },
             BD: { name: "Bangladesh", currency: "BDT", rate: 117.5, symbol: "৳ " },
-            LK: { name: "Sri Lanka", currency: "LKR", rate: 303.0, symbol: "Rs " },
-            NG: { name: "Nigeria", currency: "NGN", rate: 1500.0, symbol: "₦ " },
-            KE: { name: "Kenya", currency: "KES", rate: 128.5, symbol: "KSh " }
+            LK: { name: "Sri Lanka", currency: "LKR", rate: 303.0, symbol: "Rs " }
         };
 
         let currentActiveTargetCurrencyRate = 83.5;
@@ -452,26 +377,21 @@
         let generatedVideoFileCacheString = "";
         let generatedAvatarFileCacheString = "";
 
-        // Populate Location Selector Loops Dom Matrices
         function buildCountrySelectionDropdownDOMNodeTrees() {
             const selects = [document.getElementById('regCountry'), document.getElementById('profileCountrySelect')];
             selects.forEach(sel => {
-                if(!sel) return;
-                sel.innerHTML = "";
+                if(!sel) return; sel.innerHTML = "";
                 Object.keys(COUNTRIES_GLOBAL_MAP).forEach(key => {
                     sel.innerHTML += `<option value="${key}">${COUNTRIES_GLOBAL_MAP[key].name} (${COUNTRIES_GLOBAL_MAP[key].currency})</option>`;
                 });
             });
         }
 
-        // Real-Time System Listener Engine Routines
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 currentSessionUser = user.email;
                 db.collection("users").doc(currentSessionUser).get().then((doc) => {
-                    if (doc.exists) {
-                        userDataCache = doc.data();
-                    }
+                    if (doc.exists) { userDataCache = doc.data(); }
                     const activeLocale = userDataCache.country || "IN";
                     activeSelectedCheckoutCountryCode = activeLocale;
                     currentActiveTargetCurrencyRate = COUNTRIES_GLOBAL_MAP[activeLocale].rate;
@@ -490,21 +410,15 @@
             db.collection("products").onSnapshot((snapshot) => {
                 PRODUCT_CATALOG = [];
                 snapshot.forEach(doc => {
-                    let item = doc.data(); item.id = doc.id;
-                    PRODUCT_CATALOG.push(item);
+                    let item = doc.data(); item.id = doc.id; PRODUCT_CATALOG.push(item);
                 });
                 buildMainCatalogUI(PRODUCT_CATALOG);
             });
 
             db.collection("videos").onSnapshot((snapshot) => {
-                const reel = document.getElementById('videoReelGrid');
-                reel.innerHTML = "";
+                const reel = document.getElementById('videoReelGrid'); reel.innerHTML = "";
                 snapshot.forEach(doc => {
-                    reel.innerHTML += `
-                        <div class="video-reel-card">
-                            <video src="${doc.data().video}" autoplay loop muted playsinline></video>
-                        </div>
-                    `;
+                    reel.innerHTML += `<div class="video-reel-card"><video src="${doc.data().video}" autoplay loop muted playsinline></video></div>`;
                 });
             });
         }
@@ -512,12 +426,12 @@
         function buildMainCatalogUI(items) {
             productGrid.innerHTML = '';
             if (items.length === 0) {
-                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px;">No products listed yet.</p>';
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px;">No products listed yet.</p>';
                 return;
             }
             items.forEach(product => {
                 const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
-                const calculatedPriceVal = (Number(product.price) * currentActiveTargetCurrencyRate).toFixed(2);
+                const calculatedPriceVal = (window.Number(product.price) * currentActiveTargetCurrencyRate).toFixed(2);
                 
                 const card = document.createElement('div');
                 card.classList.add('product-card');
@@ -542,9 +456,8 @@
                         generatedProductFileCacheString = e.target.result;
                         document.getElementById('admProdPreview').src = e.target.result;
                         document.getElementById('admProdPreview').style.display = 'block';
-                    } else if (scope === 'video') {
-                        generatedVideoFileCacheString = e.target.result;
-                    } else if (scope === 'avatar') {
+                    } else if (scope === 'video') { generatedVideoFileCacheString = e.target.result; } 
+                    else if (scope === 'avatar') {
                         generatedAvatarFileCacheString = e.target.result;
                         document.getElementById('profileDashboardImg').src = e.target.result;
                     }
@@ -559,7 +472,7 @@
             if (!name || isNaN(price) || !generatedProductFileCacheString) return;
 
             db.collection("products").add({ name, price, image: generatedProductFileCacheString }).then(() => {
-                emitSlidToastAlert('success', 'Catalog Updated', 'Product configuration pushed live.');
+                emitSlidToastAlert('success', 'Catalog Updated', 'Product pushed live.');
                 closeAllModals();
             });
         }
@@ -567,16 +480,14 @@
         function saveVideoToCloud() {
             if (!generatedVideoFileCacheString) return;
             db.collection("videos").add({ video: generatedVideoFileCacheString }).then(() => {
-                emitSlidToastAlert('success', 'Video Showcase Live', 'Reel injected into feed layout.');
+                emitSlidToastAlert('success', 'Video Live', 'Reel injected into layout feed.');
                 closeAllModals();
             });
         }
 
         function deleteProductFromCloud(id) {
             event.stopPropagation();
-            if(confirm("Wipe item document parameter?")) {
-                db.collection("products").doc(id).delete();
-            }
+            if(confirm("Wipe catalog document?")) { db.collection("products").doc(id).delete(); }
         }
 
         function syncSelectedProfileCountryCurrencyConfig() {
@@ -591,21 +502,20 @@
         function updateUserProfileDataMetadata() {
             const newName = document.getElementById('profileNameInput').value.trim();
             const newCountry = document.getElementById('profileCountrySelect').value;
-            
             let updatePayload = { name: newName, country: newCountry };
+            
             if (generatedAvatarFileCacheString) {
                 localStorage.setItem(`avatar_${currentSessionUser}`, generatedAvatarFileCacheString);
                 document.getElementById('profileTrigger').src = generatedAvatarFileCacheString;
             }
-
             db.collection("users").doc(currentSessionUser).update(updatePayload).then(() => {
-                userDataCache.name = newName;
-                userDataCache.country = newCountry;
-                emitSlidToastAlert('success', 'Profile Updated', 'Cloud data parameters synchronized.');
+                userDataCache.name = newName; userDataCache.country = newCountry;
+                emitSlidToastAlert('success', 'Profile Synchronized', 'Cloud parameters matching.');
                 closeAllModals();
             });
         }
 
+        // Master Verification Condition Fix: Secure lowcase mapping sync execution
         function renderSystemSessionState() {
             buildCountrySelectionDropdownDOMNodeTrees();
             if(currentSessionUser) {
@@ -614,7 +524,9 @@
                 document.getElementById('profileTrigger').src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
                 
                 if (currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com') {
-                    document.getElementById('adminNavTab').style.display = 'flex';
+                    document.getElementById('adminNavTab').style.style.setProperty('display', 'flex', 'important');
+                } else {
+                    document.getElementById('adminNavTab').style.display = 'none';
                 }
             } else {
                 document.getElementById('openAuthModal').style.display = 'block';
@@ -638,30 +550,45 @@
 
         function refreshCartDrawerUI() {
             const list = document.getElementById('cartItemsList');
+            const emptyState = document.getElementById('emptyCartWrapper');
+            const footerActions = document.getElementById('cartFooterActions');
             list.innerHTML = "";
             let itemsCount = 0, usdTotal = 0;
 
-            Object.keys(cartMap).forEach(key => {
-                const item = cartMap[key];
-                itemsCount += item.quantity;
-                usdTotal += (item.price * item.quantity);
-                
-                const itemCalculatedDisplayPrice = (item.price * currentActiveTargetCurrencyRate).toFixed(2);
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <img class="cart-item-thumb" src="${item.image}">
-                        <div class="cart-item-details">
-                            <span>${item.name}</span>
-                            <span class="cart-item-price">${currentActiveTargetCurrencySymbol}${itemCalculatedDisplayPrice}</span>
+            const cartKeys = Object.keys(cartMap);
+            
+            if (cartKeys.length === 0) {
+                // Render pure interactive empty state metrics
+                list.style.display = 'none';
+                emptyState.style.display = 'flex';
+                footerActions.style.display = 'none';
+            } else {
+                list.style.display = 'block';
+                emptyState.style.display = 'none';
+                footerActions.style.display = 'block';
+
+                cartKeys.forEach(key => {
+                    const item = cartMap[key];
+                    itemsCount += item.quantity;
+                    usdTotal += (item.price * item.quantity);
+                    
+                    const itemCalculatedDisplayPrice = (item.price * currentActiveTargetCurrencyRate).toFixed(2);
+                    list.innerHTML += `
+                        <div class="cart-item">
+                            <img class="cart-item-thumb" src="${item.image}">
+                            <div class="cart-item-details">
+                                <span>${item.name}</span>
+                                <span class="cart-item-price">${currentActiveTargetCurrencySymbol}${itemCalculatedDisplayPrice}</span>
+                            </div>
+                            <div class="quantity-controller">
+                                <button class="qty-btn" onclick="adjustQuantity('${key}', -1)">-</button>
+                                <span class="qty-val">${item.quantity}</span>
+                                <button class="qty-btn" onclick="adjustQuantity('${key}', 1)">+</button>
+                            </div>
                         </div>
-                        <div class="quantity-controller">
-                            <button class="qty-btn" onclick="adjustQuantity('${key}', -1)">-</button>
-                            <span class="qty-val">${item.quantity}</span>
-                            <button class="qty-btn" onclick="adjustQuantity('${key}', 1)">+</button>
-                        </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
             document.getElementById('cartBadgeCount').textContent = itemsCount;
             document.getElementById('cartTotal').textContent = `${currentActiveTargetCurrencySymbol}${(usdTotal * currentActiveTargetCurrencyRate).toFixed(2)}`;
@@ -676,13 +603,13 @@
                 document.getElementById('cartItemsList').style.display = 'none';
                 document.getElementById('proceedBtn').style.display = 'none';
                 document.getElementById('placeOrderBtn').style.display = 'block';
-                document.getElementById('cartModalTitle').textContent = "Delivery Configurations";
+                document.getElementById('cartModalTitle').textContent = "Delivery Setup";
                 currentCheckoutStep = "address";
             }
         }
 
         function executeFinalCheckoutPurchaseOrderRouting() {
-            emitSlidToastAlert('success', 'Order Authorized', 'Invoice metrics dispatched to system logs.');
+            emitSlidToastAlert('success', 'Order Placed', 'Invoice parameters successfully verified.');
             cartMap = {}; currentCheckoutStep = "cart";
             refreshCartDrawerUI(); closeAllModals();
         }
@@ -692,7 +619,6 @@
             closeAllModals(); 
             document.getElementById('cartModal').classList.add('active');
             document.getElementById('checkoutForm').style.display = 'none';
-            document.getElementById('cartItemsList').style.display = 'block';
             document.getElementById('proceedBtn').style.display = 'block';
             document.getElementById('placeOrderBtn').style.display = 'none';
             document.getElementById('cartModalTitle').textContent = "Your Cart";
@@ -710,11 +636,7 @@
 
         function toggleDrawer(open) { document.getElementById('sideDrawer').classList.toggle('open', open); }
         function closeAllModals() { document.querySelectorAll('.modal-overlay').forEach(el => el.classList.remove('active')); }
-
-        function switchNavTab(element, tab) {
-            document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-        }
+        function switchNavTab(element, tab) { document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active')); element.classList.add('active'); }
 
         function toggleAuthView(signup) {
             isSignUpMode = signup;
@@ -731,20 +653,15 @@
                 const name = document.getElementById('regName').value.trim();
                 const country = document.getElementById('regCountry').value;
                 firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
-                    db.collection("users").doc(email).set({ name, country });
-                    closeAllModals();
+                    db.collection("users").doc(email).set({ name, country }); closeAllModals();
                 });
-            } else {
-                firebase.auth().signInWithEmailAndPassword(email, pass).then(() => { closeAllModals(); });
-            }
+            } else { firebase.auth().signInWithEmailAndPassword(email, pass).then(() => { closeAllModals(); }); }
         }
 
         function executeLogout() { firebase.auth().signOut().then(() => window.location.reload()); }
         function emitSlidToastAlert(type, title, msg) {
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMessage').textContent = msg;
-            appToast.classList.add('active');
-            setTimeout(() => appToast.classList.remove('active'), 3000);
+            document.getElementById('toastTitle').textContent = title; document.getElementById('toastMessage').textContent = msg;
+            appToast.classList.add('active'); setTimeout(() => appToast.classList.remove('active'), 3000);
         }
 
         window.addEventListener('DOMContentLoaded', () => { listenToProductsAndVideos(); });
