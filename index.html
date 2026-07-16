@@ -117,6 +117,58 @@
             100% { background-position: 200% center; }
         }
 
+        /* NEW HYPE DROP CSS */
+        .hype-drop-container {
+            margin: 16px;
+            background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hype-drop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .hype-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hype-timer-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #f8fafc;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+        .hype-badge {
+            position: absolute;
+            top: -10px;
+            right: -25px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 20px 25px 4px 25px;
+            transform: rotate(45deg);
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+        }
+
         .video-reel-section { padding: 12px 16px; }
         .video-reel-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .video-reel-container { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
@@ -124,7 +176,7 @@
         .video-reel-card { flex: 0 0 130px; height: 195px; border-radius: 10px; overflow: hidden; background-color: #000; }
         .video-reel-card video { width: 100%; height: 100%; object-fit: cover; }
 
-        .main-content { padding: 12px 16px; }
+        .main-content { padding: 0 16px 12px 16px; }
         .section-headline { font-size: 1rem; font-weight: 700; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
         
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -166,7 +218,6 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
         
-        /* NEW STOCK BAR CSS */
         .stock-info-row { display:flex; justify-content:space-between; font-size:0.65rem; color:#f8fafc; font-weight:bold; margin-bottom:4px; margin-top:2px; }
         .stock-bar-bg { width:100%; background:var(--bg-primary); height:4px; border-radius:2px; margin-bottom:8px; border: 1px solid var(--border-color); overflow: hidden;}
         .stock-bar-fill { background:#ef4444; height:100%; border-radius:2px; }
@@ -279,7 +330,6 @@
         .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; z-index: 2000; display: flex; gap: 10px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .toast-notification.active { top: 20px; }
 
-        /* NEW SOCIAL PROOF POPUP CSS */
         .social-proof-popup {
             position: fixed; bottom: 85px; left: -100%; width: calc(100% - 32px); max-width: 350px; margin: 0 16px;
             background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px;
@@ -302,7 +352,6 @@
         </div>
     </div>
 
-    <!-- NEW SOCIAL PROOF POPUP UI -->
     <div class="social-proof-popup" id="socialProofPopup">
         <img id="spImage" class="social-proof-img" src="">
         <div>
@@ -347,8 +396,18 @@
         <div class="video-reel-container" id="videoReelGrid"></div>
     </div>
 
+    <!-- NEW SECTION: THE WEEKLY HYPE DROP -->
+    <div class="hype-drop-container" id="hypeDropMasterContainer" style="display: none;">
+        <div class="hype-badge">Drop</div>
+        <div class="hype-drop-header">
+            <div class="hype-title"><span class="pulse-dot"></span> WEEKLY DROP</div>
+            <div class="hype-timer-box" id="hypeCountdownTimer">Loading...</div>
+        </div>
+        <div class="grid" id="hypeDropGrid"></div>
+    </div>
+
     <div class="main-content">
-        <div class="section-headline">Trending Catalog</div>
+        <div class="section-headline">Everyday Catalog</div>
         <div class="grid" id="productGrid"></div>
     </div>
 
@@ -571,8 +630,6 @@
         let generatedProductFileCacheString = "";
         let generatedVideoFileCacheString = "";
         let generatedAvatarFileCacheString = "";
-        
-        /* NEW FEATURE: IDLE TIMER */
         let userIdleTimeTimer = 0;
 
         function buildCountrySelectionDropdownDOMNodeTrees() {
@@ -614,9 +671,38 @@
             }
         });
 
-        /* NEW FEATURE: INITIALIZE BACKGROUND TIMERS */
+        /* NEW ENGINE: HYPE DROP COUNTDOWN MATH */
+        function startWeeklyHypeCountdownTimer() {
+            const timerBox = document.getElementById('hypeCountdownTimer');
+            if(!timerBox) return;
+
+            setInterval(() => {
+                let now = new Date();
+                let nextFriday = new Date();
+                
+                // Calculate days until next Friday (Friday = 5)
+                let daysUntilFriday = (5 - now.getDay() + 7) % 7;
+                if (daysUntilFriday === 0 && now.getHours() > 23) {
+                    daysUntilFriday = 7; // It's Friday, but past midnight, target next week
+                }
+                
+                nextFriday.setDate(now.getDate() + daysUntilFriday);
+                nextFriday.setHours(23, 59, 59, 0); // End of the day Friday
+
+                let diff = nextFriday - now;
+                let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                // Format with leading zeros for style
+                timerBox.innerText = `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+            }, 1000);
+        }
+
         function startMarketingEngines() {
-            // Social Proof Engine
+            startWeeklyHypeCountdownTimer();
+
             setInterval(() => {
                 if (PRODUCT_CATALOG.length === 0) return;
                 const randomProduct = PRODUCT_CATALOG[Math.floor(Math.random() * PRODUCT_CATALOG.length)];
@@ -631,27 +717,23 @@
                 popup.classList.add('show');
                 
                 setTimeout(() => { popup.classList.remove('show'); }, 4000);
-            }, 25000); // Pops up every 25 seconds
+            }, 25000); 
 
-            // Idle Engagement Engine
             setInterval(() => {
                 userIdleTimeTimer++;
-                if (userIdleTimeTimer === 45) { // If idle for 45 seconds
+                if (userIdleTimeTimer === 45) { 
                     emitSlidToastAlert('success', 'Special Offer Unlocked!', 'Still deciding? Use code LONE25 for 25% OFF your entire cart right now.');
                 }
             }, 1000);
         }
 
-        // Reset idle timer on interaction
         window.onload = resetIdleTimer;
         window.onmousemove = resetIdleTimer;
         window.ontouchstart = resetIdleTimer;
         window.onscroll = resetIdleTimer;
         window.onkeypress = resetIdleTimer;
         
-        function resetIdleTimer() {
-            userIdleTimeTimer = 0;
-        }
+        function resetIdleTimer() { userIdleTimeTimer = 0; }
 
         function openSmartApplicationInstallationPromptSheet() {
             closeAllModals();
@@ -747,62 +829,83 @@
             }
         }
 
+        /* NEW GENERATOR: SPLIT CATALOG FOR HYPE DROP */
         function buildMainCatalogUI(items) {
             const productGrid = document.getElementById('productGrid');
-            if(!productGrid) return;
+            const hypeGrid = document.getElementById('hypeDropGrid');
+            const hypeContainer = document.getElementById('hypeDropMasterContainer');
+            
+            if(!productGrid || !hypeGrid) return;
             productGrid.innerHTML = '';
+            hypeGrid.innerHTML = '';
             
             if (items.length === 0) {
                 productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px;">No products listed yet.</p>';
+                hypeContainer.style.display = 'none';
                 return;
             }
-            items.forEach(product => {
-                const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
-                const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
-                
-                const seededDiscount = (product.name.charCodeAt(0) % 40) + 20; 
-                const fakeOriginalPrice = (calculatedPriceVal / (1 - (seededDiscount / 100))).toFixed(2);
-                const randomViewers = (product.name.length % 15) + 3;
-                
-                /* NEW FEATURE: LOW STOCK BAR GENERATOR */
-                const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; // Always generates a stock number between 2 and 10
-                const stockPercentage = (randomStockCount / 20) * 100; // Visual bar fill
 
-                const card = document.createElement('div');
-                card.classList.add('product-card');
-                card.innerHTML = `
-                    <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
-                    <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
-                    
-                    <div class="product-img-frame">
-                        <div class="fake-discount-corner">${seededDiscount}% OFF</div>
-                        <img class="product-img" src="${product.image}">
+            // We automatically put the first 2 products into the Weekly Drop to test the UI!
+            let hypeItems = items.slice(0, 2);
+            let regularItems = items.slice(2);
+
+            if(hypeItems.length > 0) {
+                hypeContainer.style.display = 'block';
+                hypeItems.forEach(product => renderSingleProductCard(product, hypeGrid));
+            } else {
+                hypeContainer.style.display = 'none';
+            }
+
+            if(regularItems.length > 0) {
+                regularItems.forEach(product => renderSingleProductCard(product, productGrid));
+            } else {
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px 10px;">More everyday tech arriving soon.</p>';
+            }
+        }
+
+        function renderSingleProductCard(product, targetGrid) {
+            const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
+            const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
+            const seededDiscount = (product.name.charCodeAt(0) % 40) + 20; 
+            const fakeOriginalPrice = (calculatedPriceVal / (1 - (seededDiscount / 100))).toFixed(2);
+            const randomViewers = (product.name.length % 15) + 3;
+            const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; 
+            const stockPercentage = (randomStockCount / 20) * 100; 
+
+            const card = document.createElement('div');
+            card.classList.add('product-card');
+            card.innerHTML = `
+                <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
+                <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
+                
+                <div class="product-img-frame">
+                    <div class="fake-discount-corner">${seededDiscount}% OFF</div>
+                    <img class="product-img" src="${product.image}">
+                </div>
+                
+                <div class="product-title">${product.name}</div>
+                
+                <div class="live-viewer-row">
+                    <span class="pulse-dot"></span> ${randomViewers} viewing now
+                </div>
+                
+                <div class="stock-info-row">
+                    <span>🔥 Selling Fast</span>
+                    <span>Only ${randomStockCount} left</span>
+                </div>
+                <div class="stock-bar-bg">
+                    <div class="stock-bar-fill" style="width: ${stockPercentage}%;"></div>
+                </div>
+                
+                <div>
+                    <div class="product-price">
+                        ${currentActiveTargetCurrencySymbol}${calculatedPriceVal}
+                        <span class="strike-price">${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}</span>
                     </div>
-                    
-                    <div class="product-title">${product.name}</div>
-                    
-                    <div class="live-viewer-row">
-                        <span class="pulse-dot"></span> ${randomViewers} viewing now
-                    </div>
-                    
-                    <div class="stock-info-row">
-                        <span>🔥 Selling Fast</span>
-                        <span>Only ${randomStockCount} left</span>
-                    </div>
-                    <div class="stock-bar-bg">
-                        <div class="stock-bar-fill" style="width: ${stockPercentage}%;"></div>
-                    </div>
-                    
-                    <div>
-                        <div class="product-price">
-                            ${currentActiveTargetCurrencySymbol}${calculatedPriceVal}
-                            <span class="strike-price">${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}</span>
-                        </div>
-                        <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add To Cart</button>
-                    </div>
-                `;
-                productGrid.appendChild(card);
-            });
+                    <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add To Cart</button>
+                </div>
+            `;
+            targetGrid.appendChild(card);
         }
 
         function processFileToDataString(input, scope) {
@@ -905,7 +1008,7 @@
         }
 
         function executeCartInsertion(id) {
-            if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback if phone supports it
+            if (navigator.vibrate) navigator.vibrate(50); 
             
             if (cartMap[id]) { cartMap[id].quantity += 1; }
             else { const match = PRODUCT_CATALOG.find(p => p.id === id); cartMap[id] = { ...match, quantity: 1 }; }
@@ -1271,7 +1374,7 @@
 
         window.addEventListener('DOMContentLoaded', () => { 
             listenToProductsAndVideos(); 
-            startMarketingEngines(); // Starts the popups and idle timer!
+            startMarketingEngines(); 
         });
     </script>
 </body>
