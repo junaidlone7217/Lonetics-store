@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+    <rect width="512" height="512" fill="#06060f"/>
+    <defs>
+        <linearGradient id="genzNeon" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff007f"/>
+            <stop offset="50%" stop-color="#7f00ff"/>
+            <stop offset="100%" stop-color="#00f2fe"/>
+        </linearGradient>
+        <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7f00ff" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#06060f" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+    <circle cx="256" cy="256" r="200" fill="url(#coreGlow)" filter="blur(20px)"/>
+    <polygon points="180,90 270,90 210,310 120,310" fill="url(#genzNeon)"/>
+    <polygon points="115,330 380,330 355,420 90,420" fill="url(#genzNeon)"/>
+    <circle cx="360" cy="130" r="22" fill="#00f2fe"/>
+</svg>
