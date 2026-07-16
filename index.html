@@ -21,69 +21,80 @@
     
     <style>
         :root {
-            --bg-primary: #060b13;
-            --bg-surface: #0f172a;
-            --accent: #2563eb;
-            --accent-light: #38bdf8;
-            --text-main: #f8fafc;
+            --bg-primary: #060b13; --bg-surface: #0f172a; --accent: #2563eb; 
+            --accent-light: #38bdf8; --text-main: #f8fafc;
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family: sans-serif; }
         body { background: var(--bg-primary); color: var(--text-main); padding-bottom: 80px; }
         
-        /* Premium Header */
         header { background: var(--bg-surface); padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
         .logo { font-size: 1.5rem; font-weight: 900; color: var(--text-main); }
         .logo span { color: var(--accent-light); }
         
-        /* Premium Install Banner Animation */
-        .install-prompt-ui { display: none; background: linear-gradient(135deg, #2563eb, #38bdf8); padding: 20px; border-radius: 16px; margin: 16px; text-align: center; animation: slideUp 0.5s ease-out; }
-        @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-        
-        .btn-install { background: #fff; color: var(--accent); padding: 12px 24px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; margin-top: 10px; }
-        
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
-        .card { background: var(--bg-surface); border-radius: 12px; padding: 12px; }
-        .img-placeholder { height: 120px; background: #1e293b; border-radius: 8px; margin-bottom: 8px; }
+        .card { background: var(--bg-surface); border-radius: 12px; padding: 12px; border: 1px solid #1e293b; }
+        .img-placeholder { height: 120px; background: #060b13; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+        .img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        .buy-btn { width: 100%; padding: 8px; background: var(--accent); color: white; border: none; border-radius: 6px; margin-top: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">LONE<span>TICS</span></div>
-        <div id="installTrigger" style="cursor:pointer;">Get App</div>
+        <div id="installTrigger" style="cursor:pointer; font-weight:bold; color:var(--accent-light);">Get App</div>
     </header>
 
-    <div id="installContainer" class="install-prompt-ui">
-        <h3>Install Lonetics</h3>
-        <p>Get faster access & 25% off.</p>
-        <button class="btn-install" onclick="installApp()">Install App Now</button>
+    <div class="grid" id="productGrid">
+        <p style="grid-column: 1/-1; text-align: center; margin-top: 50px;">Loading your store...</p>
     </div>
 
-    <div class="grid" id="productGrid"></div>
-
     <script>
+        // Database & PWA Logic
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5CaVG6SAkGu5Z0ffJoT8Qqe1pkhOvNMA",
+            authDomain: "lonetics-store.firebaseapp.com",
+            projectId: "lonetics-store",
+            storageBucket: "lonetics-store.firebasestorage.app",
+            messagingSenderId: "1037550611605",
+            appId: "1:1037550611605:web:21645faf582e61e3947f9c"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Load Products
+        db.collection("products").onSnapshot((snapshot) => {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = "";
+            snapshot.forEach(doc => {
+                const p = doc.data();
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="img-placeholder"><img src="${p.image}"></div>
+                        <p style="font-size:0.9rem;">${p.name}</p>
+                        <button class="buy-btn">₹${p.price}</button>
+                    </div>
+                `;
+            });
+        });
+
         // PWA Install Logic
         let deferredPrompt;
-        const installContainer = document.getElementById('installContainer');
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installContainer.style.display = 'block';
         });
 
-        async function installApp() {
+        document.getElementById('installTrigger').addEventListener('click', () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') installContainer.style.display = 'none';
-                deferredPrompt = null;
+            } else {
+                alert("To install, tap the 3 dots in Chrome and select 'Install App'");
             }
-        }
+        });
 
-        // Service Worker Registration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW fail', err));
         }
     </script>
 </body>
