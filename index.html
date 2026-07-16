@@ -306,9 +306,9 @@
             <div class="nav-icon">🏠</div>
             <div>Home</div>
         </div>
-        <div class="nav-item" onclick="switchNavTab(this, 'categories')">
-            <div class="nav-icon">🔍</div>
-            <div>Categories</div>
+        <div class="nav-item" onclick="switchNavTab(this, 'orders'); openUserOrdersTrackingPortal();">
+            <div class="nav-icon">📦</div>
+            <div>Orders</div>
         </div>
         <div class="nav-item" id="adminNavTab" style="display:none;" onclick="openAdminModal()">
             <div class="nav-icon">🛠️</div>
@@ -361,7 +361,7 @@
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:var(--accent-light); font-weight:800; letter-spacing:0.3px;">STORE CATALOG MANAGEMENT</h4>
                 <div class="input-group"><label>Product Title</label><input type="text" id="admProdName" placeholder="Enter clean descriptive name"></div>
-                <div class="input-group"><label>Product Base Price (USD)</label><input type="number" id="admProdPrice" placeholder="e.g. 49.99"></div>
+                <div class="input-group"><label>Product Base Price (INR)</label><input type="number" id="admProdPrice" placeholder="e.g. 1499"></div>
                 <div class="input-group"><label>Product Photo File</label><input type="file" id="admProdImageFile" accept="image/*" onchange="processFileToDataString(this, 'product')"><img id="admProdPreview" class="admin-image-preview"></div>
                 <button class="submit-action-btn" onclick="saveProductToCloud()">Upload Live Item</button>
             </div>
@@ -653,7 +653,7 @@
             }
             items.forEach(product => {
                 const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
-                const calculatedPriceVal = (window.Number(product.price) * currentActiveTargetCurrencyRate).toFixed(2);
+                const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
                 
                 const card = document.createElement('div');
                 card.classList.add('product-card');
@@ -831,10 +831,10 @@
                 cartKeys.forEach(key => {
                     const item = cartMap[key];
                     itemsCount += item.quantity;
-                    usdTotal += (item.price * item.quantity);
+                    usdTotal += ((item.price / 83.5) * item.quantity);
                     
                     if (currentCheckoutStep === "cart") {
-                        const itemCalculatedDisplayPrice = (item.price * currentActiveTargetCurrencyRate).toFixed(2);
+                        const itemCalculatedDisplayPrice = ((item.price / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
                         list.innerHTML += `
                             <div class="cart-item">
                                 <img class="cart-item-thumb" src="${item.image}">
