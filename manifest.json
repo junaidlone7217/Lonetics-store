@@ -8,13 +8,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://i.ibb.co/FkVrZ03/lonetics-logo.png",
-      "type": "image/png",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><path d='M30 25h40v10H40v15h25v10H40v15h30v10H30Z' fill='%2338bdf8'/></svg>",
+      "type": "image/svg+xml",
       "sizes": "192x192"
     },
     {
-      "src": "https://i.ibb.co/FkVrZ03/lonetics-logo.png",
-      "type": "image/png",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><path d='M30 25h40v10H40v15h25v10H40v15h30v10H30Z' fill='%2338bdf8'/></svg>",
+      "type": "image/svg+xml",
       "sizes": "512x512"
     }
   ]
