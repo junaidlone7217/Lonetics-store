@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
+    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -87,13 +89,31 @@
             border: 1.5px solid var(--accent-light); cursor: pointer; display: none;
         }
 
-        .search-wrapper { padding: 12px 16px; background-color: var(--bg-primary); }
+        .search-wrapper { padding: 12px 16px 6px 16px; background-color: var(--bg-primary); }
         .search-box {
             width: 100%; background-color: var(--bg-surface); border: 1px solid var(--border-color);
             border-radius: 10px; padding: 12px 16px; color: var(--text-main); font-size: 0.9rem; outline: none;
         }
 
-        .video-reel-section { padding: 4px 16px 12px 16px; }
+        /* Urgent Promo Banner */
+        .promo-ticker-banner {
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
+            background-size: 200% auto;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 0.5px;
+            animation: flowingGlow 3s linear infinite;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        @keyframes flowingGlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .video-reel-section { padding: 12px 16px; }
         .video-reel-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .video-reel-container { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
         .video-reel-container::-webkit-scrollbar { display: none; }
@@ -152,7 +172,7 @@
         .modal-close { position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
         .sheet-box h3 { margin-bottom: 22px; font-size: 1.15rem; font-weight: 700; text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
 
-        .cart-items-list { display: flex; flex-direction: column; gap: 14px; width: 100%; max-height: 40vh; overflow-y: auto; margin-bottom: 15px; }
+        .cart-items-list { display: flex; flex-direction: column; gap: 14px; width: 100%; max-height: 35vh; overflow-y: auto; margin-bottom: 15px; }
         .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; background-color: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); width: 100%; }
         .cart-item-thumb { width: 55px; height: 55px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
         .cart-item-details { flex-grow: 1; display: flex; flex-direction: column; font-size: 0.85rem; gap: 3px; min-width: 0; }
@@ -175,22 +195,37 @@
 
         .checkout-form-container { display: none; flex-direction: column; gap: 4px; width: 100%; }
 
-        /* Custom Injected UPI Interface Container */
-        .native-upi-payment-block {
-            display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; background: var(--bg-card); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 15px;
-        }
+        /* Promo Coupon Box */
+        .coupon-apply-wrapper { display: flex; gap: 8px; width: 100%; background: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 12px; }
+        .coupon-input { flex-grow: 1; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; color: white; outline: none; font-size: 0.85rem; text-transform: uppercase; }
+        .coupon-btn { background: var(--accent); color: white; border: none; padding: 0 16px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
+
+        .payment-method-selector-box { display: none; flex-direction: column; gap: 12px; width: 100%; margin-bottom: 15px; }
+        .payment-option-card { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; cursor: pointer; }
+        .payment-option-card.selected { border-color: var(--accent-light); background: rgba(56, 189, 248, 0.05); }
+        .discount-pill { background: #10b981; color: white; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 20px; text-transform: uppercase; }
+
+        .native-upi-payment-block { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; background: var(--bg-card); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 15px; }
         .upi-qr-image { width: 190px; height: 180px; object-fit: contain; background: white; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); }
         .upi-id-copy-row { display: flex; align-items: center; width: 100%; background: var(--bg-primary); border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden; margin-top: 4px; }
         .upi-string-display { flex-grow: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; color: var(--accent-light); }
         .upi-copy-action-btn { background: var(--accent); color: white; border: none; padding: 10px 16px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 
+        .orders-tracking-container { display: flex; flex-direction: column; gap: 12px; width: 100%; padding-bottom: 20px; }
+        .order-tracking-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .order-track-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+        .status-badge { font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; }
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .status-processing { background: rgba(37, 99, 235, 0.15); color: #2563eb; }
+        .status-shipped { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
         .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); }
-        
+        .discount-strike { text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem; margin-right: 6px; }
+
         .flow-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; text-align: center; display: block; transition: transform 0.1s; }
         .primary-flow-btn { background-color: var(--accent); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
         .success-flow-btn { background-color: #10b981; color: white; display: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-        .flow-btn:active { transform: scale(0.98); }
 
         .submit-action-btn { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 8px; }
         .side-menu-drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background-color: var(--bg-surface); border-right: 1px solid var(--border-color); z-index: 600; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; }
@@ -198,8 +233,6 @@
         .side-menu-item { padding: 14px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.9rem; cursor: pointer; }
 
         .admin-image-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px dashed var(--border-color); margin-top: 8px; display: none; }
-        .toast-notification { position: fixed; top: -120px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; z-index: 2000; display: flex; gap: 10px; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .toast-notification.active { top: 20px; }
     </style>
 </head>
 <body>
@@ -218,6 +251,7 @@
             <span style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);" onclick="toggleDrawer(false)">&times;</span>
         </div>
         <div class="side-menu-item" onclick="toggleDrawer(false); openProfilePanel();">Edit Profile Settings</div>
+        <div class="side-menu-item" onclick="toggleDrawer(false); openUserOrdersTrackingPortal();">My Orders Track</div>
         <div class="side-menu-item" onclick="toggleDrawer(false); emitSlidToastAlert('success','Support Help','Customer care routing active.');">Help Center & Docs</div>
         <div class="side-menu-item" style="color:#ef4444; font-weight:700;" onclick="executeLogout()">Sign Out Account</div>
     </div>
@@ -235,6 +269,11 @@
 
     <div class="search-wrapper">
         <input type="text" class="search-box" id="catalogSearch" placeholder="Search brands, premium tech and categories..." oninput="filterCatalogSearch()">
+    </div>
+
+    <!-- Promotional Ticker Banner Insertion -->
+    <div class="promo-ticker-banner">
+        🔥 LIMITED TIME DEAL: Use code LONE25 for 25% OFF your entire cart! Offer ends soon!
     </div>
 
     <div class="video-reel-section">
@@ -269,6 +308,7 @@
         </div>
     </div>
 
+    <!-- Admin Panel -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -288,6 +328,7 @@
         </div>
     </div>
 
+    <!-- Profile Management -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -309,6 +350,16 @@
         </div>
     </div>
 
+    <!-- Tracking Modal -->
+    <div class="modal-overlay" id="ordersTrackingModal">
+        <div class="sheet-box">
+            <button class="modal-close" onclick="closeAllModals()">&times;</button>
+            <h3>My Orders & Status</h3>
+            <div class="orders-tracking-container" id="ordersTrackingListDeck"></div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal Sheet -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -322,23 +373,52 @@
                     <h4>Your shopping bag is empty</h4>
                     <p>Pushed items will display in real time.</p>
                 </div>
-                <button class="submit-action-btn" style="max-width:220px; background-color:var(--accent);" onclick="closeAllModals()">Continue Shopping</button>
+                <button class="flow-btn primary-flow-btn" style="max-width:220px; background-color:var(--accent);" onclick="closeAllModals()">Continue Shopping</button>
             </div>
             
             <div class="checkout-form-container" id="checkoutForm">
                 <div class="input-group"><label>Full Name</label><input type="text" id="custName" placeholder="Recipient full name"></div>
-                <div class="input-group"><label>Phone Line</label><input type="tel" id="custPhone" placeholder="10-digit smartphone mobile line"></div>
+                <div class="input-group"><label>Phone Line</label><input type="tel" id="custPhone" placeholder="10-digit mobile number"></div>
                 <div class="input-group"><label>Pincode</label><input type="number" id="custPin" placeholder="Delivery zone zip code"></div>
-                <div class="input-group"><label>Street Address Details</label><textarea id="custAddress" rows="2" placeholder="House number, building parameters..."></textarea></div>
+                <div class="input-group"><label>Street Address Details</label><textarea id="custAddress" rows="2" placeholder="House number, landmark..."></textarea></div>
             </div>
 
+            <!-- Payment Selection Deck -->
+            <div class="payment-method-selector-box" id="checkoutPaymentSelectorDeck">
+                <!-- Promo Code Engine Block -->
+                <div class="coupon-apply-wrapper" id="couponModuleRow">
+                    <input type="text" class="coupon-input" id="cartPromoInput" placeholder="Enter coupon code...">
+                    <button class="coupon-btn" onclick="applyPromoDiscountCodeVal()">Apply</button>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-bottom:4px;">Choose Payment Method</p>
+                <div class="payment-option-card selected" id="optUPI" onclick="selectCheckoutPaymentRoute('upi')">
+                    <div>
+                        <span style="font-weight:700; font-size:0.9rem; display:block;">Pay Online via UPI Scanner</span>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Instant transfer from any UPI App</span>
+                    </div>
+                    <div class="discount-pill">Save 20%</div>
+                </div>
+                <div class="payment-option-card" id="optCOD" onclick="selectCheckoutPaymentRoute('cod')">
+                    <div>
+                        <span style="font-weight:700; font-size:0.9rem; display:block;">Cash on Delivery (COD)</span>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Pay cash when package arrives</span>
+                    </div>
+                    <span style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">Standard Price</span>
+                </div>
+            </div>
+
+            <!-- UPI Payment Interface Block -->
             <div class="native-upi-payment-block" id="upiPaymentInterfaceBlock">
                 <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; font-weight: 700; text-transform: uppercase;">Scan QR Code To Pay</p>
                 <img class="upi-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9103799987@fam%26pn=Lonetics%26cu=INR" id="merchantUpiScannerCodeFrame" alt="UPI Scanner Code">
-                <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 4px;">Or copy UPI ID to any payment app:</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 4px;">Or copy UPI ID:</p>
                 <div class="upi-id-copy-row">
                     <div class="upi-string-display" id="merchantUpiIdTextValueString">9103799987@fam</div>
                     <button class="upi-copy-action-btn" onclick="copyMerchantUpiStringToDeviceClipboard()">Copy</button>
+                </div>
+                <div class="input-group" style="margin-top:10px; margin-bottom:0;">
+                    <label>Paste Payment Transaction ID / UTR Code</label>
+                    <input type="text" id="custUpiTxnRef" placeholder="12-digit transaction index...">
                 </div>
             </div>
 
@@ -350,6 +430,7 @@
         </div>
     </div>
 
+    <!-- Security Gateway -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -391,6 +472,8 @@
         
         let cartMap = JSON.parse(localStorage.getItem('lonetics_cart')) || {};
         let currentCheckoutStep = "cart";
+        let activePaymentRouteSelection = "upi"; 
+        let activeAppliedCouponCodeString = ""; // Promo calculation tracking cache
         let isSignUpMode = false;
         
         let generatedProductFileCacheString = "";
@@ -585,6 +668,18 @@
             refreshCartDrawerUI();
         }
 
+        // Promo Discount Evaluator Function
+        function applyPromoDiscountCodeVal() {
+            const inputVal = document.getElementById('cartPromoInput').value.trim().toUpperCase();
+            if(inputVal === "LONE25") {
+                activeAppliedCouponCodeString = "LONE25";
+                emitSlidToastAlert('success', 'Coupon Applied!', '25% Flat Discount activated successfully.');
+            } else {
+                emitSlidToastAlert('error', 'Invalid Code', 'The entered code does not match any active campaigns.');
+            }
+            refreshCartDrawerUI();
+        }
+
         function refreshCartDrawerUI() {
             const list = document.getElementById('cartItemsList');
             const emptyState = document.getElementById('emptyCartWrapper');
@@ -598,10 +693,12 @@
                 list.style.display = 'none';
                 emptyState.style.display = 'flex';
                 footerActions.style.display = 'none';
+                document.getElementById('checkoutPaymentSelectorDeck').style.display = 'none';
                 document.getElementById('upiPaymentInterfaceBlock').style.display = 'none';
             } else {
                 if (currentCheckoutStep === "cart") {
                     list.style.display = 'flex';
+                    document.getElementById('checkoutPaymentSelectorDeck').style.display = 'none';
                     document.getElementById('upiPaymentInterfaceBlock').style.display = 'none';
                 }
                 emptyState.style.display = 'none';
@@ -633,7 +730,43 @@
             }
 
             document.getElementById('cartBadgeCount').textContent = itemsCount;
-            document.getElementById('cartTotal').textContent = `${currentActiveTargetCurrencySymbol}${(usdTotal * currentActiveTargetCurrencyRate).toFixed(2)}`;
+            
+            // Multilayer Multiplier Discount Engine Math Node Execution
+            let rawBaseValueAmount = usdTotal * currentActiveTargetCurrencyRate;
+            let finalCalculatedInvoiceValue = rawBaseValueAmount;
+            let wasDiscountApplied = false;
+
+            // Step A: Evaluate Coupon Rules (25% Reduction logic)
+            if(activeAppliedCouponCodeString === "LONE25") {
+                finalCalculatedInvoiceValue = finalCalculatedInvoiceValue * 0.75;
+                wasDiscountApplied = true;
+            }
+
+            // Step B: Evaluate Online Payments Rules (20% Reduction logic)
+            if (currentCheckoutStep === "payment" && activePaymentRouteSelection === "upi") {
+                finalCalculatedInvoiceValue = finalCalculatedInvoiceValue * 0.80;
+                wasDiscountApplied = true;
+            }
+
+            if (wasDiscountApplied) {
+                const totalStrikeOutString = (rawBaseValueAmount).toFixed(2);
+                document.getElementById('cartTotal').innerHTML = `<span class="discount-strike">${currentActiveTargetCurrencySymbol}${totalStrikeOutString}</span>${currentActiveTargetCurrencySymbol}${finalCalculatedInvoiceValue.toFixed(2)}`;
+            } else {
+                document.getElementById('cartTotal').textContent = `${currentActiveTargetCurrencySymbol}${finalCalculatedInvoiceValue.toFixed(2)}`;
+            }
+        }
+
+        function selectCheckoutPaymentRoute(route) {
+            activePaymentRouteSelection = route;
+            document.querySelectorAll('.payment-option-card').forEach(el => el.classList.remove('selected'));
+            if(route === 'upi') {
+                document.getElementById('optUPI').classList.add('selected');
+                document.getElementById('upiPaymentInterfaceBlock').style.display = 'flex';
+            } else {
+                document.getElementById('optCOD').classList.add('selected');
+                document.getElementById('upiPaymentInterfaceBlock').style.display = 'none';
+            }
+            refreshCartDrawerUI();
         }
 
         function handleCheckoutProgressionStep() {
@@ -643,8 +776,7 @@
                 
                 document.getElementById('checkoutForm').style.display = 'flex';
                 document.getElementById('cartItemsList').style.display = 'none';
-                document.getElementById('proceedBtn').style.display = 'none';
-                document.getElementById('placeOrderBtn').style.display = 'block';
+                document.getElementById('proceedBtn').textContent = "Continue to Payment Tab";
                 document.getElementById('cartModalTitle').textContent = "Delivery Setup";
                 currentCheckoutStep = "address";
             } else if (currentCheckoutStep === 'address') {
@@ -654,13 +786,17 @@
                 const addr = document.getElementById('custAddress').value.trim();
 
                 if(!name || !phone || !pin || !addr) {
-                    emitSlidToastAlert('error', 'Fields Required', 'Complete address routing details.');
+                    emitSlidToastAlert('error', 'Fields Required', 'Complete address details.');
                     return;
                 }
 
                 document.getElementById('checkoutForm').style.display = 'none';
-                document.getElementById('upiPaymentInterfaceBlock').style.display = 'flex';
-                document.getElementById('cartModalTitle').textContent = "Complete UPI Payment";
+                document.getElementById('checkoutPaymentSelectorDeck').style.display = 'flex';
+                selectCheckoutPaymentRoute('upi'); 
+                
+                document.getElementById('proceedBtn').style.display = 'none';
+                document.getElementById('placeOrderBtn').style.display = 'block';
+                document.getElementById('cartModalTitle').textContent = "Select Payment Option";
                 currentCheckoutStep = "payment";
             }
         }
@@ -672,40 +808,105 @@
             });
         }
 
+        function openUserOrdersTrackingPortal() {
+            if(!currentSessionUser) { openAuthenticationModalOverlaySheet(); return; }
+            closeAllModals();
+            
+            const listDeck = document.getElementById('ordersTrackingListDeck');
+            listDeck.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">Syncing tracked packages...</p>';
+            
+            db.collection("orders")
+              .where("userEmail", "==", currentSessionUser)
+              .orderBy("timestamp", "desc")
+              .get()
+              .then((snapshot) => {
+                  listDeck.innerHTML = "";
+                  if(snapshot.empty) {
+                      listDeck.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">No orders placed yet.</p>';
+                      return;
+                  }
+                  snapshot.forEach(doc => {
+                      const order = doc.data();
+                      const formattedDate = order.timestamp ? new Date(order.timestamp.seconds * 1000).toLocaleDateString() : "Just Now";
+                      
+                      let statusClass = "status-pending";
+                      if (order.status === "processing") statusClass = "status-processing";
+                      if (order.status === "shipped") statusClass = "status-shipped";
+
+                      listDeck.innerHTML += `
+                          <div class="order-tracking-card">
+                              <div class="order-track-header">
+                                  <span>📅 Date: ${formattedDate}</span>
+                                  <span class="status-badge ${statusClass}">${order.status}</span>
+                              </div>
+                              <div style="font-size:0.85rem; font-weight:700; color:var(--text-main); margin:4px 0;">
+                                  ${order.itemsSummary}
+                              </div>
+                              <div style="font-size:0.8rem; color:var(--accent-light); font-weight:bold;">
+                                  Total Paid: ${order.totalValue} (${order.paymentMethod.toUpperCase()})
+                              </div>
+                              ${order.txnId ? `<div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">UTR Ref: ${order.txnId}</div>` : ''}
+                          </div>
+                      `;
+                  });
+              }).catch(err => {
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Fetch Mismatch.</p>`;
+              });
+              
+            document.getElementById('ordersTrackingModal').classList.add('active');
+        }
+
         function executeFinalCheckoutPurchaseOrderRouting() {
-            if (currentCheckoutStep === 'address') {
-                handleCheckoutProgressionStep();
+            const txnIdInputVal = document.getElementById('custUpiTxnRef').value.trim();
+            if (activePaymentRouteSelection === "upi" && !txnIdInputVal) {
+                emitSlidToastAlert('error', 'UTR Required', 'Please enter your 12-digit UPI Transaction ID.');
                 return;
             }
 
             let checkoutItemsSummary = "";
             Object.keys(cartMap).forEach(key => {
-                checkoutItemsSummary += `${cartMap[key].name} (Qty: ${cartMap[key].quantity})\n`;
+                checkoutItemsSummary += `${cartMap[key].name} (x${cartMap[key].quantity}) `;
             });
 
             const currentCurrencyMappingValue = document.getElementById('cartTotal').textContent;
-            const buyerAddressSummaryText = `
-                Name: ${document.getElementById('custName').value}
-                Phone: ${document.getElementById('custPhone').value}
-                Address: ${document.getElementById('custAddress').value} - Pincode: ${document.getElementById('custPin').value}
-            `;
+            const computedStatusString = activePaymentRouteSelection === "upi" ? "pending verification" : "processing";
 
-            const emailPayload = {
-                email: currentSessionUser,
-                to_email: "junaidlone7217@gmail.com", 
-                otp_code: `PAID AMOUNT VIA UPI: ${currentCurrencyMappingValue}\n\nPURCHASE INVENTORY:\n${checkoutItemsSummary}\n\nDELIVERY METRICS:\n${buyerAddressSummaryText}`
+            const orderPayloadDataMatrix = {
+                userEmail: currentSessionUser,
+                itemsSummary: checkoutItemsSummary,
+                totalValue: currentCurrencyMappingValue,
+                paymentMethod: activePaymentRouteSelection,
+                couponUsed: activeAppliedCouponCodeString || "None",
+                txnId: activePaymentRouteSelection === "upi" ? txnIdInputVal : "",
+                status: computedStatusString,
+                buyerName: document.getElementById('custName').value,
+                buyerPhone: document.getElementById('custPhone').value,
+                buyerAddress: document.getElementById('custAddress').value,
+                buyerPin: document.getElementById('custPin').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload).then(() => {
-                emitSlidToastAlert('success', 'Order Submitted', 'Verification details sent to vendor logs.');
-                cartMap = {}; 
-                currentCheckoutStep = "cart";
-                localStorage.removeItem('lonetics_cart'); 
-                document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
-                document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
-                refreshCartDrawerUI(); closeAllModals();
+            db.collection("orders").add(orderPayloadDataMatrix).then(() => {
+                const emailPayload = {
+                    email: currentSessionUser,
+                    to_email: "junaidlone7217@gmail.com", 
+                    otp_code: `INVOICE: ${currentCurrencyMappingValue}\nCOUPON: ${activeAppliedCouponCodeString || 'NONE'}\nMETHOD: ${activePaymentRouteSelection.toUpperCase()}\nREF UTR: ${txnIdInputVal || 'COD'}\n\nITEMS:\n${checkoutItemsSummary}\n\nDELIVERY:\n${orderPayloadDataMatrix.buyerName}\n${orderPayloadDataMatrix.buyerPhone}\n${orderPayloadDataMatrix.buyerAddress}`
+                };
+
+                emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload).then(() => {
+                    emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Track it under "My Orders"');
+                    cartMap = {}; 
+                    currentCheckoutStep = "cart";
+                    activeAppliedCouponCodeString = "";
+                    localStorage.removeItem('lonetics_cart'); 
+                    document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
+                    document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
+                    document.getElementById('custUpiTxnRef').value = "";
+                    document.getElementById('cartPromoInput').value = "";
+                    refreshCartDrawerUI(); closeAllModals();
+                });
             }).catch(() => {
-                emitSlidToastAlert('error', 'Routing Dropped', 'Invoice logging failed.');
+                emitSlidToastAlert('error', 'Storage Failure', 'Cloud synchronization dropped.');
             });
         }
 
@@ -714,8 +915,10 @@
             closeAllModals(); 
             document.getElementById('cartModal').classList.add('active');
             document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('checkoutPaymentSelectorDeck').style.display = 'none';
             document.getElementById('upiPaymentInterfaceBlock').style.display = 'none';
             document.getElementById('proceedBtn').style.display = 'block';
+            document.getElementById('proceedBtn').textContent = "Proceed to Checkout";
             document.getElementById('placeOrderBtn').style.display = 'none';
             document.getElementById('cartModalTitle').textContent = "Your Cart";
             currentCheckoutStep = "cart";
