@@ -8,6 +8,12 @@
     <!-- Link the PWA config manifest file -->
     <link rel="manifest" href="manifest.json">
     
+    <!-- Direct Web App Meta Tags to Force App Mode -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lonetics">
+    
     <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -556,7 +562,6 @@
             e.preventDefault(); 
             deferredAppInstallPrompt = e; 
             
-            // Check if app drawer link is selected to map overlay accurately
             const modal = document.getElementById('appInstallModal');
             if (modal && !modal.classList.contains('active')) {
                 setTimeout(() => { openSmartApplicationInstallationPromptSheet(); }, 2000);
