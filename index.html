@@ -327,7 +327,7 @@
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Install Lonetics App</h3>
             <div class="app-install-sheet-container">
-                <div class="app-install-icon-frame" style="display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #a855f7, #3b82f6, #ec4899); font-size:2.5rem;">🛍️</div>
+                <div class="app-install-icon-frame" style="display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #060b13, #38bdf8); font-size:2.2rem; font-weight:900; color:#ffffff; border: 2px solid #334155;">L</div>
                 <div>
                     <h4 style="font-size:1rem; font-weight:bold;">Lonetics Mobile Store</h4>
                     <p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">Enjoy 25% off checkout codes, direct tracking, and lightning fast access.</p>
@@ -555,9 +555,12 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault(); 
             deferredAppInstallPrompt = e; 
-            setTimeout(() => {
-                openSmartApplicationInstallationPromptSheet();
-            }, 3000);
+            
+            // Check if app drawer link is selected to map overlay accurately
+            const modal = document.getElementById('appInstallModal');
+            if (modal && !modal.classList.contains('active')) {
+                setTimeout(() => { openSmartApplicationInstallationPromptSheet(); }, 2000);
+            }
         });
 
         function openSmartApplicationInstallationPromptSheet() {
@@ -578,13 +581,13 @@
                 deferredAppInstallPrompt.prompt(); 
                 deferredAppInstallPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        emitSlidToastAlert('success', 'Installing...', 'Adding Lonetics to your home app drawer!');
+                        emitSlidToastAlert('success', 'Installing App...', 'Adding Lonetics Standalone App drawer icon!');
                     }
                     deferredAppInstallPrompt = null;
                     closeAllModals();
                 });
             } else {
-                emitSlidToastAlert('success', 'Support Active', 'Tap the 3 dots in Chrome and click "Install app" manually.');
+                emitSlidToastAlert('success', 'Bypassing Core...', 'Tap Chrome 3-dots top right -> Select premium "Install app" option.');
             }
         }
 
