@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
     
-    <!-- 1. Include official Firebase Version 9 Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    <!-- 2. Include official EmailJS SDK library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script type="text/javascript">
@@ -95,7 +93,6 @@
             border-radius: 10px; padding: 12px 16px; color: var(--text-main); font-size: 0.9rem; outline: none;
         }
 
-        /* Urgent Promo Banner */
         .promo-ticker-banner {
             background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
             background-size: 200% auto;
@@ -195,7 +192,6 @@
 
         .checkout-form-container { display: none; flex-direction: column; gap: 4px; width: 100%; }
 
-        /* Promo Coupon Box */
         .coupon-apply-wrapper { display: flex; gap: 8px; width: 100%; background: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 12px; }
         .coupon-input { flex-grow: 1; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; color: white; outline: none; font-size: 0.85rem; text-transform: uppercase; }
         .coupon-btn { background: var(--accent); color: white; border: none; padding: 0 16px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
@@ -211,13 +207,18 @@
         .upi-string-display { flex-grow: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; color: var(--accent-light); }
         .upi-copy-action-btn { background: var(--accent); color: white; border: none; padding: 10px 16px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 
-        .orders-tracking-container { display: flex; flex-direction: column; gap: 12px; width: 100%; padding-bottom: 20px; }
-        .order-tracking-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-        .order-track-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
-        .status-badge { font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; }
-        .status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-        .status-processing { background: rgba(37, 99, 235, 0.15); color: #2563eb; }
-        .status-shipped { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        /* Mature App Order Tracking System UI Dashboard elements */
+        .orders-tracking-container { display: flex; flex-direction: column; gap: 14px; width: 100%; padding-bottom: 20px; }
+        .order-tracking-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .order-track-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        
+        /* Specialized Trust Status Badge Architectures */
+        .status-badge { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
+        .status-verification { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-confirmed { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-processing { background: rgba(37, 99, 235, 0.15); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3); }
+        
+        .order-delivery-eta-banner { background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-light); padding: 8px 12px; font-size: 0.78rem; font-weight: 600; color: #bae6fd; border-radius: 0 6px 6px 0; margin-top: 2px; }
 
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
         .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); }
@@ -271,7 +272,6 @@
         <input type="text" class="search-box" id="catalogSearch" placeholder="Search brands, premium tech and categories..." oninput="filterCatalogSearch()">
     </div>
 
-    <!-- Promotional Ticker Banner Insertion -->
     <div class="promo-ticker-banner">
         🔥 LIMITED TIME DEAL: Use code LONE25 for 25% OFF your entire cart! Offer ends soon!
     </div>
@@ -308,7 +308,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel -->
     <div class="modal-overlay" id="adminModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -328,7 +327,6 @@
         </div>
     </div>
 
-    <!-- Profile Management -->
     <div class="modal-overlay" id="profileModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -350,7 +348,6 @@
         </div>
     </div>
 
-    <!-- Tracking Modal -->
     <div class="modal-overlay" id="ordersTrackingModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -359,7 +356,6 @@
         </div>
     </div>
 
-    <!-- Shopping Cart Modal Sheet -->
     <div class="modal-overlay" id="cartModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -383,9 +379,7 @@
                 <div class="input-group"><label>Street Address Details</label><textarea id="custAddress" rows="2" placeholder="House number, landmark..."></textarea></div>
             </div>
 
-            <!-- Payment Selection Deck -->
             <div class="payment-method-selector-box" id="checkoutPaymentSelectorDeck">
-                <!-- Promo Code Engine Block -->
                 <div class="coupon-apply-wrapper" id="couponModuleRow">
                     <input type="text" class="coupon-input" id="cartPromoInput" placeholder="Enter coupon code...">
                     <button class="coupon-btn" onclick="applyPromoDiscountCodeVal()">Apply</button>
@@ -407,7 +401,6 @@
                 </div>
             </div>
 
-            <!-- UPI Payment Interface Block -->
             <div class="native-upi-payment-block" id="upiPaymentInterfaceBlock">
                 <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; font-weight: 700; text-transform: uppercase;">Scan QR Code To Pay</p>
                 <img class="upi-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9103799987@fam%26pn=Lonetics%26cu=INR" id="merchantUpiScannerCodeFrame" alt="UPI Scanner Code">
@@ -430,7 +423,6 @@
         </div>
     </div>
 
-    <!-- Security Gateway -->
     <div class="modal-overlay" id="authModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -473,7 +465,7 @@
         let cartMap = JSON.parse(localStorage.getItem('lonetics_cart')) || {};
         let currentCheckoutStep = "cart";
         let activePaymentRouteSelection = "upi"; 
-        let activeAppliedCouponCodeString = ""; // Promo calculation tracking cache
+        let activeAppliedCouponCodeString = ""; 
         let isSignUpMode = false;
         
         let generatedProductFileCacheString = "";
@@ -668,14 +660,13 @@
             refreshCartDrawerUI();
         }
 
-        // Promo Discount Evaluator Function
         function applyPromoDiscountCodeVal() {
             const inputVal = document.getElementById('cartPromoInput').value.trim().toUpperCase();
             if(inputVal === "LONE25") {
                 activeAppliedCouponCodeString = "LONE25";
-                emitSlidToastAlert('success', 'Coupon Applied!', '25% Flat Discount activated successfully.');
+                emitSlidToastAlert('success', 'Coupon Applied!', '25% Flat Discount activated.');
             } else {
-                emitSlidToastAlert('error', 'Invalid Code', 'The entered code does not match any active campaigns.');
+                emitSlidToastAlert('error', 'Invalid Code', 'Campaign code unmatched.');
             }
             refreshCartDrawerUI();
         }
@@ -731,18 +722,15 @@
 
             document.getElementById('cartBadgeCount').textContent = itemsCount;
             
-            // Multilayer Multiplier Discount Engine Math Node Execution
             let rawBaseValueAmount = usdTotal * currentActiveTargetCurrencyRate;
             let finalCalculatedInvoiceValue = rawBaseValueAmount;
             let wasDiscountApplied = false;
 
-            // Step A: Evaluate Coupon Rules (25% Reduction logic)
             if(activeAppliedCouponCodeString === "LONE25") {
                 finalCalculatedInvoiceValue = finalCalculatedInvoiceValue * 0.75;
                 wasDiscountApplied = true;
             }
 
-            // Step B: Evaluate Online Payments Rules (20% Reduction logic)
             if (currentCheckoutStep === "payment" && activePaymentRouteSelection === "upi") {
                 finalCalculatedInvoiceValue = finalCalculatedInvoiceValue * 0.80;
                 wasDiscountApplied = true;
@@ -808,6 +796,7 @@
             });
         }
 
+        // Bypassed query index sorting error by executing sorting filtering directly inside locally compiled arrays
         function openUserOrdersTrackingPortal() {
             if(!currentSessionUser) { openAuthenticationModalOverlaySheet(); return; }
             closeAllModals();
@@ -817,7 +806,6 @@
             
             db.collection("orders")
               .where("userEmail", "==", currentSessionUser)
-              .orderBy("timestamp", "desc")
               .get()
               .then((snapshot) => {
                   listDeck.innerHTML = "";
@@ -825,32 +813,62 @@
                       listDeck.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">No orders placed yet.</p>';
                       return;
                   }
+                  
+                  // Sort local snapshot variables manually to bypass Index Required bugs
+                  let ordersArray = [];
                   snapshot.forEach(doc => {
-                      const order = doc.data();
+                      let data = doc.data();
+                      data.id = doc.id;
+                      ordersArray.push(data);
+                  });
+                  
+                  ordersArray.sort((a, b) => {
+                      let tA = a.timestamp ? a.timestamp.seconds : 0;
+                      let tB = b.timestamp ? b.timestamp.seconds : 0;
+                      return tB - tA;
+                  });
+
+                  ordersArray.forEach(order => {
                       const formattedDate = order.timestamp ? new Date(order.timestamp.seconds * 1000).toLocaleDateString() : "Just Now";
                       
-                      let statusClass = "status-pending";
-                      if (order.status === "processing") statusClass = "status-processing";
-                      if (order.status === "shipped") statusClass = "status-shipped";
+                      let displayStatusText = "Payment Verification in Progress";
+                      let badgeClass = "status-verification";
+                      let etaBannerHTML = "";
+
+                      if (order.paymentMethod === "cod" && order.status === "processing") {
+                          displayStatusText = "COD Order Confirmed";
+                          badgeClass = "status-confirmed";
+                          etaBannerHTML = `<div class="order-delivery-eta-banner">📦 Product arriving at your door within 10 Days</div>`;
+                      } else if (order.status === "confirmed") {
+                          displayStatusText = "Payment Confirmed";
+                          badgeClass = "status-confirmed";
+                          etaBannerHTML = `<div class="order-delivery-eta-banner">✅ Verified by Merchant - Product arriving in 10 Days</div>`;
+                      } else if (order.status === "shipped") {
+                          displayStatusText = "Package Shipped Out";
+                          badgeClass = "status-shipped";
+                          etaBannerHTML = `<div class="order-delivery-eta-banner">🚀 Out for delivery - Arriving shortly</div>`;
+                      }
 
                       listDeck.innerHTML += `
                           <div class="order-tracking-card">
                               <div class="order-track-header">
-                                  <span>📅 Date: ${formattedDate}</span>
-                                  <span class="status-badge ${statusClass}">${order.status}</span>
+                                  <span>📅 Ordered: ${formattedDate}</span>
+                                  <span class="status-badge ${badgeClass}">${displayStatusText}</span>
                               </div>
-                              <div style="font-size:0.85rem; font-weight:700; color:var(--text-main); margin:4px 0;">
+                              <div style="font-size:0.85rem; font-weight:700; color:var(--text-main); margin:2px 0;">
                                   ${order.itemsSummary}
                               </div>
                               <div style="font-size:0.8rem; color:var(--accent-light); font-weight:bold;">
-                                  Total Paid: ${order.totalValue} (${order.paymentMethod.toUpperCase()})
+                                  Total Billing: ${order.totalValue} (${order.paymentMethod.toUpperCase()})
                               </div>
-                              ${order.txnId ? `<div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">UTR Ref: ${order.txnId}</div>` : ''}
+                              ${etaBannerHTML}
+                              ${order.txnId ? `<div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">UTR Ref: ${order.txnId}</div>` : ''}
                           </div>
                       `;
                   });
               }).catch(err => {
-                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Fetch Mismatch.</p>`;
+                  console.error(err);
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>`;
               });
               
             document.getElementById('ordersTrackingModal').classList.add('active');
@@ -869,7 +887,7 @@
             });
 
             const currentCurrencyMappingValue = document.getElementById('cartTotal').textContent;
-            const computedStatusString = activePaymentRouteSelection === "upi" ? "pending verification" : "processing";
+            const computedStatusString = "processing"; 
 
             const orderPayloadDataMatrix = {
                 userEmail: currentSessionUser,
@@ -878,7 +896,7 @@
                 paymentMethod: activePaymentRouteSelection,
                 couponUsed: activeAppliedCouponCodeString || "None",
                 txnId: activePaymentRouteSelection === "upi" ? txnIdInputVal : "",
-                status: computedStatusString,
+                status: computedStatusString, // Initial baseline state
                 buyerName: document.getElementById('custName').value,
                 buyerPhone: document.getElementById('custPhone').value,
                 buyerAddress: document.getElementById('custAddress').value,
@@ -894,7 +912,7 @@
                 };
 
                 emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload).then(() => {
-                    emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Track it under "My Orders"');
+                    emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Open sidebar to track status.');
                     cartMap = {}; 
                     currentCheckoutStep = "cart";
                     activeAppliedCouponCodeString = "";
