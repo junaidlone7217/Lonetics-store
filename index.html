@@ -645,7 +645,10 @@
         }
 
         function buildMainCatalogUI(items) {
+            const productGrid = document.getElementById('productGrid');
+            if(!productGrid) return;
             productGrid.innerHTML = '';
+            
             if (items.length === 0) {
                 productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px;">No products listed yet.</p>';
                 return;
@@ -991,7 +994,7 @@
                   });
               }).catch(err => {
                   console.error(err);
-                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>';
+                  listDeck.innerHTML = `<p style="text-align:center; padding:20px; color:#ef4444;">Tracking Engine Sync crashed.</p>`;
               });
               
             document.getElementById('ordersTrackingModal').classList.add('active');
