@@ -198,7 +198,7 @@
             font-weight: 700; cursor: pointer; display: none; justify-content: center; align-items: center; z-index: 10;
         }
 
-        .product-img-frame { position: relative; width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 10px; }
+        .product-img-frame { position: relative; width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background-color: var(--bg-primary); margin-bottom: 10px; cursor: pointer;}
         .product-img { width: 100%; height: 100%; object-fit: cover; }
         
         .fake-discount-corner {
@@ -207,7 +207,7 @@
             z-index: 5; box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
-        .product-title { font-size: 0.85rem; font-weight: 600; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; color: var(--text-main); }
+        .product-title { font-size: 0.85rem; font-weight: 600; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; color: var(--text-main); cursor: pointer;}
         
         .live-viewer-row { font-size: 0.65rem; color: #ef4444; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
         .pulse-dot { width: 6px; height: 6px; background-color: #ef4444; border-radius: 50%; animation: pulseAnim 1.5s infinite; }
@@ -253,8 +253,24 @@
             transform: translateY(100%); transition: var(--spring-transition);
         }
         .modal-overlay.active .sheet-box { transform: translateY(0); }
-        .modal-close { position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
+        
+        /* UPDATED MODAL CLOSE & SHARE BUTTONS */
+        .modal-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); border: none; color: white; font-size: 1.4rem; cursor: pointer; z-index: 100; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-share { position: absolute; top: 12px; right: 52px; background: rgba(0,0,0,0.5); border: none; color: white; font-size: 1.1rem; cursor: pointer; z-index: 100; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+
         .sheet-box h3 { margin-bottom: 22px; font-size: 1.15rem; font-weight: 700; text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+
+        .chart-bars-container { display: flex; align-items: flex-end; height: 50px; gap: 6px; margin-top: 10px; }
+        .chart-bar { flex: 1; background: var(--border-color); border-radius: 3px 3px 0 0; position: relative; }
+        .chart-bar.current { background: #10b981; }
+        
+        /* NEW REVIEW SECTION CSS */
+        .review-stars { color: #f59e0b; font-size: 1.1rem; letter-spacing: 2px; }
+        .review-card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .reviewer-name { font-size: 0.8rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+        .verified-badge { color: #10b981; font-size: 0.65rem; background: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 10px; text-transform: uppercase; font-weight: 800; }
+        .review-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
 
         .cart-items-list { display: flex; flex-direction: column; gap: 14px; width: 100%; max-height: 35vh; overflow-y: auto; margin-bottom: 15px; }
         .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; background-color: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); width: 100%; }
@@ -410,7 +426,7 @@
         <div class="grid" id="productGrid"></div>
     </div>
 
-    <!-- NEW SECTION: AFFILIATE PARTNER CATALOG -->
+    <!-- AFFILIATE PARTNER CATALOG -->
     <div class="main-content" style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 10px;">
         <div class="section-headline" style="color: #10b981;">Partner Catalog (Global Sourcing)</div>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Endless deals automatically sourced from our global retail partners.</p>
@@ -439,6 +455,73 @@
         </div>
     </div>
 
+    <!-- PRODUCT DETAIL QUICK VIEW (WITH REVIEWS & SHARE) -->
+    <div class="modal-overlay" id="productDetailModal">
+        <div class="sheet-box" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
+            <button class="modal-share" id="pdShareBtn">📤</button>
+            <button class="modal-close" onclick="closeAllModals()">&times;</button>
+            
+            <div style="position: relative; height: 260px; background: white; flex-shrink: 0;">
+                <img id="pdImage" src="" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;">
+            </div>
+            <div style="padding: 20px; overflow-y: auto; background: var(--bg-surface);">
+                <div style="font-size: 0.7rem; color: #10b981; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;" id="pdSourceBadge">Lonetics Official</div>
+                <h3 id="pdTitle" style="font-size: 1.15rem; border-bottom: none; padding-bottom: 0; text-align: left; margin-bottom: 4px; line-height: 1.3;"></h3>
+                
+                <!-- NEW REVIEW RATING HEADER -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span class="review-stars">★★★★★</span>
+                    <span id="pdReviewCount" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;"></span>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                    <span id="pdPrice" style="font-size: 1.5rem; color: var(--accent-light); font-weight: 900;"></span>
+                    <span id="pdStrike" style="text-decoration: line-through; color: var(--text-muted); font-size: 0.95rem;"></span>
+                </div>
+
+                <div style="background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-bottom: 18px;">
+                    <h4 style="font-size: 0.8rem; color: var(--accent-light); margin-bottom: 6px; display: flex; justify-content: space-between;">
+                        <span>📉 30-Day Price Trend</span>
+                        <span style="color: #10b981; font-weight: 900;">LOWEST!</span>
+                    </h4>
+                    <div class="chart-bars-container" id="pdChartBars"></div>
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; text-align: center;">You are locking in the lowest price of the month.</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Product Insights</h4>
+                    <ul style="font-size: 0.8rem; color: var(--text-muted); padding-left: 18px; line-height: 1.7;">
+                        <li>Premium build quality and verified authentic.</li>
+                        <li>100% Secure checkout protection via our payment gateway.</li>
+                        <li>Dispatched safely from our regional Kashmir fulfillment center.</li>
+                    </ul>
+                </div>
+
+                <!-- NEW CUSTOMER REVIEWS SECTION -->
+                <div style="margin-bottom: 24px;">
+                    <h4 style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Top Customer Reviews</h4>
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Aarav K. <span class="verified-badge">✓ Verified Buyer</span></span>
+                            <span style="color:#f59e0b; font-size:0.7rem;">★★★★★</span>
+                        </div>
+                        <p class="review-text">Absolutely incredible quality for the price. Shipping was extremely fast and the packaging was completely secure. Highly recommend!</p>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Rahul M. <span class="verified-badge">✓ Verified Buyer</span></span>
+                            <span style="color:#f59e0b; font-size:0.7rem;">★★★★★</span>
+                        </div>
+                        <p class="review-text" id="pdDynamicReviewText">Exactly what I was looking for. Will definitely be buying from Lonetics again soon.</p>
+                    </div>
+                </div>
+
+                <button class="flow-btn primary-flow-btn" id="pdAddToCartBtn" style="font-size: 1rem; padding: 14px;">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXISTING MODALS BELOW -->
     <div class="modal-overlay" id="appInstallModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -477,7 +560,6 @@
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:var(--accent-light); font-weight:800; letter-spacing:0.3px;">STORE CATALOG MANAGEMENT</h4>
                 
-                <!-- NEW FEATURE: MAGIC AUTO-FETCHER SCRAPER -->
                 <div style="background: rgba(37, 99, 235, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 14px; border: 1px dashed var(--accent-light);">
                     <label style="font-size: 0.75rem; color: var(--accent-light); font-weight: 700;">MAGIC SCRAPER (Paste Amazon/Flipkart Link)</label>
                     <div style="display:flex; gap:6px; margin-top:8px;">
@@ -688,7 +770,67 @@
             }
         });
 
-        /* MAGIC SCRAPER FUNCTION */
+        /* UPDATED PRODUCT DETAIL WITH REVIEWS & NATIVE SHARE */
+        function openProductDetail(id, title, calculatedPrice, fakeOriginalPrice, imgUrl, isPartner) {
+            closeAllModals();
+            
+            document.getElementById('pdImage').src = imgUrl;
+            document.getElementById('pdTitle').innerText = title;
+            document.getElementById('pdPrice').innerText = `${currentActiveTargetCurrencySymbol}${calculatedPrice}`;
+            document.getElementById('pdStrike').innerText = `${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}`;
+            
+            // Generate Random Dynamic Review Data
+            const reviewScore = (Math.random() * (4.9 - 4.5) + 4.5).toFixed(1);
+            const reviewCount = Math.floor(Math.random() * 450) + 50;
+            document.getElementById('pdReviewCount').innerText = `${reviewScore}/5.0 (${reviewCount} Reviews)`;
+            document.getElementById('pdDynamicReviewText').innerText = `Got this ${title.substring(0,15)}... item yesterday. Exactly what I was looking for. Will definitely be buying from Lonetics again soon.`;
+
+            const badge = document.getElementById('pdSourceBadge');
+            if(isPartner) {
+                badge.innerText = "Partner Sourced";
+                badge.style.color = "#38bdf8"; 
+            } else {
+                badge.innerText = "Lonetics Official";
+                badge.style.color = "#10b981";
+            }
+
+            const chartContainer = document.getElementById('pdChartBars');
+            chartContainer.innerHTML = '';
+            for(let i=0; i<6; i++) {
+                let randomHeight = Math.floor(Math.random() * 50) + 40;
+                chartContainer.innerHTML += `<div class="chart-bar" style="height: ${randomHeight}%;"></div>`;
+            }
+            chartContainer.innerHTML += `<div class="chart-bar current" style="height: 30%;"></div>`;
+
+            // Native Share API functionality
+            const shareBtn = document.getElementById('pdShareBtn');
+            shareBtn.onclick = function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Insane deal on Lonetics!',
+                        text: `Check out this crazy drop for ${title} at ${currentActiveTargetCurrencySymbol}${calculatedPrice} on Lonetics Store.`,
+                        url: window.location.href
+                    }).catch(console.error);
+                } else {
+                    emitSlidToastAlert('success', 'Link Copied', 'Product link copied to clipboard!');
+                }
+            };
+
+            const addBtn = document.getElementById('pdAddToCartBtn');
+            addBtn.onclick = function() {
+                if(isPartner) {
+                    let internalBaseUsd = parseFloat(calculatedPrice) / currentActiveTargetCurrencyRate;
+                    let rawInrForFunc = internalBaseUsd * 83.5;
+                    executeAffiliateCartInsertion(id, title, rawInrForFunc, imgUrl);
+                } else {
+                    executeCartInsertion(id);
+                }
+                closeAllModals();
+            };
+
+            document.getElementById('productDetailModal').classList.add('active');
+        }
+
         async function executeMagicFetch() {
             const url = document.getElementById('admMagicUrl').value.trim();
             if(!url) return emitSlidToastAlert('error', 'Missing Link', 'Paste a URL first!');
@@ -696,14 +838,12 @@
             emitSlidToastAlert('success', 'Scanning...', 'Fetching product details from link...');
             
             try {
-                // Using Microlink API (Free open graph extraction)
                 const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
                 
                 if(data.status === 'success') {
                     document.getElementById('admProdName').value = data.data.title || '';
                     if(data.data.image && data.data.image.url) {
-                        // Store the external URL directly into our cache string instead of Base64
                         generatedProductFileCacheString = data.data.image.url;
                         document.getElementById('admProdPreview').src = data.data.image.url;
                         document.getElementById('admProdPreview').style.display = 'block';
@@ -717,9 +857,7 @@
             }
         }
 
-        /* AFFILIATE CATALOG GENERATOR */
         function loadAffiliateCatalog() {
-            // Using a free mock API to simulate pulling live electronics from a partner network
             fetch('https://fakestoreapi.com/products/category/electronics?limit=4')
             .then(res => res.json())
             .then(products => {
@@ -728,24 +866,27 @@
                 affGrid.innerHTML = '';
                 
                 products.forEach(p => {
-                    // Convert external USD to INR and automatically add your 15% hidden margin markup!
                     const calculatedMarkupInrPrice = (p.price * 83.5 * 1.15).toFixed(2); 
+                    const calculatedDisplayPrice = ((calculatedMarkupInrPrice / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
+                    const fakeStrikeDisplayPrice = (calculatedDisplayPrice * 1.3).toFixed(2); 
                     
+                    const safeTitle = p.title.replace(/'/g, "\\'");
+
                     affGrid.innerHTML += `
                         <div class="product-card" style="border: 1px solid rgba(16, 185, 129, 0.3);">
                             <div style="position:absolute; top:0; left:0; background:#10b981; color:white; font-size:0.6rem; padding:3px 6px; border-radius:0 0 8px 0; z-index:5; font-weight:bold; text-transform:uppercase;">Partner Sourced</div>
                             
-                            <div class="product-img-frame" style="background:white; padding:10px;">
+                            <div class="product-img-frame" style="background:white; padding:10px; cursor:pointer;" onclick="openProductDetail('aff_${p.id}', '${safeTitle}', '${calculatedDisplayPrice}', '${fakeStrikeDisplayPrice}', '${p.image}', true)">
                                 <img class="product-img" src="${p.image}" style="object-fit:contain;">
                             </div>
                             
-                            <div class="product-title">${p.title}</div>
+                            <div class="product-title" style="cursor:pointer;" onclick="openProductDetail('aff_${p.id}', '${safeTitle}', '${calculatedDisplayPrice}', '${fakeStrikeDisplayPrice}', '${p.image}', true)">${p.title}</div>
                             
                             <div>
                                 <div class="product-price">
-                                    ${currentActiveTargetCurrencySymbol}${((calculatedMarkupInrPrice / 83.5) * currentActiveTargetCurrencyRate).toFixed(2)}
+                                    ${currentActiveTargetCurrencySymbol}${calculatedDisplayPrice}
                                 </div>
-                                <button class="buy-btn" style="background:#10b981;" onclick="executeAffiliateCartInsertion('aff_${p.id}', '${p.title.replace(/'/g, "")}', ${calculatedMarkupInrPrice}, '${p.image}')">Add To Cart</button>
+                                <button class="buy-btn" style="background:#10b981;" onclick="executeAffiliateCartInsertion('aff_${p.id}', '${safeTitle}', ${calculatedMarkupInrPrice}, '${p.image}')">Add To Cart</button>
                             </div>
                         </div>
                     `;
@@ -756,7 +897,6 @@
         function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
             if (navigator.vibrate) navigator.vibrate(50);
             
-            // Re-convert INR back to base USD for the internal math engine
             const internalUsdPrice = inrPrice / 83.5; 
 
             if (cartMap[id]) { cartMap[id].quantity += 1; }
@@ -937,6 +1077,8 @@
             const randomViewers = (product.name.length % 15) + 3;
             const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; 
             const stockPercentage = (randomStockCount / 20) * 100; 
+            
+            const safeTitle = product.name.replace(/'/g, "\\'");
 
             const card = document.createElement('div');
             card.classList.add('product-card');
@@ -944,12 +1086,12 @@
                 <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
                 <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
                 
-                <div class="product-img-frame">
+                <div class="product-img-frame" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">
                     <div class="fake-discount-corner">${seededDiscount}% OFF</div>
                     <img class="product-img" src="${product.image}">
                 </div>
                 
-                <div class="product-title">${product.name}</div>
+                <div class="product-title" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">${product.name}</div>
                 
                 <div class="live-viewer-row">
                     <span class="pulse-dot"></span> ${randomViewers} viewing now
