@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="ejfDMQ7ii4dAAzsfTQK0xiuBK_Rw31lsZTFZctqxIOs" />
+    <meta name="google-site-verification" content="YOUR_UNIQUE_CODE_HERE" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lonetics - Premium Electronics & Essentials</title>
@@ -323,7 +323,6 @@
 
         .app-install-sheet-container { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 5px; gap: 16px; }
         .app-install-icon-frame { width: 90px; height: 90px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .ios-guidance-instruction-box { display: none; width: 100%; background: var(--bg-primary); border: 1px dashed var(--border-color); border-radius: 10px; padding: 14px; text-align: left; flex-direction: column; gap: 8px; }
 
         .cart-total-section { border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; width: 100%; }
         .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); }
@@ -456,7 +455,7 @@
         </div>
     </div>
 
-    <!-- NEW MODAL: STORE POLICIES GOOGLE MERCHANT READY -->
+    <!-- STORE POLICIES GOOGLE MERCHANT READY -->
     <div class="modal-overlay" id="policiesModal">
         <div class="sheet-box" style="max-height: 80vh; overflow-y: auto;">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
@@ -543,12 +542,15 @@
         </div>
     </div>
 
+    <!-- APP INSTALL MODAL (WITH YOUR REAL LOGO) -->
     <div class="modal-overlay" id="appInstallModal">
         <div class="sheet-box">
             <button class="modal-close" onclick="closeAllModals()">&times;</button>
             <h3>Install Lonetics App</h3>
             <div class="app-install-sheet-container">
-                <div class="app-install-icon-frame" style="display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #060b13, #38bdf8); font-size:2.2rem; font-weight:900; color:#ffffff; border: 2px solid #334155;">L</div>
+                <div class="app-install-icon-frame" style="display:flex; align-items:center; justify-content:center; border: 2px solid #334155;">
+                    <img src="./15433.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
                 <div>
                     <h4 style="font-size:1rem; font-weight:bold;">Lonetics Mobile Store</h4>
                     <p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">Enjoy 25% off checkout codes, direct tracking, and lightning fast access.</p>
@@ -565,6 +567,7 @@
             
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom:14px; margin-bottom:14px;">
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:#10b981; font-weight:800; letter-spacing:0.3px;">CUSTOMER ORDERS TRACKING DESK</h4>
+                <button class="submit-action-btn" style="background-color: #2563eb; margin-bottom: 12px;" onclick="exportCustomerOrdersForFulfillment()">📦 Export Orders for Supplier (CSV)</button>
                 <div class="orders-tracking-container" id="admOrdersManagerDeckList" style="max-height: 25vh; overflow-y: auto;">
                     <p style="text-align:center; padding:10px; font-size:0.8rem; color:var(--text-muted);">Syncing incoming requests...</p>
                 </div>
@@ -584,7 +587,9 @@
                 <div class="input-group"><label>Product Title</label><input type="text" id="admProdName" placeholder="Enter clean descriptive name"></div>
                 <div class="input-group"><label>Product Base Price (INR)</label><input type="number" id="admProdPrice" placeholder="e.g. 1499"></div>
                 <div class="input-group"><label>Product Photo File</label><input type="file" id="admProdImageFile" accept="image/*" onchange="processFileToDataString(this, 'product')"><img id="admProdPreview" class="admin-image-preview"></div>
+                
                 <button class="submit-action-btn" onclick="saveProductToCloud()">Upload Live Item</button>
+                <button class="submit-action-btn" style="background-color: #f59e0b; margin-top: 15px;" onclick="exportCatalogForGoogleMerchant()">📥 Download Google Merchant Feed</button>
             </div>
             <div>
                 <h4 style="font-size:0.8rem; margin-bottom:10px; color:var(--accent-light); font-weight:800; letter-spacing:0.3px;">VIDEO SHOWCASE FEED MANAGER</h4>
@@ -753,7 +758,6 @@
             });
         }
 
-        // AUTO POLICIES MODAL ACTION TRIGGER
         function openPoliciesModal() { 
             closeAllModals(); 
             document.getElementById('policiesModal').classList.add('active'); 
@@ -978,10 +982,35 @@
             });
         }
 
+        // UPGRADED EMAIL TRACKING STATUS UPDATE
         function updateOrderStatusFromClientApp(orderId, newStatus) {
-            db.collection("orders").doc(orderId).update({ status: newStatus }).then(() => {
+            let updatePayload = { status: newStatus };
+            let trackingLink = "";
+
+            if (newStatus === 'shipped') {
+                trackingLink = prompt("Enter the Tracking Link for this package (or leave blank if none):");
+                if (trackingLink) { updatePayload.trackingLink = trackingLink; }
+            }
+
+            db.collection("orders").doc(orderId).update(updatePayload).then(() => {
                 emitSlidToastAlert('success', 'Status Synchronized', `Order updated to ${newStatus.toUpperCase()}`);
-            }).catch(err => console.error(err));
+                
+                if (newStatus === 'shipped') {
+                    db.collection("orders").doc(orderId).get().then((doc) => {
+                        if (doc.exists) {
+                            const orderData = doc.data();
+                            const emailPayload = {
+                                to_email: orderData.userEmail, 
+                                email: "junaidlone7217@gmail.com", 
+                                otp_code: `Great news from Lonetics! Your order containing ${orderData.itemsSummary} has been officially shipped out.\n\n${trackingLink ? `Track your package here: ${trackingLink}` : 'Your package is in transit and will arrive soon!'}`
+                            };
+                            emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload)
+                                .then(() => console.log("Tracking email sent to customer."))
+                                .catch(err => console.error("EmailJS failed:", err));
+                        }
+                    });
+                }
+            }).catch(err => emitSlidToastAlert('error', 'Update Failed', err.message));
         }
         
         function editProductPrice(id, currentPrice) {
@@ -1117,6 +1146,74 @@
         function deleteProductFromCloud(id) {
             event.stopPropagation();
             if(confirm("Wipe catalog item configuration?")) { db.collection("products").doc(id).delete(); }
+        }
+
+        // GOOGLE MERCHANT PRODUCT EXPORT FEATURE
+        function exportCatalogForGoogleMerchant() {
+            if (PRODUCT_CATALOG.length === 0) {
+                emitSlidToastAlert('error', 'Empty Catalog', 'No products to export.');
+                return;
+            }
+
+            emitSlidToastAlert('success', 'Generating...', 'Building Google Merchant file.');
+
+            let tsvContent = "id\ttitle\tdescription\tlink\timage_link\tavailability\tprice\tcondition\n";
+
+            PRODUCT_CATALOG.forEach(p => {
+                let id = p.id;
+                let title = p.name;
+                let description = "Premium electronics and accessories from Lonetics Official.";
+                let link = "https://lonetics-store.vercel.app";
+                let image_link = p.image;
+                let availability = "in stock";
+                let price = p.price + " INR";
+                let condition = "new";
+
+                tsvContent += `${id}\t${title}\t${description}\t${link}\t${image_link}\t${availability}\t${price}\t${condition}\n`;
+            });
+
+            const blob = new Blob([tsvContent], { type: 'text/tab-separated-values' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lonetics_google_feed.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // CUSTOMER SUPPLIER CSV EXPORT FEATURE
+        function exportCustomerOrdersForFulfillment() {
+            db.collection("orders").get().then((snapshot) => {
+                if(snapshot.empty) {
+                    emitSlidToastAlert('error', 'No Orders', 'There are no customer orders to export.');
+                    return;
+                }
+                
+                let csvContent = "Order ID,Date,Customer Name,Phone,Address,PIN Code,Items,Total Paid,Status,Transaction UTR\n";
+                
+                snapshot.forEach(doc => {
+                    let ord = doc.data();
+                    let date = ord.timestamp ? new Date(ord.timestamp.seconds * 1000).toLocaleDateString() : "N/A";
+                    
+                    let items = ord.itemsSummary ? ord.itemsSummary.replace(/,/g, " |") : "N/A";
+                    let address = ord.buyerAddress ? ord.buyerAddress.replace(/,/g, " ") : "N/A";
+                    let name = ord.buyerName ? ord.buyerName.replace(/,/g, "") : "N/A";
+                    
+                    csvContent += `${doc.id},${date},${name},${ord.buyerPhone},${address},${ord.buyerPin},${items},${ord.totalValue},${ord.status},${ord.txnId || 'COD'}\n`;
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'lonetics_customer_orders.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                emitSlidToastAlert('success', 'Orders Exported', 'CSV file downloaded safely.');
+            });
         }
 
         function syncSelectedProfileCountryCurrencyConfig() {
@@ -1483,6 +1580,24 @@
             document.getElementById('profileNameInput').value = userDataCache.name || "";
             document.getElementById('profileDashboardImg').src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
             document.getElementById('profileModal').classList.add('active');
+        }
+
+        // TRIGGERS FOR NATIVE APP INSTALL POPUP
+        function openSmartApplicationInstallationPromptSheet() {
+            closeAllModals();
+            document.getElementById('appInstallModal').classList.add('active');
+        }
+
+        async function triggerAndroidNativePwaInstall() {
+            if (deferredAppInstallPrompt) {
+                deferredAppInstallPrompt.prompt();
+                const { outcome } = await deferredAppInstallPrompt.userChoice;
+                if (outcome === 'accepted') { console.log('User accepted the install prompt'); }
+                deferredAppInstallPrompt = null;
+                closeAllModals();
+            } else {
+                emitSlidToastAlert('error', 'Install Unavailable', 'Please tap the 3 dots in Chrome and select "Add to Home Screen".');
+            }
         }
 
         function toggleDrawer(open) { document.getElementById('sideDrawer').classList.toggle('open', open); }
