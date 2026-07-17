@@ -467,8 +467,8 @@
                 <p class="policy-paragraph"><strong>Global Sourcing:</strong> Partner catalog tech drops ship directly from verified suppliers and require 7-14 business days.</p>
 
                 <div class="policy-headline">🔄 Returns & Refund Desk</div>
-                <p class="policy-paragraph">Customers enjoy a clear <strong>30-day window</strong> to return unused items in factory packaging. Gift cards and operational software remain excluded.</p>
-                <p class="policy-paragraph">Initiate returns through help tickets. Confirmed refunds resolve to the original UPI reference within 5-7 business days. Return logistics are customer-funded.</p>
+                <p class="policy-paragraph">Customers enjoy a strict <strong>10-day window</strong> to return unused items in factory packaging. Gift cards and operational software remain excluded.</p>
+                <p class="policy-paragraph">Initiate returns through help tickets. <strong>All returned items are subject to a 15% restocking fee deducted from the final refund.</strong> Confirmed refunds resolve to the original UPI reference within 5-7 business days. Return logistics are customer-funded.</p>
 
                 <div class="policy-headline">📞 Merchant Verification</div>
                 <p class="policy-paragraph"><strong>Support Channel:</strong> junaidlone7217@gmail.com</p>
@@ -982,7 +982,6 @@
             });
         }
 
-        // UPGRADED EMAIL TRACKING STATUS UPDATE
         function updateOrderStatusFromClientApp(orderId, newStatus) {
             let updatePayload = { status: newStatus };
             let trackingLink = "";
@@ -1148,7 +1147,6 @@
             if(confirm("Wipe catalog item configuration?")) { db.collection("products").doc(id).delete(); }
         }
 
-        // GOOGLE MERCHANT PRODUCT EXPORT FEATURE
         function exportCatalogForGoogleMerchant() {
             if (PRODUCT_CATALOG.length === 0) {
                 emitSlidToastAlert('error', 'Empty Catalog', 'No products to export.');
@@ -1182,7 +1180,6 @@
             document.body.removeChild(a);
         }
 
-        // CUSTOMER SUPPLIER CSV EXPORT FEATURE
         function exportCustomerOrdersForFulfillment() {
             db.collection("orders").get().then((snapshot) => {
                 if(snapshot.empty) {
@@ -1582,7 +1579,6 @@
             document.getElementById('profileModal').classList.add('active');
         }
 
-        // TRIGGERS FOR NATIVE APP INSTALL POPUP
         function openSmartApplicationInstallationPromptSheet() {
             closeAllModals();
             document.getElementById('appInstallModal').classList.add('active');
