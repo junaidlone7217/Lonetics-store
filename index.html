@@ -758,13 +758,20 @@
         let generatedAvatarFileCacheString = "";
         let userIdleTimeTimer = 0;
 
-        function buildCountrySelectionDropdownDOMNodeTrees() {
+                function buildCountrySelectionDropdownDOMNodeTrees() {
             const selects = [document.getElementById('regCountry'), document.getElementById('profileCountrySelect')];
             selects.forEach(sel => {
-                if(!sel) return; sel.innerHTML = "";
+                if(!sel) return; 
+                // FIX: If the list is already built, stop here so it doesn't erase itself
+                if(sel.options.length > 0) return; 
+                
+                sel.innerHTML = "";
                 Object.keys(COUNTRIES_GLOBAL_MAP).forEach(key => {
                     sel.innerHTML += `<option value="${key}">${COUNTRIES_GLOBAL_MAP[key].name} (${COUNTRIES_GLOBAL_MAP[key].currency})</option>`;
                 });
+                
+                // Set default to India
+                sel.value = "IN"; 
             });
         }
 
