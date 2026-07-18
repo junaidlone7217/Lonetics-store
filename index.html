@@ -1685,9 +1685,12 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => { 
+                window.addEventListener('DOMContentLoaded', () => { 
             listenToProductsAndVideos(); 
             startMarketingEngines(); 
+            buildCountrySelectionDropdownDOMNodeTrees(); // FIX: Fills the dropdowns immediately on load
+        });
+
         });
     </script>
 </body>
