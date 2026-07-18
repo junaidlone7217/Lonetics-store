@@ -1620,8 +1620,7 @@
             document.getElementById('authToggleText').innerHTML = signup ? 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>' : 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
         }
 
-        // UPDATED: Email Verification Lock integration
-        function handleSecurityAuthIdentitySubmission() {
+        /        function handleSecurityAuthIdentitySubmission() {
             const email = document.getElementById('authIdentity').value.trim().toLowerCase();
             const pass = document.getElementById('authPassword').value.trim();
             if(!email || !pass) { emitSlidToastAlert('error', 'Fields Required', 'Enter both parameters.'); return; }
@@ -1629,31 +1628,22 @@
             if(isSignUpMode) {
                 const name = document.getElementById('regName').value.trim();
                 const country = document.getElementById('regCountry').value;
+                
                 firebase.auth().createUserWithEmailAndPassword(email, pass).then((cred) => {
-                    // Send verification email instantly
-                    cred.user.sendEmailVerification().then(() => {
-                        db.collection("users").doc(email).set({ name, country }).then(() => {
-                            // Sign them out immediately
-                            firebase.auth().signOut();
-                            closeAllModals();
-                            emitSlidToastAlert('success', 'Check Your Inbox', 'A verification link has been sent to your email. Please verify to log in.');
-                        });
+                    db.collection("users").doc(email).set({ name, country }).then(() => {
+                        closeAllModals();
+                        emitSlidToastAlert('success', 'Profile Created', 'Account database connected.');
                     });
                 }).catch(err => emitSlidToastAlert('error', 'Error', err.message));
+                
             } else { 
                 firebase.auth().signInWithEmailAndPassword(email, pass).then((cred) => { 
-                    // Check if verified
-                    if (!cred.user.emailVerified) {
-                        firebase.auth().signOut();
-                        emitSlidToastAlert('error', 'Access Denied', 'Please check your email and click the verification link before logging in.');
-                    } else {
-                        closeAllModals();
-                        emitSlidToastAlert('success', 'Signed In', 'Session verified.');
-                    }
+                    closeAllModals();
+                    emitSlidToastAlert('success', 'Signed In', 'Session verified.');
                 }).catch(err => emitSlidToastAlert('error', 'Refused', err.message)); 
             }
         }
-
+        
         function executeLogout() { 
             const userRefBeforeWipe = currentSessionUser;
             firebase.auth().signOut().then(() => { 
