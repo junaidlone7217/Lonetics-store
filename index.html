@@ -19,6 +19,9 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
+    <!-- GOOGLE CUSTOMER REVIEWS SCRIPT (Official Format) -->
+    <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+    
     <script type="text/javascript">
         try { emailjs.init("TIv-gbXH55nrs32nc"); } catch (error) { console.error("EmailJS Fail:", error); }
 
@@ -37,6 +40,11 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
         } catch (error) { console.error("Firebase Fail:", error); }
+
+        // Google requires this function to exist on load, but we delay the actual popup until checkout
+        window.renderOptIn = function() {
+            console.log("Google Customer Reviews framework ready.");
+        };
     </script>
     <style>
         :root {
@@ -99,23 +107,6 @@
         .search-box {
             width: 100%; background-color: var(--bg-surface); border: 1px solid var(--border-color);
             border-radius: 10px; padding: 12px 16px; color: var(--text-main); font-size: 0.9rem; outline: none;
-        }
-
-        .promo-ticker-banner {
-            background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
-            background-size: 200% auto;
-            color: #fff;
-            padding: 8px 16px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-align: center;
-            letter-spacing: 0.5px;
-            animation: flowingGlow 3s linear infinite;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        @keyframes flowingGlow {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
         }
 
         .hype-drop-container {
@@ -715,7 +706,6 @@
                     <div class="input-group"><label>Select Profile Location Context</label><select id="regCountry"></select></div>
                 </div>
                 <div class="input-group"><label>Email Address</label><input type="email" id="authIdentity" placeholder="name@domain.com"></div>
-                <!-- UPDATED: Password field now contains the Forgot Password trigger -->
                 <div class="input-group">
                     <label style="display: flex; justify-content: space-between;">
                         Password 
@@ -1553,7 +1543,10 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            db.collection("orders").add(orderPayloadDataMatrix).then(() => {
+            // Dynamic Google Customer Reviews Integration
+            db.collection("orders").add(orderPayloadDataMatrix).then((docRef) => {
+                const newOrderId = docRef.id;
+                
                 const emailPayload = {
                     email: currentSessionUser,
                     to_email: "junaidlone7217@gmail.com", 
@@ -1562,6 +1555,22 @@
 
                 emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload).then(() => {
                     emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Open sidebar to track status.');
+                    
+                    try {
+                        const estimatedDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                        window.gapi.load('surveyoptin', function() {
+                            window.gapi.surveyoptin.render({
+                                "merchant_id": 5826499589,
+                                "order_id": newOrderId,
+                                "email": currentSessionUser,
+                                "delivery_country": activeSelectedCheckoutCountryCode,
+                                "estimated_delivery_date": estimatedDate
+                            });
+                        });
+                    } catch (e) {
+                        console.error("Google Reviews Opt-In failed to load.", e);
+                    }
+                    
                     cartMap = {}; 
                     currentCheckoutStep = "cart";
                     activeAppliedCouponCodeString = "";
@@ -1628,7 +1637,6 @@
             document.getElementById('authToggleText').innerHTML = signup ? 'Already have an account? <span onclick="toggleAuthView(false)">Sign In</span>' : 'New to Lonetics? <span onclick="toggleAuthView(true)">Create an account</span>';
         }
 
-        // UPDATED: Password Reset Logic
         function triggerPasswordReset() {
             const email = document.getElementById('authIdentity').value.trim().toLowerCase();
             if(!email) {
@@ -1640,7 +1648,6 @@
             }).catch(err => emitSlidToastAlert('error', 'Error', err.message));
         }
 
-        // UPDATED: Registration logic fixed to allow instant login
         function handleSecurityAuthIdentitySubmission() {
             const email = document.getElementById('authIdentity').value.trim().toLowerCase();
             const pass = document.getElementById('authPassword').value.trim();
@@ -1651,7 +1658,6 @@
                 const country = document.getElementById('regCountry').value;
                 
                 firebase.auth().createUserWithEmailAndPassword(email, pass).then((cred) => {
-                    // Send verification email, but don't sign them out. Let them use the app immediately!
                     cred.user.sendEmailVerification().catch(e => console.log(e));
                     
                     db.collection("users").doc(email).set({ name, country }).then(() => {
@@ -1662,7 +1668,6 @@
                 
             } else { 
                 firebase.auth().signInWithEmailAndPassword(email, pass).then((cred) => { 
-                    // Normal login restored - no strict email verification lock
                     closeAllModals();
                     emitSlidToastAlert('success', 'Signed In', 'Welcome back to Lonetics!');
                 }).catch(err => emitSlidToastAlert('error', 'Refused', err.message)); 
