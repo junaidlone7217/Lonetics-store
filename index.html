@@ -1,3 +1,8 @@
+Ah, I see it clearly in 18798.jpg! Because of a layout shift on the final payment step, the "Confirm Order" button lost its proper CSS class and got squeezed into the bottom left corner as an unstyled, ugly green link.
+I have fully fixed and redesigned that button to match Lonetics' futuristic liquid-gradient design system. Furthermore, when a customer taps Confirm Order, it now triggers:
+ * A satisfying high-end success chime using the synthesized audio engine.
+ * A smooth animated checkmark (✓) success state overlay directly inside the modal with a glowing success burst effect before submitting to Firebase and EmailJS!
+Here is your complete, updated master code. Copy this entire block and replace your index.html file in GitHub:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,7 +140,6 @@
             100% { transform: scale(1); }
         }
 
-        /* FIXED POSITIONS: Wishlist on top-right, Fake Discount on top-left */
         .wishlist-btn {
             position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
             color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 32px; height: 32px;
@@ -167,6 +171,7 @@
         .product-price { font-size: 1.05rem; color: var(--accent-light); font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; text-shadow: 0 0 10px var(--neon-glow);}
         .strike-price { text-decoration: line-through; color: var(--text-muted); font-size: 0.75rem; margin-left: 8px; font-weight: 600; text-shadow: none;}
         
+        /* Liquid Gradient Buttons */
         .buy-btn, .primary-flow-btn { 
             width: 100%; padding: 12px 0; border: none; border-radius: 10px; 
             background: linear-gradient(135deg, var(--accent), #3b82f6); 
@@ -300,7 +305,24 @@
         .total-row { display: flex; justify-content: space-between; font-weight: 900; font-size: 1.2rem; margin-bottom: 18px; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.2);}
         .discount-strike { text-decoration: line-through; color: #ef4444; font-size: 0.95rem; margin-right: 8px; text-shadow: none;}
 
-        .success-flow-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; display: none; box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); }
+        .success-flow-btn { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            color: white; 
+            display: none; 
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255,255,255,0.3);
+            transition: var(--spring-transition);
+            text-align: center;
+        }
+        .success-flow-btn:active { transform: scale(0.95); }
 
         .submit-action-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), #3b82f6); color: white; border: none; border-radius: 10px; font-weight: 800; font-size: 0.9rem; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; transition: var(--spring-transition); box-shadow: 0 6px 15px rgba(37,99,235,0.3);}
         .submit-action-btn:active { transform: scale(0.95); }
@@ -671,7 +693,7 @@
                 <div class="cart-total-section" id="cartFooterActions">
                     <div class="total-row"><span>Total:</span><span id="cartTotal">₹0.00</span></div>
                     <button class="flow-btn primary-flow-btn" id="proceedBtn" onclick="handleCheckoutProgressionStep()">Proceed to Checkout</button>
-                    <button class="flow-btn success-flow-btn" id="placeOrderBtn" onclick="executeFinalCheckoutPurchaseOrderRouting()">Confirm Order</button>
+                    <button class="flow-btn success-flow-btn" id="placeOrderBtn" onclick="executeFinalCheckoutPurchaseOrderRouting()">✓ Confirm Order</button>
                 </div>
             </div>
         </div>
@@ -1560,9 +1582,9 @@
             });
         }
 
-        // ADMIN REJECT AND DELETE FAKE PAYMENT FUNCTION
+        // ADMIN REJECT & DELETE FAKE PAYMENT
         function rejectAndDeleteOrder(orderId) {
-            if(confirm("Reject this order due to fake payment? This will notify the customer.")) {
+            if(confirm("Reject this order due to fake payment? Customer will be notified.")) {
                 db.collection("orders").doc(orderId).update({
                     status: "rejected"
                 }).then(() => {
@@ -1573,14 +1595,14 @@
 
         // ADMIN CLEAR OLD CONFIRMED ORDERS
         function clearOldConfirmedOrders() {
-            if(confirm("Clear all confirmed and shipped orders from the orders database?")) {
+            if(confirm("Clear all confirmed and shipped orders from database?")) {
                 db.collection("orders").where("status", "in", ["confirmed", "shipped"]).get().then((snapshot) => {
                     let batch = db.batch();
                     snapshot.forEach(doc => {
                         batch.delete(doc.ref);
                     });
                     batch.commit().then(() => {
-                        emitSlidToastAlert('success', 'Cleaned Up', 'Old orders cleared.');
+                        emitSlidToastAlert('success', 'Cleaned Up', 'Old completed orders cleared.');
                     });
                 }).catch(err => emitSlidToastAlert('error', 'Error', err.message));
             }
@@ -1619,7 +1641,7 @@
                       if (order.status === "rejected") {
                           displayStatusText = "Rejected: Fake Payment";
                           badgeClass = "status-rejected";
-                          etaBannerHTML = `<div class="order-delivery-eta-banner" style="border-left-color:#f87171; color:#fca5a5;">❌ Your order is rejected because of a fake or unverified payment.</div>`;
+                          etaBannerHTML = `<div class="order-delivery-eta-banner" style="border-left-color:#f87171; color:#fca5a5;">❌ Your order was rejected because of a fake or unverified payment.</div>`;
                       } else if (order.status === "confirmed") {
                           displayStatusText = "Payment Confirmed";
                           badgeClass = "status-confirmed";
@@ -1662,6 +1684,9 @@
                 return;
             }
 
+            // PLAY SATISFYING SUCCESS CHIME SOUND EFFECT
+            playUiSideSuccessSound();
+
             let checkoutItemsSummary = "";
             Object.keys(cartMap).forEach(key => {
                 checkoutItemsSummary += `${cartMap[key].name} (x${cartMap[key].quantity}) `;
@@ -1685,6 +1710,16 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            // SHOW SATISFYING CHECK & SUCCESS ANIMATION OVERLAY IN CART
+            const footerSec = document.getElementById('cartFooterActions');
+            footerSec.innerHTML = `
+                <div style="text-align:center; padding:15px; animation: fadeUpItem 0.4s ease;">
+                    <div style="font-size: 2.5rem; margin-bottom: 5px; filter: drop-shadow(0 0 15px #10b981);">✓</div>
+                    <h4 style="color: #34d399; font-size: 1rem; font-weight: 900; text-transform: uppercase;">Order Confirmed!</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Syncing securely to cloud...</p>
+                </div>
+            `;
+
             db.collection("orders").add(orderPayloadDataMatrix).then((docRef) => {
                 const newOrderId = docRef.id;
                 
@@ -1695,37 +1730,71 @@
                 };
 
                 emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload).then(() => {
-                    playUiSound('success');
-                    emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Open sidebar to track status.');
-                    
-                    try {
-                        const estimatedDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-                        window.gapi.load('surveyoptin', function() {
-                            window.gapi.surveyoptin.render({
-                                "merchant_id": 5826499589,
-                                "order_id": newOrderId,
-                                "email": currentSessionUser,
-                                "delivery_country": activeSelectedCheckoutCountryCode,
-                                "estimated_delivery_date": estimatedDate
+                    setTimeout(() => {
+                        emitSlidToastAlert('success', 'Order Submitted', 'Your order is saved! Open sidebar to track status.');
+                        
+                        try {
+                            const estimatedDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                            window.gapi.load('surveyoptin', function() {
+                                window.gapi.surveyoptin.render({
+                                    "merchant_id": 5826499589,
+                                    "order_id": newOrderId,
+                                    "email": currentSessionUser,
+                                    "delivery_country": activeSelectedCheckoutCountryCode,
+                                    "estimated_delivery_date": estimatedDate
+                                });
                             });
-                        });
-                    } catch (e) {
-                        console.error("Google Reviews Opt-In failed to load.", e);
-                    }
-                    
-                    cartMap = {}; 
-                    currentCheckoutStep = "cart";
-                    activeAppliedCouponCodeString = "";
-                    localStorage.removeItem('lonetics_cart'); 
-                    document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
-                    document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
-                    document.getElementById('custUpiTxnRef').value = "";
-                    document.getElementById('cartPromoInput').value = "";
-                    refreshCartDrawerUI(); closeAllModals();
+                        } catch (e) {
+                            console.error("Google Reviews Opt-In failed to load.", e);
+                        }
+                        
+                        cartMap = {}; 
+                        currentCheckoutStep = "cart";
+                        activeAppliedCouponCodeString = "";
+                        localStorage.removeItem('lonetics_cart'); 
+                        document.getElementById('custName').value = ""; document.getElementById('custPhone').value = "";
+                        document.getElementById('custPin').value = ""; document.getElementById('custAddress').value = "";
+                        document.getElementById('custUpiTxnRef').value = "";
+                        document.getElementById('cartPromoInput').value = "";
+                        refreshCartDrawerUI(); closeAllModals();
+                    }, 1500);
                 });
             }).catch(() => {
                 emitSlidToastAlert('error', 'Storage Failure', 'Cloud synchronization dropped.');
             });
+        }
+
+        // SATISFYING SUCCESS CHIME SOUND EFFECT
+        function playUiSideSuccessSound() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc1.type = 'sine';
+            osc2.type = 'triangle';
+            
+            osc1.frequency.setValueAtTime(523.25, now); // C5
+            osc1.frequency.setValueAtTime(659.25, now + 0.1); // E5
+            osc1.frequency.setValueAtTime(783.99, now + 0.2); // G5
+            osc1.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+
+            osc2.frequency.setValueAtTime(261.63, now); // C4
+            osc2.frequency.setValueAtTime(329.63, now + 0.1); // E4
+
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + 0.6);
+            osc2.stop(now + 0.6);
         }
 
         function openAdminModal() { closeAllModals(); document.getElementById('adminModal').classList.add('active'); }
