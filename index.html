@@ -883,15 +883,13 @@
             }).catch(err => console.error("Partner Catalog connection drop."));
         }
 
-        function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
+                function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
             playUiSound('pop');
             if (navigator.vibrate) navigator.vibrate(50);
             
-            const internalUsdPrice = inrPrice / 83.5; 
-
             if (cartMap[id]) { cartMap[id].quantity += 1; }
             else { 
-                cartMap[id] = { id: id, name: name, price: internalUsdPrice, image: imgUrl, quantity: 1 }; 
+                cartMap[id] = { id: id, name: name, price: parseFloat(inrPrice), image: imgUrl, quantity: 1 }; 
             }
             
             localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
