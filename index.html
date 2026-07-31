@@ -51,16 +51,16 @@
     <style>
         :root {
             --bg-primary: #030712;
-            --bg-surface: rgba(15, 23, 42, 0.65);
-            --bg-card: rgba(15, 23, 42, 0.55);
+            --bg-surface: rgba(15, 23, 42, 0.7);
+            --bg-card: rgba(15, 23, 42, 0.6);
             --accent: #2563eb;
             --accent-light: #38bdf8;
             --neon-glow: rgba(56, 189, 248, 0.4);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: rgba(56, 189, 248, 0.2);
+            --border-color: rgba(56, 189, 248, 0.25);
             --card-radius: 16px;
-            --spring-transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            --spring-transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -71,6 +71,7 @@
         #bg-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 0; pointer-events: none;
+            will-change: transform;
         }
 
         .app-layer { position: relative; z-index: 10; }
@@ -112,18 +113,19 @@
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
         @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
 
-        @keyframes fadeUpItem { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUpItem { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 3D Glassmorphic Cards */
         .product-card {
             background-color: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 12px; display: flex;
             flex-direction: column; justify-content: space-between; position: relative;
-            animation: fadeUpItem 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; animation-fill-mode: both; transition: var(--spring-transition);
+            animation: fadeUpItem 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; animation-fill-mode: both; transition: var(--spring-transition);
+            will-change: transform;
         }
-        .grid .product-card:nth-child(even) { animation-delay: 0.1s; }
-        .grid .product-card:nth-child(odd) { animation-delay: 0.2s; }
-        .product-card:active, .product-card:hover { transform: translateY(-6px) scale(1.02); border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(56, 189, 248, 0.2); }
+        .grid .product-card:nth-child(even) { animation-delay: 0.08s; }
+        .grid .product-card:nth-child(odd) { animation-delay: 0.16s; }
+        .product-card:active, .product-card:hover { transform: translateY(-5px) scale(1.015); border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(56, 189, 248, 0.2); }
 
         /* WISHLIST BUTTON POP */
         @keyframes heartBurstPop {
@@ -165,6 +167,7 @@
         .product-price { font-size: 1.05rem; color: var(--accent-light); font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; text-shadow: 0 0 10px var(--neon-glow);}
         .strike-price { text-decoration: line-through; color: var(--text-muted); font-size: 0.75rem; margin-left: 8px; font-weight: 600; text-shadow: none;}
         
+        /* Liquid Gradient Buttons */
         .buy-btn, .primary-flow-btn { 
             width: 100%; padding: 12px 0; border: none; border-radius: 10px; 
             background: linear-gradient(135deg, var(--accent), #3b82f6); 
@@ -700,63 +703,66 @@
         </div>
     </div>
 
-    <!-- THREE.JS 3D GYROSCOPIC ENGINE SCRIPT -->
+    <!-- THREE.JS HIGH-PERFORMANCE SMOOTH 3D BACKGROUND ENGINE -->
     <script>
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 45;
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 40;
 
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         const sceneGroup = new THREE.Group();
         scene.add(sceneGroup);
 
-        // 3D ORBITING TORUS KNOT
-        const knotGeo = new THREE.TorusKnotGeometry(12, 3, 100, 16);
-        const knotMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.25 });
-        const torusKnot = new THREE.Mesh(knotGeo, knotMat);
-        sceneGroup.add(torusKnot);
+        // SMOOTH CYBER SPHERE MESH
+        const sphereGeo = new THREE.IcosahedronGeometry(15, 3);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.22 });
+        const cyberSphere = new THREE.Mesh(sphereGeo, sphereMat);
+        sceneGroup.add(cyberSphere);
 
-        // FLOATING CYBER PARTICLES
-        const pCount = 500;
+        // FLOATING PARTICLES
+        const pCount = 450;
         const pGeo = new THREE.BufferGeometry();
         const pPos = new Float32Array(pCount * 3);
-        for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 140;
+        for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 130;
         pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.7, color: 0x2563eb, transparent: true, opacity: 0.5 });
+        const pMat = new THREE.PointsMaterial({ size: 0.6, color: 0x2563eb, transparent: true, opacity: 0.4 });
         const particles = new THREE.Points(pGeo, pMat);
         sceneGroup.add(particles);
 
-        // GYROSCOPE & MOUSE PARALLAX CONTROLS
-        let targetRotationX = 0;
-        let targetRotationY = 0;
+        // GYROSCOPE & MOUSE PARALLAX WITH SMOOTH EASING
+        let targetRotX = 0, targetRotY = 0;
+        let currentRotX = 0, currentRotY = 0;
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (e) => {
                 if (e.gamma !== null && e.beta !== null) {
-                    targetRotationY = (e.gamma / 90) * 0.8;
-                    targetRotationX = (e.beta / 180) * 0.8;
+                    targetRotY = (e.gamma / 90) * 0.7;
+                    targetRotX = (e.beta / 180) * 0.7;
                 }
             }, true);
         }
 
         window.addEventListener('mousemove', (e) => {
-            targetRotationY = ((e.clientX / window.innerWidth) - 0.5) * 0.6;
-            targetRotationX = ((e.clientY / window.innerHeight) - 0.5) * 0.6;
+            targetRotY = ((e.clientX / window.innerWidth) - 0.5) * 0.5;
+            targetRotX = ((e.clientY / window.innerHeight) - 0.5) * 0.5;
         });
 
         function animate3DScene() {
             requestAnimationFrame(animate3DScene);
             
-            sceneGroup.rotation.y += (targetRotationY - sceneGroup.rotation.y) * 0.05;
-            sceneGroup.rotation.x += (targetRotationX - sceneGroup.rotation.x) * 0.05;
+            // Motion Smoothing Interpolation
+            currentRotX += (targetRotX - currentRotX) * 0.04;
+            currentRotY += (targetRotY - currentRotY) * 0.04;
 
-            torusKnot.rotation.y += 0.005;
-            torusKnot.rotation.x += 0.003;
-            particles.rotation.y += 0.0003;
+            sceneGroup.rotation.x = currentRotX;
+            sceneGroup.rotation.y = currentRotY + performance.now() * 0.0002;
+
+            cyberSphere.rotation.y += 0.002;
+            particles.rotation.y += 0.0002;
 
             renderer.render(scene, camera);
         }
@@ -837,7 +843,17 @@
                     if (doc.exists) userDataCache = doc.data();
                     renderSystemSessionState();
                 });
-            } else { currentSessionUser = null; renderSystemSessionState(); }
+            } else { 
+                currentSessionUser = null; 
+                renderSystemSessionState(); 
+                
+                // AUTO POPUP LOGIN PROMPT AFTER 3 SECONDS FOR UNIFIED VISITORS
+                setTimeout(() => {
+                    if(!currentSessionUser) {
+                        openAuthenticationModalOverlaySheet();
+                    }
+                }, 3000);
+            }
         });
 
         function listenToProductsAndVideos() {
@@ -1055,6 +1071,32 @@
             }
             document.getElementById('cartBadgeCount').textContent = itemsCount;
             document.getElementById('cartTotal').textContent = `${currentActiveTargetCurrencySymbol}${(usdTotal * currentActiveTargetCurrencyRate).toFixed(2)}`;
+        }
+
+        function renderSystemSessionState() {
+            buildCountrySelectionDropdownDOMNodeTrees();
+            const profImg = document.getElementById('profileTrigger');
+            const adminTab = document.getElementById('adminNavTab');
+            const manualAuthBtn = document.getElementById('openAuthModal');
+
+            if(currentSessionUser) {
+                manualAuthBtn.style.display = 'none';
+                profImg.src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                profImg.style.display = 'block';
+                
+                if (currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com') {
+                    adminTab.style.setProperty('display', 'flex', 'important');
+                } else {
+                    adminTab.style.display = 'none';
+                }
+            } else {
+                manualAuthBtn.style.display = 'block';
+                profImg.src = "";
+                profImg.style.display = 'none';
+                adminTab.style.display = 'none';
+            }
+            buildMainCatalogUI(PRODUCT_CATALOG);
+            refreshCartDrawerUI();
         }
 
         function startMarketingEngines() { loadAffiliateCatalog(); }
