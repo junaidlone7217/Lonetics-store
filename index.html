@@ -135,7 +135,7 @@
             100% { transform: scale(1); }
         }
 
-        /* REPOSITIONED WISHLIST BUTTON (Top Right) & FAKE DISCOUNT (Top Left) */
+        /* FIXED POSITIONS: Wishlist on top-right, Fake Discount on top-left */
         .wishlist-btn {
             position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
             color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 32px; height: 32px;
@@ -167,7 +167,6 @@
         .product-price { font-size: 1.05rem; color: var(--accent-light); font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; text-shadow: 0 0 10px var(--neon-glow);}
         .strike-price { text-decoration: line-through; color: var(--text-muted); font-size: 0.75rem; margin-left: 8px; font-weight: 600; text-shadow: none;}
         
-        /* Liquid Gradient Buttons */
         .buy-btn, .primary-flow-btn { 
             width: 100%; padding: 12px 0; border: none; border-radius: 10px; 
             background: linear-gradient(135deg, var(--accent), #3b82f6); 
@@ -290,8 +289,8 @@
         
         .order-delivery-eta-banner { background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--accent-light); padding: 10px 14px; font-size: 0.8rem; font-weight: 700; color: #e0f2fe; border-radius: 0 8px 8px 0; margin-top: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
 
-        .admin-action-row { display: flex; gap: 10px; margin-top: 8px; width: 100%; }
-        .adm-ctrl-btn { flex: 1; padding: 10px; font-size: 0.8rem; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; color: white; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+        .admin-action-row { display: flex; gap: 8px; margin-top: 8px; width: 100%; }
+        .adm-ctrl-btn { flex: 1; padding: 8px; font-size: 0.75rem; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; color: white; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
         .adm-ctrl-btn:active { transform: scale(0.95); }
 
         .app-install-sheet-container { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 5px; gap: 20px; }
@@ -637,22 +636,21 @@
                     <div class="input-group"><label>Address Details</label><textarea id="custAddress" rows="2" placeholder="House number, landmark..."></textarea></div>
                 </div>
 
-                <!-- ONLINE ONLY PAYMENT (COD REMOVED PER REQUEST) -->
                 <div class="payment-method-selector-box" id="checkoutPaymentSelectorDeck" style="display:none;">
                     <div class="coupon-apply-wrapper" id="couponModuleRow">
                         <input type="text" class="coupon-input" id="cartPromoInput" placeholder="Enter promo code...">
                         <button class="coupon-btn" onclick="applyPromoDiscountCodeVal()">Apply</button>
                     </div>
-                    <p style="font-size:0.8rem; color:var(--accent-light); font-weight:800; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Payment Method (Online Only)</p>
+                    <p style="font-size:0.8rem; color:var(--accent-light); font-weight:800; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Choose Payment (Online Only)</p>
                     <div class="payment-option-card selected" id="optUPI" onclick="selectCheckoutPaymentRoute('upi')">
                         <div>
                             <span style="font-weight:800; font-size:0.95rem; display:block; margin-bottom:2px; color:var(--text-main);">Pay Online via UPI Scanner</span>
-                            <span style="font-size:0.75rem; color:var(--text-muted);">Instant secure transfer (Required)</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">Instant secure transfer</span>
                         </div>
                         <div class="discount-pill">Save 20%</div>
                     </div>
                     <div style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); padding:10px; border-radius:10px; font-size:0.75rem; color:#f87171; text-align:center; font-weight:bold; margin-top:4px;">
-                        ⚠️ Cash on Delivery (COD) is not available for these products. Online payment is mandatory.
+                        ⚠️ Cash on Delivery (COD) is not available for these products.
                     </div>
                 </div>
 
@@ -770,9 +768,31 @@
 
     <!-- MAIN LONETICS LOGIC ENGINE -->
     <script>
-        const COUNTRIES_GLOBAL_MAP = { IN: { name: "India", currency: "INR (₹)", rate: 83.5, symbol: "₹" }, US: { name: "United States", currency: "USD ($)", rate: 1.0, symbol: "$" } };
-        let currentActiveTargetCurrencyRate = 83.5, currentActiveTargetCurrencySymbol = "₹", activeSelectedCheckoutCountryCode = "IN", currentSessionUser = null, userDataCache = { name: "User Profile", country: "IN" };
-        let PRODUCT_CATALOG = [], cartMap = JSON.parse(localStorage.getItem('lonetics_cart')) || {}, wishlistItems = JSON.parse(localStorage.getItem('lonetics_wishlist')) || [];
+        const COUNTRIES_GLOBAL_MAP = {
+            IN: { name: "India", currency: "INR (₹)", rate: 83.5, symbol: "₹" },
+            US: { name: "United States", currency: "USD ($)", rate: 1.0, symbol: "$" },
+            AE: { name: "United Arab Emirates", currency: "AED", rate: 3.67, symbol: "AED " },
+            GB: { name: "United Kingdom", currency: "GBP (£)", rate: 0.78, symbol: "£" },
+            CA: { name: "Canada", currency: "CAD ($)", rate: 1.37, symbol: "C$" },
+            AU: { name: "Australia", currency: "AUD ($)", rate: 1.51, symbol: "A$" },
+            DE: { name: "Germany", currency: "EUR (€)", rate: 0.92, symbol: "€" },
+            SA: { name: "Saudi Arabia", currency: "SAR", rate: 3.75, symbol: "SR " },
+            JP: { name: "Japan", currency: "JPY (¥)", rate: 158.2, symbol: "¥" },
+            PK: { name: "Pakistan", currency: "PKR", rate: 278.5, symbol: "Rs " },
+            BD: { name: "Bangladesh", currency: "BDT", rate: 117.5, symbol: "৳ " }
+        };
+
+        const CITIES_SOCIAL_PROOF = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Srinagar"];
+
+        let currentActiveTargetCurrencyRate = 83.5;
+        let currentActiveTargetCurrencySymbol = "₹";
+        let activeSelectedCheckoutCountryCode = "IN";
+        let currentSessionUser = null;
+        let userDataCache = { name: "User Profile", country: "IN" };
+        let PRODUCT_CATALOG = [];
+        
+        let cartMap = JSON.parse(localStorage.getItem('lonetics_cart')) || {};
+        let wishlistItems = JSON.parse(localStorage.getItem('lonetics_wishlist')) || [];
         let currentCheckoutStep = "cart";
         let activePaymentRouteSelection = "upi"; 
         let activeAppliedCouponCodeString = ""; 
@@ -792,6 +812,7 @@
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
+            
             if(type === 'pop') { 
                 osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
@@ -810,44 +831,49 @@
             }
         }
 
-        const swCode = `
-            const CACHE_NAME = 'lonetics-offline-v1';
-            self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/']))); });
-            self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
-        `;
-        const swBlob = new Blob([swCode], {type: 'application/javascript'});
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).then(() => console.log("Offline Engine Active"));
-            });
-        }
-
         function emitSlidToastAlert(type, title, msg) {
             if(type === 'error') playUiSound('error');
             document.getElementById('toastIcon').textContent = type === 'success' ? '🎉' : '🔒';
-            document.getElementById('toastTitle').textContent = title; document.getElementById('toastMessage').textContent = msg;
-            appToast.classList.add('active'); setTimeout(() => appToast.classList.remove('active'), 3000);
+            document.getElementById('toastTitle').textContent = title; 
+            document.getElementById('toastMessage').textContent = msg;
+            appToast.classList.add('active'); 
+            setTimeout(() => appToast.classList.remove('active'), 3000);
         }
 
         function buildCountrySelectionDropdownDOMNodeTrees() {
             const selects = [document.getElementById('regCountry'), document.getElementById('profileCountrySelect')];
             selects.forEach(sel => {
-                if(!sel || sel.options.length > 0) return; sel.innerHTML = "";
-                Object.keys(COUNTRIES_GLOBAL_MAP).forEach(key => { sel.innerHTML += `<option value="${key}">${COUNTRIES_GLOBAL_MAP[key].name}</option>`; });
+                if(!sel) return; 
+                if(sel.options.length > 0) return;
+                sel.innerHTML = "";
+                Object.keys(COUNTRIES_GLOBAL_MAP).forEach(key => {
+                    sel.innerHTML += `<option value="${key}">${COUNTRIES_GLOBAL_MAP[key].name} (${COUNTRIES_GLOBAL_MAP[key].currency})</option>`;
+                });
                 sel.value = "IN";
             });
+        }
+
+        function openPoliciesModal() { 
+            closeAllModals(); 
+            document.getElementById('policiesModal').classList.add('active'); 
         }
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 currentSessionUser = user.email;
                 db.collection("users").doc(currentSessionUser).get().then((doc) => {
-                    if (doc.exists) userDataCache = doc.data();
+                    if (doc.exists) { userDataCache = doc.data(); }
+                    const activeLocale = userDataCache.country || "IN";
+                    activeSelectedCheckoutCountryCode = activeLocale;
+                    currentActiveTargetCurrencyRate = COUNTRIES_GLOBAL_MAP[activeLocale].rate;
+                    currentActiveTargetCurrencySymbol = COUNTRIES_GLOBAL_MAP[activeLocale].symbol;
+                    
+                    document.getElementById('profileCountrySelect').value = activeLocale;
                     renderSystemSessionState();
                 });
-            } else { 
-                currentSessionUser = null; 
-                renderSystemSessionState(); 
+            } else {
+                currentSessionUser = null;
+                renderSystemSessionState();
                 
                 setTimeout(() => {
                     if(!currentSessionUser) {
@@ -857,210 +883,40 @@
             }
         });
 
-        function listenToProductsAndVideos() {
-            db.collection("products").onSnapshot((snapshot) => {
-                PRODUCT_CATALOG = [];
-                snapshot.forEach(doc => { let item = doc.data(); item.id = doc.id; PRODUCT_CATALOG.push(item); });
-                buildMainCatalogUI(PRODUCT_CATALOG);
-            });
-        }
-
-        function buildMainCatalogUI(items) {
-            const productGrid = document.getElementById('productGrid');
-            if(!productGrid) return; productGrid.innerHTML = '';
-            items.slice(0).forEach(product => renderSingleProductCard(product, productGrid));
-        }
-
-        function toggleWishlist(id, e) {
-            e.stopPropagation();
-            if(wishlistItems.includes(id)) {
-                wishlistItems = wishlistItems.filter(item => item !== id);
-                emitSlidToastAlert('success', 'Removed', 'Item removed from Wishlist.');
-            } else {
-                wishlistItems.push(id);
-                playUiSound('success');
-                emitSlidToastAlert('success', 'Saved!', 'Item locked in your Wishlist ❤️');
-            }
-            localStorage.setItem('lonetics_wishlist', JSON.stringify(wishlistItems));
-            buildMainCatalogUI(PRODUCT_CATALOG);
-            if(document.getElementById('wishlistModal').classList.contains('active')) openWishlistModal();
-        }
-
-        function openWishlistModal() {
-            closeAllModals();
-            const grid = document.getElementById('wishlistGrid'); grid.innerHTML = '';
-            const savedProducts = PRODUCT_CATALOG.filter(p => wishlistItems.includes(p.id));
-            if(savedProducts.length === 0) grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No items saved yet.</p>';
-            else savedProducts.forEach(p => renderSingleProductCard(p, grid));
-            document.getElementById('wishlistModal').classList.add('active');
-        }
-
-        function renderSingleProductCard(product, targetGrid) {
-            const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
-            const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
-            const seededDiscount = (product.name.charCodeAt(0) % 40) + 20; 
-            const fakeOriginalPrice = (calculatedPriceVal / (1 - (seededDiscount / 100))).toFixed(2);
-            const randomViewers = (product.name.length % 15) + 3;
-            const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; 
-            const stockPercentage = (randomStockCount / 20) * 100; 
-            const isWished = wishlistItems.includes(product.id);
-            const safeTitle = product.name.replace(/'/g, "\\'");
-
-            const card = document.createElement('div'); card.classList.add('product-card');
-            card.innerHTML = `
-                <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${product.id}', event)">♥</button>
-                <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
-                <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
-                
-                <div class="product-img-frame" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">
-                    <div class="fake-discount-corner">${seededDiscount}% OFF</div>
-                    <img class="product-img" src="${product.image}">
-                </div>
-                
-                <div class="product-title" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">${product.name}</div>
-                
-                <div class="live-viewer-row">
-                    <span class="pulse-dot"></span> ${randomViewers} viewing now
-                </div>
-                
-                <div class="stock-info-row">
-                    <span>🔥 Selling Fast</span>
-                    <span>Only ${randomStockCount} left</span>
-                </div>
-                <div class="stock-bar-bg">
-                    <div class="stock-bar-fill" style="width: ${stockPercentage}%;"></div>
-                </div>
-                
-                <div>
-                    <div class="product-price">
-                        ${currentActiveTargetCurrencySymbol}${calculatedPriceVal}
-                        <span class="strike-price">${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}</span>
-                    </div>
-                    <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add To Cart</button>
-                </div>
-            `;
-            targetGrid.appendChild(card);
-        }
-
-        function loadSmartRecommendations(currentId) {
-            const recContainer = document.getElementById('pdRecommendationsGrid'); recContainer.innerHTML = '';
-            let others = PRODUCT_CATALOG.filter(p => p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0, 2);
-            others.forEach(p => {
-                const price = ((window.Number(p.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
-                const safeTitle = p.name.replace(/'/g, "\\'");
-                recContainer.innerHTML += `
-                    <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:12px; cursor:pointer; transition:0.2s;" onclick="openProductDetail('${p.id}', '${safeTitle}', '${price}', '${(price*1.3).toFixed(2)}', '${p.image}', false)">
-                        <img src="${p.image}" style="width:100%; height:90px; object-fit:contain; margin-bottom:8px; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.4));">
-                        <div style="font-size:0.75rem; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px;">${p.name}</div>
-                        <div style="font-size:0.85rem; font-weight:900; color:var(--accent-light);">${currentActiveTargetCurrencySymbol}${price}</div>
-                    </div>
-                `;
-            });
-        }
-
-        function setReviewRating(val) {
-            currentReviewRating = val; playUiSound('pop');
-            document.querySelectorAll('.star-select span').forEach((el, index) => {
-                if(index < val) el.classList.add('active'); else el.classList.remove('active');
-            });
-        }
-
-        function submitLiveReview() {
-            if(!currentSessionUser) { emitSlidToastAlert('error', 'Sign In Required', 'Please log in to review.'); return; }
-            const text = document.getElementById('reviewInputText').value.trim();
-            if(!text) { emitSlidToastAlert('error', 'Empty Review', 'Please type your experience.'); return; }
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); 
+            deferredAppInstallPrompt = e; 
             
-            db.collection('reviews').add({
-                productId: currentViewedProductId,
-                userName: userDataCache.name || currentSessionUser.split('@')[0],
-                text: text, rating: currentReviewRating, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                playUiSound('success'); document.getElementById('reviewInputText').value = '';
-                emitSlidToastAlert('success', 'Published', 'Your review is now live globally!');
-                loadLiveReviews(currentViewedProductId);
-            });
-        }
-
-        function loadLiveReviews(productId) {
-            const container = document.getElementById('pdLiveReviews'); container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Loading community data...</p>';
-            db.collection('reviews').where('productId', '==', productId).orderBy('timestamp', 'desc').limit(5).get().then(snap => {
-                container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Be the first to review this tech!</p>'; return; }
-                snap.forEach(doc => {
-                    const r = doc.data(); const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-                    container.innerHTML += `
-                        <div class="review-card">
-                            <div class="review-header"><span class="reviewer-name">${r.userName} <span class="verified-badge">✓ Verified</span></span><span style="color:#f59e0b; font-size:0.8rem;">${stars}</span></div>
-                            <p class="review-text">${r.text}</p>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        function openProductDetail(id, title, price, strike, image, isAffiliate) {
-            currentViewedProductId = id;
-            document.getElementById('pdTitle').textContent = title;
-            document.getElementById('pdPrice').textContent = currentActiveTargetCurrencySymbol + price;
-            document.getElementById('pdStrike').textContent = currentActiveTargetCurrencySymbol + strike;
-            document.getElementById('pdImage').src = image;
-            
-            const badge = document.getElementById('pdSourceBadge');
-            if (isAffiliate) {
-                badge.textContent = "Global Partner Supply";
-                badge.style.color = "#10b981";
-                document.getElementById('pdAddToCartBtn').onclick = () => { closeAllModals(); executeAffiliateCartInsertion(id, title, (price * 83.5 / currentActiveTargetCurrencyRate).toFixed(2), image); };
-            } else {
-                badge.textContent = "Lonetics Official";
-                badge.style.color = "var(--accent-light)";
-                document.getElementById('pdAddToCartBtn').onclick = () => { closeAllModals(); executeCartInsertion(id); };
+            const modal = document.getElementById('appInstallModal');
+            if (modal && !modal.classList.contains('active')) {
+                setTimeout(() => { openSmartApplicationInstallationPromptSheet(); }, 2000);
             }
+        });
 
-            const chartContainer = document.getElementById('pdChartBars');
-            chartContainer.innerHTML = '';
-            for(let i=0; i<7; i++) {
-                const randomHeight = Math.floor(Math.random() * 40) + 10;
-                chartContainer.innerHTML += `<div class="chart-bar" style="height: ${randomHeight}px;"></div>`;
-            }
-            chartContainer.innerHTML += `<div class="chart-bar current" style="height: 15px;"></div>`;
+        async function executeMagicFetch() {
+            const url = document.getElementById('admMagicUrl').value.trim();
+            if(!url) return emitSlidToastAlert('error', 'Missing Link', 'Paste a URL first!');
             
-            document.getElementById('pdShareBtn').onclick = () => {
-                if (navigator.share) {
-                    navigator.share({ title: 'Check this out on Lonetics', text: title, url: window.location.href });
+            emitSlidToastAlert('success', 'Scanning...', 'Fetching product details from link...');
+            
+            try {
+                const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    document.getElementById('admProdName').value = data.data.title || '';
+                    if(data.data.image && data.data.image.url) {
+                        generatedProductFileCacheString = data.data.image.url;
+                        document.getElementById('admProdPreview').src = data.data.image.url;
+                        document.getElementById('admProdPreview').style.display = 'block';
+                    }
+                    emitSlidToastAlert('success', 'Fetch Complete', 'Title and Image captured!');
                 } else {
-                    emitSlidToastAlert('success', 'Link Copied', 'Share this product with your friends.');
+                    emitSlidToastAlert('error', 'Fetch Failed', 'Could not extract data from that link.');
                 }
-            };
-            
-            setReviewRating(5); loadLiveReviews(id); loadSmartRecommendations(id);
-            closeAllModals();
-            document.getElementById('productDetailModal').classList.add('active');
-        }
-
-        function executeCartInsertion(id) {
-            playUiSound('pop');
-            if (navigator.vibrate) navigator.vibrate(50); 
-            
-            if (cartMap[id]) { cartMap[id].quantity += 1; }
-            else { const match = PRODUCT_CATALOG.find(p => p.id === id); cartMap[id] = { ...match, quantity: 1 }; }
-            
-            localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
-            refreshCartDrawerUI();
-            emitSlidToastAlert('success', 'Cart Added', 'Item appended to checkout list.');
-        }
-
-        function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
-            playUiSound('pop');
-            if (navigator.vibrate) navigator.vibrate(50);
-            
-            if (cartMap[id]) { cartMap[id].quantity += 1; }
-            else { 
-                cartMap[id] = { id: id, name: name, price: parseFloat(inrPrice), image: imgUrl, quantity: 1 }; 
+            } catch(e) {
+                emitSlidToastAlert('error', 'Network Error', 'The scraper was blocked by the target site.');
             }
-            
-            localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
-            refreshCartDrawerUI();
-            emitSlidToastAlert('success', 'Cart Added', 'Partner item appended to checkout list.');
         }
 
         function loadAffiliateCatalog() {
@@ -1100,6 +956,466 @@
             }).catch(err => console.error("Partner Catalog connection drop."));
         }
 
+        function executeAffiliateCartInsertion(id, name, inrPrice, imgUrl) {
+            playUiSound('pop');
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            if (cartMap[id]) { cartMap[id].quantity += 1; }
+            else { 
+                cartMap[id] = { id: id, name: name, price: parseFloat(inrPrice), image: imgUrl, quantity: 1 }; 
+            }
+            
+            localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
+            refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Cart Added', 'Partner item appended to checkout list.');
+        }
+
+        function startWeeklyHypeCountdownTimer() {
+            const timerBox = document.getElementById('hypeCountdownTimer');
+            if(!timerBox) return;
+
+            setInterval(() => {
+                let now = new Date();
+                let nextFriday = new Date();
+                
+                let daysUntilFriday = (5 - now.getDay() + 7) % 7;
+                if (daysUntilFriday === 0 && now.getHours() > 23) {
+                    daysUntilFriday = 7; 
+                }
+                
+                nextFriday.setDate(now.getDate() + daysUntilFriday);
+                nextFriday.setHours(23, 59, 59, 0); 
+
+                let diff = nextFriday - now;
+                let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                timerBox.innerText = `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+            }, 1000);
+        }
+
+        function startMarketingEngines() {
+            startWeeklyHypeCountdownTimer();
+            loadAffiliateCatalog();
+
+            setInterval(() => {
+                if (PRODUCT_CATALOG.length === 0) return;
+                const randomProduct = PRODUCT_CATALOG[Math.floor(Math.random() * PRODUCT_CATALOG.length)];
+                const randomCity = CITIES_SOCIAL_PROOF[Math.floor(Math.random() * CITIES_SOCIAL_PROOF.length)];
+                const randomTime = Math.floor(Math.random() * 59) + 1;
+                
+                document.getElementById('spImage').src = randomProduct.image;
+                document.getElementById('spMessage').innerHTML = `Someone in <strong>${randomCity}</strong> just bought <strong>${randomProduct.name}</strong>`;
+                document.getElementById('spTime').innerText = `Verified Purchase • ${randomTime} minutes ago`;
+                
+                const popup = document.getElementById('socialProofPopup');
+                popup.classList.add('show');
+                
+                setTimeout(() => { popup.classList.remove('show'); }, 4000);
+            }, 25000); 
+
+            setInterval(() => {
+                userIdleTimeTimer++;
+                if (userIdleTimeTimer === 45) { 
+                    emitSlidToastAlert('success', 'Local Delivery Ready!', 'Lock in your order now for express fulfillment in Kashmir.');
+                }
+            }, 1000);
+        }
+
+        window.onload = resetIdleTimer;
+        window.onmousemove = resetIdleTimer;
+        window.ontouchstart = resetIdleTimer;
+        window.onscroll = resetIdleTimer;
+        window.onkeypress = resetIdleTimer;
+        
+        function resetIdleTimer() { userIdleTimeTimer = 0; }
+
+        function listenToProductsAndVideos() {
+            db.collection("products").onSnapshot((snapshot) => {
+                PRODUCT_CATALOG = [];
+                snapshot.forEach(doc => {
+                    let item = doc.data(); item.id = doc.id; PRODUCT_CATALOG.push(item);
+                });
+                buildMainCatalogUI(PRODUCT_CATALOG);
+            });
+
+            db.collection("videos").onSnapshot((snapshot) => {
+                const reel = document.getElementById('videoReelGrid'); reel.innerHTML = "";
+                snapshot.forEach(doc => {
+                    reel.innerHTML += `<div class="video-reel-card"><video src="${doc.data().video}" autoplay loop muted playsinline></video></div>`;
+                });
+            });
+
+            db.collection("orders").onSnapshot((snapshot) => {
+                const admDeck = document.getElementById('admOrdersManagerDeckList');
+                if(!admDeck) return;
+                admDeck.innerHTML = "";
+                
+                if(snapshot.empty) {
+                    admDeck.innerHTML = '<p style="text-align:center; padding:10px; font-size:0.8rem; color:var(--text-muted);">No incoming requests logged.</p>';
+                    return;
+                }
+
+                let globalOrdersLog = [];
+                snapshot.forEach(doc => {
+                    let d = doc.data(); d.id = doc.id; globalOrdersLog.push(d);
+                });
+
+                globalOrdersLog.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                globalOrdersLog.forEach(ord => {
+                    admDeck.innerHTML += `
+                        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); padding:14px; border-radius:12px; margin-bottom:12px; font-size:0.8rem; display:flex; flex-direction:column; gap:6px;">
+                            <div><strong>Buyer:</strong> ${ord.buyerName} (${ord.buyerPhone})</div>
+                            <div><strong>Items:</strong> ${ord.itemsSummary}</div>
+                            <div><strong>Bill:</strong> <span style="color:var(--accent-light); font-weight:bold;">${ord.totalValue}</span> | <strong>Status:</strong> ${ord.status.toUpperCase()}</div>
+                            ${ord.txnId ? `<div><strong>UTR:</strong> ${ord.txnId}</div>` : ''}
+                            <div class="admin-action-row">
+                                <button class="adm-ctrl-btn" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="updateOrderStatusFromClientApp('${ord.id}', 'confirmed')">Confirm</button>
+                                <button class="adm-ctrl-btn" style="background:linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="updateOrderStatusFromClientApp('${ord.id}', 'shipped')">Ship</button>
+                                <button class="adm-ctrl-btn" style="background:linear-gradient(135deg, #ef4444, #dc2626);" onclick="rejectAndDeleteOrder('${ord.id}')">❌ Reject</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function updateOrderStatusFromClientApp(orderId, newStatus) {
+            let updatePayload = { status: newStatus };
+            let trackingLink = "";
+
+            if (newStatus === 'shipped') {
+                trackingLink = prompt("Enter the Tracking Link for this package (or leave blank if none):");
+                if (trackingLink) { updatePayload.trackingLink = trackingLink; }
+            }
+
+            db.collection("orders").doc(orderId).update(updatePayload).then(() => {
+                emitSlidToastAlert('success', 'Status Synchronized', `Order updated to ${newStatus.toUpperCase()}`);
+                
+                if (newStatus === 'shipped') {
+                    db.collection("orders").doc(orderId).get().then((doc) => {
+                        if (doc.exists) {
+                            const orderData = doc.data();
+                            const emailPayload = {
+                                to_email: orderData.userEmail, 
+                                email: "junaidlone7217@gmail.com", 
+                                otp_code: `Great news from Lonetics! Your order containing ${orderData.itemsSummary} has been officially shipped out.\n\n${trackingLink ? `Track your package here: ${trackingLink}` : 'Your package is in transit and will arrive soon!'}`
+                            };
+                            emailjs.send("service_oofkjro", "template_sorgfz4", emailPayload)
+                                .then(() => console.log("Tracking email sent to customer."))
+                                .catch(err => console.error("EmailJS failed:", err));
+                        }
+                    });
+                }
+            }).catch(err => emitSlidToastAlert('error', 'Update Failed', err.message));
+        }
+        
+        function editProductPrice(id, currentPrice) {
+            event.stopPropagation();
+            const newPrice = prompt("Enter the new Base Price in INR (₹):", currentPrice);
+            if (newPrice !== null && newPrice !== "" && !isNaN(newPrice)) {
+                db.collection("products").doc(id).update({ price: parseFloat(newPrice) }).then(() => {
+                    emitSlidToastAlert('success', 'Price Updated', 'Live price synced to database.');
+                });
+            }
+        }
+
+        function buildMainCatalogUI(items) {
+            const productGrid = document.getElementById('productGrid');
+            const hypeGrid = document.getElementById('hypeDropGrid');
+            const hypeContainer = document.getElementById('hypeDropMasterContainer');
+            
+            if(!productGrid || !hypeGrid) return;
+            productGrid.innerHTML = '';
+            hypeGrid.innerHTML = '';
+            
+            if (items.length === 0) {
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px;">No products listed yet.</p>';
+                hypeContainer.style.display = 'none';
+                return;
+            }
+
+            let hypeItems = items.slice(0, 2);
+            let regularItems = items.slice(2);
+
+            if(hypeItems.length > 0) {
+                hypeContainer.style.display = 'block';
+                hypeItems.forEach(product => renderSingleProductCard(product, hypeGrid));
+            } else {
+                hypeContainer.style.display = 'none';
+            }
+
+            if(regularItems.length > 0) {
+                regularItems.forEach(product => renderSingleProductCard(product, productGrid));
+            } else {
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px 10px;">More everyday tech arriving soon.</p>';
+            }
+        }
+
+        function toggleWishlist(id, e) {
+            e.stopPropagation();
+            if(wishlistItems.includes(id)) {
+                wishlistItems = wishlistItems.filter(item => item !== id);
+                emitSlidToastAlert('success', 'Removed', 'Item removed from Wishlist.');
+            } else {
+                wishlistItems.push(id);
+                playUiSound('success');
+                emitSlidToastAlert('success', 'Saved!', 'Item locked in your Wishlist ❤️');
+            }
+            localStorage.setItem('lonetics_wishlist', JSON.stringify(wishlistItems));
+            buildMainCatalogUI(PRODUCT_CATALOG);
+            if(document.getElementById('wishlistModal').classList.contains('active')) openWishlistModal();
+        }
+
+        function openWishlistModal() {
+            closeAllModals();
+            const grid = document.getElementById('wishlistGrid'); grid.innerHTML = '';
+            const savedProducts = PRODUCT_CATALOG.filter(p => wishlistItems.includes(p.id));
+            if(savedProducts.length === 0) grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); margin-top:20px;">No items saved yet.</p>';
+            else savedProducts.forEach(p => renderSingleProductCard(p, grid));
+            document.getElementById('wishlistModal').classList.add('active');
+        }
+
+        function renderSingleProductCard(product, targetGrid) {
+            const isCreator = currentSessionUser && currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com';
+            const calculatedPriceVal = ((window.Number(product.price) / 83.5) * currentActiveTargetCurrencyRate).toFixed(2);
+            const seededDiscount = (product.name.charCodeAt(0) % 40) + 20; 
+            const fakeOriginalPrice = (calculatedPriceVal / (1 - (seededDiscount / 100))).toFixed(2);
+            const randomViewers = (product.name.length % 15) + 3;
+            const randomStockCount = (product.name.charCodeAt(1) % 9) + 2; 
+            const stockPercentage = (randomStockCount / 20) * 100; 
+            const isWished = wishlistItems.includes(product.id);
+            
+            const safeTitle = product.name.replace(/'/g, "\\'");
+
+            const card = document.createElement('div');
+            card.classList.add('product-card');
+            card.innerHTML = `
+                <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${product.id}', event)">♥</button>
+                <button class="delete-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="deleteProductFromCloud('${product.id}')">&times;</button>
+                <button class="edit-product-badge" style="display: ${isCreator ? 'flex' : 'none'}" onclick="editProductPrice('${product.id}', '${product.price}')">✏️</button>
+                
+                <div class="product-img-frame" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">
+                    <div class="fake-discount-corner">${seededDiscount}% OFF</div>
+                    <img class="product-img" src="${product.image}">
+                </div>
+                
+                <div class="product-title" onclick="openProductDetail('${product.id}', '${safeTitle}', '${calculatedPriceVal}', '${fakeOriginalPrice}', '${product.image}', false)">${product.name}</div>
+                
+                <div class="live-viewer-row">
+                    <span class="pulse-dot"></span> ${randomViewers} viewing now
+                </div>
+                
+                <div class="stock-info-row">
+                    <span>🔥 Selling Fast</span>
+                    <span>Only ${randomStockCount} left</span>
+                </div>
+                <div class="stock-bar-bg">
+                    <div class="stock-bar-fill" style="width: ${stockPercentage}%;"></div>
+                </div>
+                
+                <div>
+                    <div class="product-price">
+                        ${currentActiveTargetCurrencySymbol}${calculatedPriceVal}
+                        <span class="strike-price">${currentActiveTargetCurrencySymbol}${fakeOriginalPrice}</span>
+                    </div>
+                    <button class="buy-btn" onclick="executeCartInsertion('${product.id}')">Add To Cart</button>
+                </div>
+            `;
+            targetGrid.appendChild(card);
+        }
+
+        function processFileToDataString(input, scope) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (scope === 'product') {
+                        generatedProductFileCacheString = e.target.result;
+                        document.getElementById('admProdPreview').src = e.target.result;
+                        document.getElementById('admProdPreview').style.display = 'block';
+                    } else if (scope === 'video') { generatedVideoFileCacheString = e.target.result; } 
+                    else if (scope === 'avatar') {
+                        generatedAvatarFileCacheString = e.target.result;
+                        document.getElementById('profileDashboardImg').src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveProductToCloud() {
+            const name = document.getElementById('admProdName').value.trim();
+            const price = parseFloat(document.getElementById('admProdPrice').value);
+            if (!name || isNaN(price) || !generatedProductFileCacheString) return;
+
+            db.collection("products").add({ name, price, image: generatedProductFileCacheString }).then(() => {
+                emitSlidToastAlert('success', 'Catalog Updated', 'Product pushed live.');
+                closeAllModals();
+                document.getElementById('admProdName').value = "";
+                document.getElementById('admProdPrice').value = "";
+                document.getElementById('admMagicUrl').value = "";
+                document.getElementById('admProdPreview').style.display = 'none';
+            });
+        }
+
+        function saveVideoToCloud() {
+            if (!generatedVideoFileCacheString) return;
+            db.collection("videos").add({ video: generatedVideoFileCacheString }).then(() => {
+                emitSlidToastAlert('success', 'Video Live', 'Reel injected into layout feed.');
+                closeAllModals();
+            });
+        }
+
+        function deleteProductFromCloud(id) {
+            event.stopPropagation();
+            if(confirm("Wipe catalog item configuration?")) { db.collection("products").doc(id).delete(); }
+        }
+
+        function exportCatalogForGoogleMerchant() {
+            if (PRODUCT_CATALOG.length === 0) {
+                emitSlidToastAlert('error', 'Empty Catalog', 'No products to export.');
+                return;
+            }
+
+            emitSlidToastAlert('success', 'Generating...', 'Building Google Merchant file.');
+
+            let tsvContent = "id\ttitle\tdescription\tlink\timage_link\tavailability\tprice\tcondition\n";
+
+            PRODUCT_CATALOG.forEach(p => {
+                let id = p.id;
+                let title = p.name;
+                let description = "Premium electronics and accessories from Lonetics Official.";
+                let link = "https://lonetics-store.vercel.app";
+                let image_link = p.image;
+                let availability = "in stock";
+                let price = p.price + " INR";
+                let condition = "new";
+
+                tsvContent += `${id}\t${title}\t${description}\t${link}\t${image_link}\t${availability}\t${price}\tcondition}\n`;
+            });
+
+            const blob = new Blob([tsvContent], { type: 'text/tab-separated-values' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lonetics_google_feed.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function exportCustomerOrdersForFulfillment() {
+            db.collection("orders").get().then((snapshot) => {
+                if(snapshot.empty) {
+                    emitSlidToastAlert('error', 'No Orders', 'There are no customer orders to export.');
+                    return;
+                }
+                
+                let csvContent = "Order ID,Date,Customer Name,Phone,Address,PIN Code,Items,Total Paid,Status,Transaction UTR\n";
+                
+                snapshot.forEach(doc => {
+                    let ord = doc.data();
+                    let date = ord.timestamp ? new Date(ord.timestamp.seconds * 1000).toLocaleDateString() : "N/A";
+                    
+                    let items = ord.itemsSummary ? ord.itemsSummary.replace(/,/g, " |") : "N/A";
+                    let address = ord.buyerAddress ? ord.buyerAddress.replace(/,/g, " ") : "N/A";
+                    let name = ord.buyerName ? ord.buyerName.replace(/,/g, "") : "N/A";
+                    
+                    csvContent += `${doc.id},${date},${name},${ord.buyerPhone},${address},${ord.buyerPin},${items},${ord.totalValue},${ord.status},${ord.txnId || 'COD'}\n`;
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'lonetics_customer_orders.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                emitSlidToastAlert('success', 'Orders Exported', 'CSV file downloaded safely.');
+            });
+        }
+
+        function syncSelectedProfileCountryCurrencyConfig() {
+            const selectedLocale = document.getElementById('profileCountrySelect').value;
+            currentActiveTargetCurrencyRate = COUNTRIES_GLOBAL_MAP[selectedLocale].rate;
+            currentActiveTargetCurrencySymbol = COUNTRIES_GLOBAL_MAP[selectedLocale].symbol;
+            activeSelectedCheckoutCountryCode = selectedLocale;
+            buildMainCatalogUI(PRODUCT_CATALOG);
+            loadAffiliateCatalog();
+            refreshCartDrawerUI();
+        }
+
+        function updateUserProfileDataMetadata() {
+            const newName = document.getElementById('profileNameInput').value.trim();
+            const newCountry = document.getElementById('profileCountrySelect').value;
+            let updatePayload = { name: newName, country: newCountry };
+            
+            if (generatedAvatarFileCacheString) {
+                localStorage.setItem(`avatar_${currentSessionUser}`, generatedAvatarFileCacheString);
+                document.getElementById('profileTrigger').src = generatedAvatarFileCacheString;
+            }
+            db.collection("users").doc(currentSessionUser).update(updatePayload).then(() => {
+                userDataCache.name = newName; userDataCache.country = newCountry;
+                emitSlidToastAlert('success', 'Profile Synchronized', 'Cloud parameters updated.');
+                closeAllModals();
+            });
+        }
+
+        function renderSystemSessionState() {
+            buildCountrySelectionDropdownDOMNodeTrees();
+            const profImg = document.getElementById('profileTrigger');
+            const adminTab = document.getElementById('adminNavTab');
+            const manualAuthBtn = document.getElementById('openAuthModal');
+
+            if(currentSessionUser) {
+                manualAuthBtn.style.display = 'none';
+                profImg.src = localStorage.getItem(`avatar_${currentSessionUser}`) || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
+                profImg.style.display = 'block';
+                
+                if (currentSessionUser.toLowerCase().trim() === 'junaidlone7217@gmail.com') {
+                    adminTab.style.setProperty('display', 'flex', 'important');
+                } else {
+                    adminTab.style.display = 'none';
+                }
+            } else {
+                manualAuthBtn.style.display = 'block';
+                profImg.src = "";
+                profImg.style.display = 'none';
+                adminTab.style.display = 'none';
+            }
+            buildMainCatalogUI(PRODUCT_CATALOG);
+            refreshCartDrawerUI();
+        }
+
+        function openAuthenticationModalOverlaySheet() {
+            closeAllModals();
+            toggleAuthView(false);
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function executeCartInsertion(id) {
+            playUiSound('pop');
+            if (navigator.vibrate) navigator.vibrate(50); 
+            
+            if (cartMap[id]) { cartMap[id].quantity += 1; }
+            else { const match = PRODUCT_CATALOG.find(p => p.id === id); cartMap[id] = { ...match, quantity: 1 }; }
+            
+            localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
+            refreshCartDrawerUI();
+            emitSlidToastAlert('success', 'Cart Added', 'Item appended to checkout list.');
+        }
+
+        function filterCatalogSearch() {
+            const val = document.getElementById('catalogSearch').value.toLowerCase().trim();
+            const filtered = PRODUCT_CATALOG.filter(p => p.name.toLowerCase().includes(val));
+            buildMainCatalogUI(filtered);
+        }
+
         function adjustQuantity(id, delta) {
             if(!cartMap[id]) return;
             playUiSound('pop');
@@ -1107,6 +1423,19 @@
             if(cartMap[id].quantity <= 0) delete cartMap[id];
             
             localStorage.setItem('lonetics_cart', JSON.stringify(cartMap));
+            refreshCartDrawerUI();
+        }
+
+        function applyPromoDiscountCodeVal() {
+            const inputVal = document.getElementById('cartPromoInput').value.trim().toUpperCase();
+            if(inputVal === "IGVIP25") {
+                activeAppliedCouponCodeString = "IGVIP25";
+                playUiSound('success');
+                emitSlidToastAlert('success', 'VIP Code Applied!', 'You unlocked 25% off your order.');
+            } else {
+                emitSlidToastAlert('error', 'Invalid Code', 'Campaign code unmatched or expired.');
+                activeAppliedCouponCodeString = "";
+            }
             refreshCartDrawerUI();
         }
 
@@ -1187,10 +1516,8 @@
         function selectCheckoutPaymentRoute(route) {
             activePaymentRouteSelection = route;
             document.querySelectorAll('.payment-option-card').forEach(el => el.classList.remove('selected'));
-            if(route === 'upi') {
-                document.getElementById('optUPI').classList.add('selected');
-                document.getElementById('upiPaymentInterfaceBlock').style.display = 'flex';
-            }
+            document.getElementById('optUPI').classList.add('selected');
+            document.getElementById('upiPaymentInterfaceBlock').style.display = 'flex';
             refreshCartDrawerUI();
         }
 
@@ -1233,27 +1560,27 @@
             });
         }
 
-        // REJECT & DELETE FAKE PAYMENTS (ADMIN FEATURE)
+        // ADMIN REJECT AND DELETE FAKE PAYMENT FUNCTION
         function rejectAndDeleteOrder(orderId) {
-            if(confirm("Are you sure you want to reject this order due to a fake/unverified payment?")) {
+            if(confirm("Reject this order due to fake payment? This will notify the customer.")) {
                 db.collection("orders").doc(orderId).update({
                     status: "rejected"
                 }).then(() => {
-                    emitSlidToastAlert('success', 'Order Rejected', 'Customer notified of fake payment.');
+                    emitSlidToastAlert('success', 'Order Rejected', 'Customer notified.');
                 }).catch(err => emitSlidToastAlert('error', 'Error', err.message));
             }
         }
 
-        // CLEAR OLD COMPLETED ORDERS (ADMIN FEATURE)
+        // ADMIN CLEAR OLD CONFIRMED ORDERS
         function clearOldConfirmedOrders() {
-            if(confirm("Are you sure you want to delete all confirmed and shipped orders from the database?")) {
+            if(confirm("Clear all confirmed and shipped orders from the orders database?")) {
                 db.collection("orders").where("status", "in", ["confirmed", "shipped"]).get().then((snapshot) => {
                     let batch = db.batch();
                     snapshot.forEach(doc => {
                         batch.delete(doc.ref);
                     });
                     batch.commit().then(() => {
-                        emitSlidToastAlert('success', 'Cleaned Up', 'Old completed orders cleared.');
+                        emitSlidToastAlert('success', 'Cleaned Up', 'Old orders cleared.');
                     });
                 }).catch(err => emitSlidToastAlert('error', 'Error', err.message));
             }
@@ -1290,9 +1617,9 @@
                       let etaBannerHTML = "";
 
                       if (order.status === "rejected") {
-                          displayStatusText = "Rejected: Fake/Unverified Payment";
+                          displayStatusText = "Rejected: Fake Payment";
                           badgeClass = "status-rejected";
-                          etaBannerHTML = `<div class="order-delivery-eta-banner" style="border-left-color:#f87171; color:#fca5a5;">❌ Your order was rejected because of a fake or unverified payment.</div>`;
+                          etaBannerHTML = `<div class="order-delivery-eta-banner" style="border-left-color:#f87171; color:#fca5a5;">❌ Your order is rejected because of a fake or unverified payment.</div>`;
                       } else if (order.status === "confirmed") {
                           displayStatusText = "Payment Confirmed";
                           badgeClass = "status-confirmed";
@@ -1313,7 +1640,7 @@
                                   ${order.itemsSummary}
                               </div>
                               <div style="font-size:0.8rem; color:var(--accent-light); font-weight:bold;">
-                                  Total Billing: ${order.totalValue} (${order.paymentMethod.toUpperCase()})
+                                  Total Billing: ${order.totalValue} (UPI ONLINE)
                               </div>
                               ${etaBannerHTML}
                               ${order.txnId ? `<div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">UTR Ref: ${order.txnId}</div>` : ''}
@@ -1496,3 +1823,4 @@
     </script>
 </body>
 </html>
+
