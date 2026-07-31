@@ -638,7 +638,7 @@
                 <div class="cart-items-list" id="cartItemsList"></div>
                 
                 <div id="emptyCartWrapper" class="empty-cart-state" style="display:none;">
-                    <div class="empty-cart-icon">👜</div>
+                    <div class="empty-cart-icon">gb</div>
                     <div class="empty-cart-text">
                         <h4>Your bag is empty</h4>
                         <p>Discover premium tech in the catalog.</p>
@@ -892,6 +892,7 @@
                 currentSessionUser = null;
                 renderSystemSessionState();
                 
+                // AUTO POPUP LOGIN PROMPT AFTER 3 SECONDS
                 setTimeout(() => {
                     if(!currentSessionUser) {
                         openAuthenticationModalOverlaySheet();
